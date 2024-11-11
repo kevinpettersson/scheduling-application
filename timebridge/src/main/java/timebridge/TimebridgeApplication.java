@@ -1,4 +1,4 @@
-package dit213.timebridge;
+package timebridge;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

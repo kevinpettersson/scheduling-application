@@ -1,4 +1,4 @@
-package main.java.timebridge;
+package timebridge;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
