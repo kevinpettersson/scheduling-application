@@ -1,0 +1,84 @@
+# Compiled source
+target/
+out/
+
+# Logs
+*.log
+
+# Maven
+.mvn/
+!/.mvn/wrapper/maven-wrapper.jar
+**/mvnw
+**/mvnw.cmd
+
+# IDEs
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# IntelliJ
+*.idea/
+*.iws
+.idea/workspace.xml
+.idea/libraries/
+.idea/shelf/
+.idea/modules.xml
+.idea/.name
+.idea/*.iml
+.idea/modules/
+.idea/artifacts/
+.idea/scopes/
+.idea/inspectionProfiles/
+.idea/dictionaries/
+.idea/codeStyles/
+.idea/fileTemplates/
+.idea/svn/
+.idea/httpRequests/
+.idea/jsLibraryMappings.xml
+.idea/jarRepositories.xml
+.idea/sqlDataSources.xml
+.idea/sqlDataSources.xml
+.idea/datasources.xml
+.idea/datasources.local.xml
+.idea/workspace.xml
+
+# VS Code
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# Linux
+*~
+
+# Other
+*.swp
+*.swo
+
+# Build artifacts
+*.jar
+*.war
+*.ear
+
+# Spring Boot specific
+*.springBeans
+
+# Local environment files
+.env
+*.env.local
+*.env.development.local
+*.env.test.local
+*.env.production.local
+
+# Generated files
+*.class
+*.project
+*.classpath
+*.factorypath
+**/src/main/resources/static/built/
+**/src/main/resources/static/dist/
