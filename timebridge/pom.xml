@@ -8,10 +8,10 @@
 		<version>3.3.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.dit213_group_12</groupId>
-	<artifactId>timebridge_api</artifactId>
+	<groupId>dit213</groupId>
+	<artifactId>timebridge</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>timebridge_api</name>
+	<name>timebridge</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>

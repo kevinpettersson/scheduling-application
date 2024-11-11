@@ -1,13 +1,13 @@
-package com.dit213_group_12.timebridge_api;
+package dit213.timebridge;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TimeBridgeApplication {
+public class TimebridgeApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TimeBridgeApplication.class, args);
+		SpringApplication.run(TimebridgeApplication.class, args);
 	}
 
 }

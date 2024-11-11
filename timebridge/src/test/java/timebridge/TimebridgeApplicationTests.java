@@ -1,4 +1,4 @@
-package com.dit213_group_12.timebridge_api;
+package dit213.timebridge;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
