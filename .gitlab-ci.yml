@@ -32,7 +32,7 @@ deploy-job:      # This job runs in the deploy stage.
     - echo "Deploying application..."
     - docker build -t registry.git.chalmers.se/palssons/dit213-group-12:latest -f timebridge/Dockerfile timebridge/
     - echo "Login to gitlab..."
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.git.chalmers.se
+    - docker login registry.git.chalmers.se -u gitlab-ci-token -p $CI_BUILD_TOKEN
     - echo "Pushing to gitlab..."
     - docker push registry.git.chalmers.se/palssons/dit213-group-12 
     - echo "Application successfully deployed."
