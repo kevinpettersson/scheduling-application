@@ -29,11 +29,10 @@ deploy-job:      # This job runs in the deploy stage.
     - name: docker:dind
   script:
     - cd timebridge
-    - echo $CI_BUILD_TOKEN
-    - echo "Login to gitlab..."
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.git.chalmers.se
     - echo "Deploying application..."
     - docker build -t registry.git.chalmers.se/palssons/dit213-group-12 . -f /Dockerfile
+    - echo "Login to gitlab..."
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.git.chalmers.se
     - echo "Pushing to gitlab..."
     - docker push registry.git.chalmers.se/palssons/dit213-group-12 
     - echo "Application successfully deployed."
