@@ -3,6 +3,7 @@ variables:
 
 stages:          # List of stages for jobs, and their order of execution
   - build
+  - publish
   - deploy
 
 maven-build-job:       # This job runs in the build stage, which runs first.
@@ -20,9 +21,9 @@ maven-build-job:       # This job runs in the build stage, which runs first.
         - timebridge/target/*.jar 
 
 
-deploy-job:      # This job runs in the deploy stage.
+publish-job:      # This job pushes the docker image to gitlab container registry
   image: docker:latest
-  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+  stage: publish  # It only runs when *both* jobs in the test stage complete successfully.
   tags:
     - docker-build  # Use the 'docker-build' runner
   services:
@@ -35,4 +36,4 @@ deploy-job:      # This job runs in the deploy stage.
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
     - echo "Pushing to gitlab..."
     - docker push registry.git.chalmers.se/palssons/dit213-group-12/timebridge-api
-    - echo "Application successfully deployed."
+    - echo "Application successfully published."
