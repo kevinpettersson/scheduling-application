@@ -7,6 +7,7 @@ stages:          # List of stages for jobs, and their order of execution
   - deploy
 
 maven-build-job:       # This job runs in the build stage, which runs first.
+  environment: production
   image: maven:latest
   stage: build
   tags:
@@ -18,10 +19,13 @@ maven-build-job:       # This job runs in the build stage, which runs first.
     - mvn clean package
   artifacts:
     paths:
-        - timebridge/target/*.jar 
+        - timebridge/target/*.jar
+  only:
+  - main
 
 
 publish-job:      # This job pushes the docker image to gitlab container registry
+  environment: production
   image: docker:latest
   stage: publish  # It only runs when *both* jobs in the test stage complete successfully.
   tags:
@@ -37,3 +41,17 @@ publish-job:      # This job pushes the docker image to gitlab container registr
     - echo "Pushing to gitlab..."
     - docker push registry.git.chalmers.se/palssons/dit213-group-12/timebridge-api
     - echo "Application successfully published."
+  only:
+  - main
+
+render-deploy:
+  environment: production
+  image: alpine:latest
+  stage: deploy
+  tags:
+    - shell
+  script:
+    - curl $api_deploy_hook
+  only:
+  - main
+  
