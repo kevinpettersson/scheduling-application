@@ -24,9 +24,10 @@ deploy-job:      # This job runs in the deploy stage.
   image: docker:latest
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   tags:
-    - docker  # Use the 'docker' runner
+    - docker-build  # Use the 'docker-build' runner
   services:
     - name: docker:dind
+      alias: docker
   script:
     - cd timebridge
     - echo "Deploying application..."
