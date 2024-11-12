@@ -1,3 +1,6 @@
+before_script:
+  - docker pull maven:latest
+
 variables:
   DOCKER_DRIVER: overlay2
 
