@@ -34,5 +34,5 @@ deploy-job:      # This job runs in the deploy stage.
     - echo "Login to gitlab..."
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
     - echo "Pushing to gitlab..."
-    - docker push registry.git.chalmers.se/palssons/timebridge-api 
+    - docker push registry.git.chalmers.se/palssons/dit213-group-12 
     - echo "Application successfully deployed."
