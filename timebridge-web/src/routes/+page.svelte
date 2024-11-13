@@ -1,6 +1,20 @@
 <script> 
-    let messege = "Webbapp för OOP"   
-</script>    
+    let content = "";
+
+    function handleFile(event){
+        const file = event.target.files[0];
+        if (file){
+            const reader = new FileReader();
+            reader.onload = () => {
+                content = reader.result;
+                console.log('File content:',content)
+            };
+            reader.readAsText(file);
+            }
+    }
+    
+</script> 
+ 
 
 <style>
     body {
@@ -41,14 +55,19 @@
 
 <main>  
     <h2>
-        {messege}
+        Webbapp för OOP
     </h2>
     <p>
         text hahahahah text hahahahah
     </p>
     <!-- INTERACTIVE COMPONENTS HERE -->
-     <button on:click={() => alert('ButtonHasBeen clicked but does it do anythin?!')}>CLICK ME!!!!!</button>
-    
+       
+    <label for="ical-file">Upload .ical File: </label>
+        <input type="file" id="ical-file" accept=".ical" on:change={handleFile}/>
+        {#if content}
+        <p> .ical file content loaded succesfully!</p>
+        
+        {/if}
 </main>
 
 <footer>
