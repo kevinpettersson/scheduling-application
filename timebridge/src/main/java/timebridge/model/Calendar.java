@@ -17,12 +17,22 @@ public class Calendar {
         this.events = new ArrayList<Event>();
     }
 
+    public Calendar() {}
+
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Interval getInterval() {
         return interval;
+    }
+
+    public void setInterval(Interval interval) {
+        this.interval = interval;
     }
 
     public ArrayList<Event> getEvents() {
