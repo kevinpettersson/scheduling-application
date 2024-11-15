@@ -3,9 +3,6 @@ package timebridge.model;
 import org.springframework.data.annotation.Id;
 
 public class Room implements Location {
-
-    @Id
-    private String id;
     private String name;
 
     public Room(String name){
@@ -14,5 +11,9 @@ public class Room implements Location {
 
     public String getName(){
         return name;
+    }
+
+    public void setName(String name){
+        this.name = name;
     }
 }

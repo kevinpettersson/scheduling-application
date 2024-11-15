@@ -1,35 +1,49 @@
 package timebridge;
 
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import timebridge.model.Schedule;
-import timebridge.repository.ScheduleRepository;
+import timebridge.model.*;
 
 @RestController
 class Controller {
-
-    @Autowired
-    private ScheduleRepository repository;
 
     @GetMapping("/hello")
     public String sayHello() {
         return "Hello, World!";
     }
 
-    @GetMapping("/schedules")
-    public List<Schedule> getSchedules() {
-        return repository.findAll();
-    }
+    @GetMapping("/upload")
+    public ResponseEntity<Calendar> uploadCalendar(@RequestParam String ical) {
+        try {
+            // Create a URL object and open a connection to the iCalendar URL
+            URL url = new URL(ical);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-    @GetMapping("/schedules/{courseId}")
-    public List<Schedule> getSchedulesByCourseId(@PathVariable String url) {
-        return repository.findByUrl(url);
+            // Check if the request was successful
+            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                return ResponseEntity.badRequest().build();
+            }
+
+            // Read the iCalendar file data from the URL
+            try (InputStream inputStream = connection.getInputStream()) {
+                String icsData = new String(inputStream.readAllBytes());
+                Calendar calendar = CalendarBuilder.build(icsData);
+                return ResponseEntity.ok(calendar);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
     }
 }
