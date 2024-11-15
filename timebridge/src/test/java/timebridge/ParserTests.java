@@ -5,13 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import timebridge.model.Calendar;
 import timebridge.model.CalendarBuilder;
 import timebridge.model.Event;
-import timebridge.model.CalendarBuilder;
 
 @SpringBootTest
 class ParserTests {
@@ -40,7 +38,7 @@ class ParserTests {
         // Verify the parsed event object
         Event event = calendar.getEvents().get(0);
         assertEquals("Sample Event", event.getActivity());
-        assertEquals("Room 101", event.getLocations().get(0).getName());
+        assertEquals("Room 101", event.getLocations().get(0).getRoom());
         assertEquals(ZonedDateTime.parse("2023-10-10T10:00:00Z"), event.getInterval().getStart());
         assertEquals(ZonedDateTime.parse("2023-10-10T11:00:00Z"), event.getInterval().getEnd());
     }
