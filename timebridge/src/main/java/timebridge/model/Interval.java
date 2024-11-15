@@ -1,13 +1,9 @@
 package timebridge.model;
 
-import org.springframework.data.annotation.Id;
+
 import java.time.ZonedDateTime;
-import java.time.ZoneId;
 
 public class Interval {
-
-    @Id
-    private String id;
     private ZonedDateTime start;
     private ZonedDateTime end; 
 
@@ -16,7 +12,10 @@ public class Interval {
         this.end = end;
     }
 
-    public Interval(){};
+    public Interval(){
+        this.start = ZonedDateTime.now();
+        this.end = ZonedDateTime.now();
+    };
 
     public ZonedDateTime getStart() {
         return start;
