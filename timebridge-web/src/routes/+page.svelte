@@ -1,85 +1,47 @@
-<script> 
-    let content = "";
+<script lang="ts">
+	// Components
+	import * as Form from '$lib/components/ui/form/index.js';
+	import { Input } from '$lib/components/ui/input/index.js';
 
-    function handleFile(event){
-        const file = event.target.files[0];
-        if (file){
-            const reader = new FileReader();
-            reader.onload = () => {
-                content = reader.result;
-                console.log('File content:',content)
-            };
-            reader.readAsText(file);
-            }
-    }
-    
-</script> 
- 
+	// Form validation
+	import { superForm, defaults } from 'sveltekit-superforms';
+	import { zod } from 'sveltekit-superforms/adapters';
+	import { _iCalSchema, type iCalSchema } from '$lib/schemas';
 
-<style>
-    body {
-        font-family: Arial, Sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f9f9f9;
-        color: black;
-    }    
-    header {
-        background-color: #6200ea;
-        color: white;
-        padding: 1rem;
-        text-align: center;
-    }
+	// Validate the form and send data to an external API
+	let data;
+	
+	const form = superForm(defaults(zod(_iCalSchema)), {
+		SPA: true,
+		validators: zod(_iCalSchema),
+		async onUpdate({ form }) {
+			if (form.valid) {
+				// Call an external API with form.data, await the result and update form
+				data = await fetch('http://localhost:8080/download', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'ical': form.data.url
+					},
+					body: JSON.stringify(form.data)
+				}).then((res) => res.json());
+			}
+		}
+	});
 
-    main {
-        padding: 2rem;
-        text-align: center;
-    }
+	const { form: formData, enhance } = form;
+</script>
 
-    footer {
-        background-color: #333;
-        color: white;
-        padding: 1rem;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        text-align: center;
-    }
-</style>
-
-<header>
-    <h1>
-        Scheduling app website!
-    </h1>
-</header>
-
-<main>  
-    <h2>
-        Webbapp för OOP
-    </h2>
-    <p>
-        text hahahahah text hahahahah
-    </p>
-    <!-- INTERACTIVE COMPONENTS HERE -->
-       
-    <label for="ical-file">Upload .ical File: </label>
-        <input type="file" id="ical-file" accept=".ical" on:change={handleFile}/>
-        {#if content}
-        <p> .ical file content loaded succesfully!</p>
-        
-        {/if}
-</main>
-
-<footer>
-    <p>
-        &copy; 2024 Object Oriented Project Course
-    </p>
-    <p>
-        &copy; group 12
-    </p>
-    <p>
-        Kevin, Natalie, Nils, Oscar, Sebastian
-    </p>
-</footer>
-
-
+<form method="GET" use:enhance>
+	<Form.Field {form} name="url">
+		<Form.Control>
+			{#snippet children({ props })}
+				<Form.Label>Calendar</Form.Label>
+				<Input {...props} bind:value={$formData.url} />
+			{/snippet}
+		</Form.Control>
+		<Form.Description>This is your public display name.</Form.Description>
+		<Form.FieldErrors />
+	</Form.Field>
+	<Form.Button>Submit</Form.Button>
+</form>
