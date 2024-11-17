@@ -1,30 +1,34 @@
 <script lang="ts">
-	// Components
 	import * as Form from '$lib/components/ui/form/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
-
-	// Form validation
 	import { superForm, defaults } from 'sveltekit-superforms';
 	import { zod } from 'sveltekit-superforms/adapters';
 	import { _iCalSchema, type iCalSchema } from '$lib/schemas';
+	import { goto } from '$app/navigation';
+	import { calendarStore } from '$lib/stores/session-store';
 
-	// Validate the form and send data to an external API
-	let data;
-	
 	const form = superForm(defaults(zod(_iCalSchema)), {
 		SPA: true,
 		validators: zod(_iCalSchema),
 		async onUpdate({ form }) {
+			// Call an external API with form.data, await the result and update form
 			if (form.valid) {
-				// Call an external API with form.data, await the result and update form
-				data = await fetch('http://localhost:8080/download', {
-					method: 'POST',
+				let request = `http://localhost:8080/upload?ical=${form.data.url}`;
+
+				const response = await fetch(request, {
+					method: 'GET',
 					headers: {
 						'Content-Type': 'application/json',
-						'ical': form.data.url
-					},
-					body: JSON.stringify(form.data)
-				}).then((res) => res.json());
+					}
+				});
+
+				if (!response.ok) {
+					throw new Error(`Failed to upload calendar: ${response.statusText}`);
+				}
+				else {
+					calendarStore.set(await response.json());
+					goto('/editor');
+				}
 			}
 		}
 	});
