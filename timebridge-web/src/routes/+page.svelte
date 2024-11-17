@@ -1,11 +1,12 @@
 <script lang="ts">
 	import * as Form from '$lib/components/ui/form/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
-	import { superForm, defaults } from 'sveltekit-superforms';
+	import { superForm, defaults, setError } from 'sveltekit-superforms';
 	import { zod } from 'sveltekit-superforms/adapters';
 	import { _iCalSchema, type iCalSchema } from '$lib/schemas';
 	import { goto } from '$app/navigation';
 	import { calendarStore } from '$lib/stores/session-store';
+	import { Upload } from 'lucide-svelte';
 
 	const form = superForm(defaults(zod(_iCalSchema)), {
 		SPA: true,
@@ -18,14 +19,13 @@
 				const response = await fetch(request, {
 					method: 'GET',
 					headers: {
-						'Content-Type': 'application/json',
+						'Content-Type': 'application/json'
 					}
 				});
 
 				if (!response.ok) {
 					throw new Error(`Failed to upload calendar: ${response.statusText}`);
-				}
-				else {
+				} else {
 					calendarStore.set(await response.json());
 					goto('/editor');
 				}
@@ -36,16 +36,23 @@
 	const { form: formData, enhance } = form;
 </script>
 
-<form method="GET" use:enhance>
-	<Form.Field {form} name="url">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Form.Label>Calendar</Form.Label>
-				<Input {...props} bind:value={$formData.url} />
-			{/snippet}
-		</Form.Control>
-		<Form.Description>This is your public display name.</Form.Description>
-		<Form.FieldErrors />
-	</Form.Field>
-	<Form.Button>Submit</Form.Button>
-</form>
+<div class="flex h-screen flex-col items-center justify-center">
+	<h1 class="mb-6 font-bold">TimeBridge</h1>
+	<form method="GET" use:enhance>
+		<Form.Field {form} name="url">
+			<Form.Control>
+				{#snippet children({ props })}
+					<div class="flex flex-row gap-3 rounded-xl border p-2 pl-3 items-center">
+						<Input
+							{...props}
+							class="h-8 w-96 border-0 focus-visible:ring-ring rounded-sm px-1"
+							bind:value={$formData.url}
+						/>
+						<Form.Button size="icon"><Upload /></Form.Button>
+					</div>
+				{/snippet}
+			</Form.Control>
+			<Form.FieldErrors />
+		</Form.Field>
+	</form>
+</div>

@@ -9,7 +9,6 @@
 </script>
 
 <Table.Root class="w-full">
-    <Table.Caption>A list of your calendar events.</Table.Caption>
     <Table.Header>
         <Table.Row>
             <Table.Head>Code</Table.Head>
