@@ -141,7 +141,15 @@ public abstract class CalendarBuilder {
         Matcher matcher = regex.matcher(tempLine);
 
         while (matcher.find()) {
-            Course temp = new Course(matcher.group(1),matcher.group(2));
+            String rep;
+            if (matcher.group(2) != null && matcher.group(2).charAt(matcher.group(2).length()-1) == ','){ // funkar typ inte bör fixas
+                rep = matcher.group(2).substring(0, matcher.group(2).length() - 1);
+            }
+            else { rep = matcher.group(2); }
+
+            String ret = rep.replace("Rubrik:", "");
+
+            Course temp = new Course(matcher.group(1),ret);
             courses.add(temp);
         }
 
