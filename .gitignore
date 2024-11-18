@@ -82,3 +82,21 @@ ehthumbs.db
 *.factorypath
 **/src/main/resources/static/built/
 **/src/main/resources/static/dist/
+
+node_modules
+
+# Output
+timebridge-web/.output
+timebridge-web/.vercel
+timebridge-web/.svelte-kit
+timebridge-web/build
+
+# Env
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Vite
+timebridge-web/vite.config.js.timestamp-*
+timebridge-web/vite.config.ts.timestamp-*

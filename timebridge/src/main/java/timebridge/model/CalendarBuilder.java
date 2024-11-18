@@ -8,6 +8,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public abstract class CalendarBuilder {
 
@@ -59,10 +60,10 @@ public abstract class CalendarBuilder {
 
     // Method to parse a single event from the input BufferedReader
     private static Event parseEvent(BufferedReader reader) throws IOException {
-        Course course = null;
+        Course course = new Course("mockname", "mockcode");
         String activity = null;
         Interval interval = new Interval();
-        ArrayList<Location> locations = new ArrayList<>();
+        ArrayList<Location> locations = new ArrayList<Location>();
         String line;
 
         // Read each line until the end of the event
@@ -90,19 +91,19 @@ public abstract class CalendarBuilder {
                     break;
                 // Parse and add the location(s) of the event
                 case "LOCATION":
-                    locations = parseLocation(line);
+                    locations = parseLocations(line);
                     break;
                 // Handle any other prefixes if necessary
                 default:
                     break;
             }
         }
-
+    
         // Create and return a new Event object with the parsed details
         return new Event(course, activity, interval, locations);
     }
 
-    // Method to parse a datetime string and return a ZonedDateTime object
+    // Method to parse a datetime string and return codea ZonedDateTime object
     private static ZonedDateTime parseDateTime(String line) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
             "yyyyMMdd'T'HHmmss'Z'"
@@ -116,9 +117,27 @@ public abstract class CalendarBuilder {
     }
 
     // Method to parse the location(s) of an event
-    private static ArrayList<Location> parseLocation(String line) {
+    private static ArrayList<Location> parseLocations(String line) {
         ArrayList<Location> locations = new ArrayList<>();
-        locations.add(new Room(line));
+
+        line = line.replace("\\n", "\n");
+        line  = line.trim();
+        ArrayList<String> locationList = new ArrayList<String>(Arrays.asList(line.split("\n")));
+
+        for (String location : locationList) {
+            if (location.isEmpty()) {
+                continue;
+            }
+
+            int firstDotIndex = location.indexOf(".");
+            int secondDotIndex = location.indexOf(".", firstDotIndex + 1);
+
+            String room = location.substring(0, firstDotIndex);
+            String building = location.substring(location.indexOf("Byggnad:"), secondDotIndex).replace("Byggnad:", "").trim();
+            
+            locations.add(new Location(building, room));
+        }
+
         return locations;
     }
 }
