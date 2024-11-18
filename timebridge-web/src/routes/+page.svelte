@@ -7,7 +7,6 @@
 	import { goto } from '$app/navigation';
 	import { calendarStore } from '$lib/stores/session-store';
 	import { Upload } from 'lucide-svelte';
-	import * as Select from '$lib/components/ui/select';
 
 	const form = superForm(defaults(zod(_iCalSchema)), {
 		SPA: true,
@@ -60,3 +59,5 @@
 		</Form.Field>
 	</form>
 </div>
+
+
