@@ -7,6 +7,7 @@
 	import { goto } from '$app/navigation';
 	import { calendarStore } from '$lib/stores/session-store';
 	import { Upload } from 'lucide-svelte';
+	import * as Select from '$lib/components/ui/select';
 
 	const form = superForm(defaults(zod(_iCalSchema)), {
 		SPA: true,
@@ -42,11 +43,14 @@
 		<Form.Field {form} name="url">
 			<Form.Control>
 				{#snippet children({ props })}
-					<div class="flex flex-row gap-3 rounded-xl border p-2 pl-3 items-center">
+					<div
+						class="flex flex-row items-center gap-3 rounded-xl border p-2 pl-3 ring-zinc-700 focus-within:ring"
+					>
 						<Input
 							{...props}
-							class="h-8 w-96 border-0 focus-visible:ring-ring rounded-sm px-1"
+							class="focus-visible:ring-none h-8 w-96 rounded-sm border-0  px-1  focus:ring-transparent"
 							bind:value={$formData.url}
+							placeholder="https://cloud.timeedit.net/chalmers/web/public/ ... .ics"
 						/>
 						<Form.Button size="icon"><Upload /></Form.Button>
 					</div>

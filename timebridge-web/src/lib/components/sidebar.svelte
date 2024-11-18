@@ -5,9 +5,13 @@
 </script>
 
 <Sidebar.Root variant="floating">
+	<Sidebar.Header>
+		
+	</Sidebar.Header>
 	<Sidebar.Content>
 		<Sidebar.Group>
-			<Sidebar.GroupContent></Sidebar.GroupContent>
+			<Sidebar.GroupContent>
+			</Sidebar.GroupContent>
 		</Sidebar.Group>
 	</Sidebar.Content>
 	<Sidebar.Footer class="flex-row">
