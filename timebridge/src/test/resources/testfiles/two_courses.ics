@@ -1,0 +1,813 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+METHOD:PUBLISH
+X-WR-CALNAME:TimeEdit-DIT213GU\, Objektorien
+ terat programmering...\, +1 Kurs (2)-2024
+ 1118
+X-WR-CALDESC:Date limit -
+X-PUBLISHED-TTL:PT20M
+CALSCALE:GREGORIAN
+PRODID:-//TimeEdit\\\, //TimeEdit//EN
+BEGIN:VEVENT
+DTSTART:20241118T121500Z
+DTEND:20241118T140000Z
+UID:2027834-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT084GU. Kursnamn: Testning\, fe
+ lsökning & verifiering\, Kurskod: TDA567. Kursn
+ amn: Testning\, felsökning och verifiering\, La
+ boration
+LOCATION:MT10. Byggnad: Maskinteknik. Våningsplan: -1
+DESCRIPTION:MPSYS-1 \nTIDAL-3 \nTKITE-2
+  \nTKITE-3 \nTIDAL-3.002 AMN\nID 202
+ 7834
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241118T141500Z
+DTEND:20241118T160000Z
+UID:2027833-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT084GU. Kursnamn: Testning\, fel
+ sökning & verifiering\, Kurskod: TDA567. Kursnam
+ n: Testning\, felsökning och verifiering\, Förel
+ äsning
+LOCATION:ED. Byggnad: ED-blocket. Våningsplan: 5
+DESCRIPTION:MPSYS-1 \nTIDAL-3 \nTKITE-2
+  \nTKITE-3 \nTIDAL-3.002 AMN\nID 202
+ 7833
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241120T121500Z
+DTEND:20241120T140000Z
+UID:2093100-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Före
+ läsning
+LOCATION:SB-H1. Byggnad: SB2. Våningsplan: E
+DESCRIPTION:TKITE-2\nID 2093100
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241120T141500Z
+DTEND:20241120T160000Z
+UID:1975734-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektoriente
+ rat programmeringsprojekt\, Kurskod: TDA367. Ku
+ rsnamn: Objektorienterat programmeringsprojekt\
+ , Övning
+LOCATION:SB-D023. Byggnad: SB1. Våningsplan: -1 \nSB-D025. Byggn
+ ad: SB1. Våningsplan: -1 \nSB-D080. Byggnad: SB1. Våningsplan
+ : -1
+DESCRIPTION:TKITE-2\nID 1975734
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241121T070000Z
+DTEND:20241121T084500Z
+UID:2027832-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT084GU. Kursnamn: Testning\, fel
+ sökning & verifiering\, Kurskod: TDA567. Kursnam
+ n: Testning\, felsökning och verifiering\, Förel
+ äsning
+LOCATION:EB. Byggnad: ED-blocket. Våningsplan: 4
+DESCRIPTION:MPSYS-1 \nTIDAL-3 \nTKITE-2
+  \nTKITE-3 \nTIDAL-3.002 AMN\nID 202
+ 7832
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241121T090000Z
+DTEND:20241121T104500Z
+UID:2027831-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT084GU. Kursnamn: Testning\, f
+ elsökning & verifiering\, Kurskod: TDA567. Kur
+ snamn: Testning\, felsökning och verifiering\,
+  Övning
+LOCATION:ES51. Byggnad: ED-blocket. Våningsplan: 5
+DESCRIPTION:MPSYS-1 \nTIDAL-3 \nTKITE-2
+  \nTKITE-3 \nTIDAL-3.002 AMN\nID 202
+ 7831
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241121T121500Z
+DTEND:20241121T140000Z
+UID:2064820-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Före
+ läsning
+LOCATION:SB-H1. Byggnad: SB2. Våningsplan: E
+DESCRIPTION:TKITE-2\nID 2064820
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241121T141500Z
+DTEND:20241121T160000Z
+UID:1975733-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Hand
+ ledning
+LOCATION:EG-2514. Byggnad: ED-blocket. Våningsplan: E \nE
+ G-2516. Byggnad: ED-blocket. Våningsplan: E \nEG-3503.
+  Byggnad: ED-blocket. Våningsplan: 2 \nEG-3504. Byggna
+ d: ED-blocket. Våningsplan: 2 \nEG-3505. Byggnad: ED-b
+ locket. Våningsplan: 2 \nEG-3506. Byggnad: ED-blocket.
+  Våningsplan: 2
+DESCRIPTION:TKITE-2\nID 1975733
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241122T070000Z
+DTEND:20241122T084500Z
+UID:1975732-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, semi
+ narium
+LOCATION:SB3-L111. Byggnad: SB3. Våningsplan: 1
+DESCRIPTION:TKITE-2\nID 1975732
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241122T090000Z
+DTEND:20241122T104500Z
+UID:2093099-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Hand
+ ledning
+LOCATION:EG-2514. Byggnad: ED-blocket. Våningsplan: E \nE
+ G-2516. Byggnad: ED-blocket. Våningsplan: E \nEG-3503.
+  Byggnad: ED-blocket. Våningsplan: 2 \nEG-3504. Byggna
+ d: ED-blocket. Våningsplan: 2 \nEG-3505. Byggnad: ED-b
+ locket. Våningsplan: 2 \nEG-3506. Byggnad: ED-blocket.
+  Våningsplan: 2
+DESCRIPTION:TKITE-2\nID 2093099
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241122T090000Z
+DTEND:20241122T104500Z
+UID:1975731-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, semi
+ narium
+LOCATION:SB3-L111. Byggnad: SB3. Våningsplan: 1
+DESCRIPTION:TKITE-2\nID 1975731
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241122T121500Z
+DTEND:20241122T140000Z
+UID:1975729-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Hand
+ ledning
+LOCATION:EG-2514. Byggnad: ED-blocket. Våningsplan: E \nE
+ G-2516. Byggnad: ED-blocket. Våningsplan: E \nEG-3503.
+  Byggnad: ED-blocket. Våningsplan: 2 \nEG-3504. Byggna
+ d: ED-blocket. Våningsplan: 2 \nEG-3505. Byggnad: ED-b
+ locket. Våningsplan: 2 \nEG-3506. Byggnad: ED-blocket.
+  Våningsplan: 2
+DESCRIPTION:TKITE-2\nID 1975729
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241122T121500Z
+DTEND:20241122T140000Z
+UID:1975730-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, semi
+ narium
+LOCATION:ML11. Byggnad: Maskinteknik. Våningsplan: 1
+DESCRIPTION:TKITE-2\nID 1975730
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241122T141500Z
+DTEND:20241122T160000Z
+UID:1975728-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Hand
+ ledning
+LOCATION:EG-2514. Byggnad: ED-blocket. Våningsplan: E \nE
+ G-2516. Byggnad: ED-blocket. Våningsplan: E \nEG-3503.
+  Byggnad: ED-blocket. Våningsplan: 2 \nEG-3504. Byggna
+ d: ED-blocket. Våningsplan: 2 \nEG-3505. Byggnad: ED-b
+ locket. Våningsplan: 2 \nEG-3506. Byggnad: ED-blocket.
+  Våningsplan: 2
+DESCRIPTION:TKITE-2\nID 1975728
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20241125
+DTEND;VALUE=DATE:20241125
+UID:2008031-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Rubrik: Anmälan omtenta Jan. öppnar
+LOCATION:
+DESCRIPTION:07:00 - 17:00\nID 2008031
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241125T121500Z
+DTEND:20241125T140000Z
+UID:2027830-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT084GU. Kursnamn: Testning\, fe
+ lsökning & verifiering\, Kurskod: TDA567. Kursn
+ amn: Testning\, felsökning och verifiering\, La
+ boration
+LOCATION:IDE-D2505-7. Byggnad: ED-blocket. Våningsplan: E
+DESCRIPTION:MPSYS-1 \nTIDAL-3 \nTKITE-2
+  \nTKITE-3 \nTIDAL-3.002 AMN\nID 202
+ 7830
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241125T141500Z
+DTEND:20241125T160000Z
+UID:2027829-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT084GU. Kursnamn: Testning\, fel
+ sökning & verifiering\, Kurskod: TDA567. Kursnam
+ n: Testning\, felsökning och verifiering\, Förel
+ äsning
+LOCATION:ED. Byggnad: ED-blocket. Våningsplan: 5
+DESCRIPTION:MPSYS-1 \nTIDAL-3 \nTKITE-2
+  \nTKITE-3 \nTIDAL-3.002 AMN\nID 202
+ 7829
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241127T121500Z
+DTEND:20241127T140000Z
+UID:1975726-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Före
+ läsning
+LOCATION:SB-H1. Byggnad: SB2. Våningsplan: E
+DESCRIPTION:TKITE-2\nID 1975726
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241128T070000Z
+DTEND:20241128T084500Z
+UID:2027828-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT084GU. Kursnamn: Testning\, fel
+ sökning & verifiering\, Kurskod: TDA567. Kursnam
+ n: Testning\, felsökning och verifiering\, Förel
+ äsning
+LOCATION:EB. Byggnad: ED-blocket. Våningsplan: 4
+DESCRIPTION:MPSYS-1 \nTIDAL-3 \nTKITE-2
+  \nTKITE-3 \nTIDAL-3.002 AMN\nID 202
+ 7828
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241128T090000Z
+DTEND:20241128T104500Z
+UID:2027827-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT084GU. Kursnamn: Testning\, f
+ elsökning & verifiering\, Kurskod: TDA567. Kur
+ snamn: Testning\, felsökning och verifiering\,
+  Övning
+LOCATION:ES51. Byggnad: ED-blocket. Våningsplan: 5
+DESCRIPTION:MPSYS-1 \nTIDAL-3 \nTKITE-2
+  \nTKITE-3 \nTIDAL-3.002 AMN\nID 202
+ 7827
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241128T121500Z
+DTEND:20241128T140000Z
+UID:2093101-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Hand
+ ledning
+LOCATION:EG-2514. Byggnad: ED-blocket. Våningsplan: E \nE
+ G-2516. Byggnad: ED-blocket. Våningsplan: E \nEG-3503.
+  Byggnad: ED-blocket. Våningsplan: 2 \nEG-3504. Byggna
+ d: ED-blocket. Våningsplan: 2 \nEG-3505. Byggnad: ED-b
+ locket. Våningsplan: 2 \nEG-3506. Byggnad: ED-blocket.
+  Våningsplan: 2
+DESCRIPTION:TKITE-2\nID 2093101
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241128T141500Z
+DTEND:20241128T160000Z
+UID:1975725-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Hand
+ ledning
+LOCATION:EG-2514. Byggnad: ED-blocket. Våningsplan: E \nE
+ G-2516. Byggnad: ED-blocket. Våningsplan: E \nEG-3503.
+  Byggnad: ED-blocket. Våningsplan: 2 \nEG-3504. Byggna
+ d: ED-blocket. Våningsplan: 2 \nEG-3505. Byggnad: ED-b
+ locket. Våningsplan: 2 \nEG-3506. Byggnad: ED-blocket.
+  Våningsplan: 2
+DESCRIPTION:TKITE-2\nID 1975725
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241129T121500Z
+DTEND:20241129T140000Z
+UID:1975724-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Hand
+ ledning
+LOCATION:EG-2514. Byggnad: ED-blocket. Våningsplan: E \nE
+ G-2516. Byggnad: ED-blocket. Våningsplan: E \nEG-3503.
+  Byggnad: ED-blocket. Våningsplan: 2 \nEG-3504. Byggna
+ d: ED-blocket. Våningsplan: 2 \nEG-3505. Byggnad: ED-b
+ locket. Våningsplan: 2 \nEG-3506. Byggnad: ED-blocket.
+  Våningsplan: 2
+DESCRIPTION:TKITE-2\nID 1975724
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241129T141500Z
+DTEND:20241129T160000Z
+UID:1975723-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Hand
+ ledning
+LOCATION:EG-2514. Byggnad: ED-blocket. Våningsplan: E \nE
+ G-2516. Byggnad: ED-blocket. Våningsplan: E \nEG-3503.
+  Byggnad: ED-blocket. Våningsplan: 2 \nEG-3504. Byggna
+ d: ED-blocket. Våningsplan: 2 \nEG-3505. Byggnad: ED-b
+ locket. Våningsplan: 2 \nEG-3506. Byggnad: ED-blocket.
+  Våningsplan: 2
+DESCRIPTION:TKITE-2\nID 1975723
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241202T121500Z
+DTEND:20241202T140000Z
+UID:2027826-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT084GU. Kursnamn: Testning\, fe
+ lsökning & verifiering\, Kurskod: TDA567. Kursn
+ amn: Testning\, felsökning och verifiering\, La
+ boration
+LOCATION:MT10. Byggnad: Maskinteknik. Våningsplan: -1
+DESCRIPTION:MPSYS-1 \nTIDAL-3 \nTKITE-2
+  \nTKITE-3 \nTIDAL-3.002 AMN\nID 202
+ 7826
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241202T141500Z
+DTEND:20241202T160000Z
+UID:2027825-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT084GU. Kursnamn: Testning\, fel
+ sökning & verifiering\, Kurskod: TDA567. Kursnam
+ n: Testning\, felsökning och verifiering\, Förel
+ äsning
+LOCATION:ED. Byggnad: ED-blocket. Våningsplan: 5
+DESCRIPTION:MPSYS-1 \nTIDAL-3 \nTKITE-2
+  \nTKITE-3 \nTIDAL-3.002 AMN\nID 202
+ 7825
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241204T121500Z
+DTEND:20241204T140000Z
+UID:1975721-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Före
+ läsning
+LOCATION:SB-H1. Byggnad: SB2. Våningsplan: E
+DESCRIPTION:TKITE-2\nID 1975721
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241205T070000Z
+DTEND:20241205T084500Z
+UID:2027824-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT084GU. Kursnamn: Testning\, fel
+ sökning & verifiering\, Kurskod: TDA567. Kursnam
+ n: Testning\, felsökning och verifiering\, Förel
+ äsning
+LOCATION:EB. Byggnad: ED-blocket. Våningsplan: 4
+DESCRIPTION:MPSYS-1 \nTIDAL-3 \nTKITE-2
+  \nTKITE-3 \nTIDAL-3.002 AMN\nID 202
+ 7824
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241205T090000Z
+DTEND:20241205T104500Z
+UID:2027823-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT084GU. Kursnamn: Testning\, f
+ elsökning & verifiering\, Kurskod: TDA567. Kur
+ snamn: Testning\, felsökning och verifiering\,
+  Övning
+LOCATION:ES51. Byggnad: ED-blocket. Våningsplan: 5
+DESCRIPTION:MPSYS-1 \nTIDAL-3 \nTKITE-2
+  \nTKITE-3 \nTIDAL-3.002 AMN\nID 202
+ 7823
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241205T121500Z
+DTEND:20241205T140000Z
+UID:1975722-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Hand
+ ledning
+LOCATION:EG-2514. Byggnad: ED-blocket. Våningsplan: E \nE
+ G-2516. Byggnad: ED-blocket. Våningsplan: E \nEG-3503.
+  Byggnad: ED-blocket. Våningsplan: 2 \nEG-3504. Byggna
+ d: ED-blocket. Våningsplan: 2 \nEG-3505. Byggnad: ED-b
+ locket. Våningsplan: 2 \nEG-3506. Byggnad: ED-blocket.
+  Våningsplan: 2
+DESCRIPTION:TKITE-2\nID 1975722
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241205T141500Z
+DTEND:20241205T160000Z
+UID:1975720-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Hand
+ ledning
+LOCATION:EG-2514. Byggnad: ED-blocket. Våningsplan: E \nE
+ G-2516. Byggnad: ED-blocket. Våningsplan: E \nEG-3503.
+  Byggnad: ED-blocket. Våningsplan: 2 \nEG-3504. Byggna
+ d: ED-blocket. Våningsplan: 2 \nEG-3505. Byggnad: ED-b
+ locket. Våningsplan: 2 \nEG-3506. Byggnad: ED-blocket.
+  Våningsplan: 2
+DESCRIPTION:TKITE-2\nID 1975720
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241206T121500Z
+DTEND:20241206T140000Z
+UID:1975719-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Hand
+ ledning
+LOCATION:EG-2514. Byggnad: ED-blocket. Våningsplan: E \nE
+ G-2516. Byggnad: ED-blocket. Våningsplan: E \nEG-3503.
+  Byggnad: ED-blocket. Våningsplan: 2 \nEG-3504. Byggna
+ d: ED-blocket. Våningsplan: 2 \nEG-3505. Byggnad: ED-b
+ locket. Våningsplan: 2 \nEG-3506. Byggnad: ED-blocket.
+  Våningsplan: 2
+DESCRIPTION:TKITE-2\nID 1975719
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241206T141500Z
+DTEND:20241206T160000Z
+UID:1975718-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Hand
+ ledning
+LOCATION:EG-2514. Byggnad: ED-blocket. Våningsplan: E \nE
+ G-2516. Byggnad: ED-blocket. Våningsplan: E \nEG-3503.
+  Byggnad: ED-blocket. Våningsplan: 2 \nEG-3504. Byggna
+ d: ED-blocket. Våningsplan: 2 \nEG-3505. Byggnad: ED-b
+ locket. Våningsplan: 2 \nEG-3506. Byggnad: ED-blocket.
+  Våningsplan: 2
+DESCRIPTION:TKITE-2\nID 1975718
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241209T121500Z
+DTEND:20241209T140000Z
+UID:2027822-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT084GU. Kursnamn: Testning\, fe
+ lsökning & verifiering\, Kurskod: TDA567. Kursn
+ amn: Testning\, felsökning och verifiering\, La
+ boration
+LOCATION:IDE-D2505-7. Byggnad: ED-blocket. Våningsplan: E
+DESCRIPTION:MPSYS-1 \nTIDAL-3 \nTKITE-2
+  \nTKITE-3 \nTIDAL-3.002 AMN\nID 202
+ 7822
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241209T141500Z
+DTEND:20241209T160000Z
+UID:2027821-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT084GU. Kursnamn: Testning\, fel
+ sökning & verifiering\, Kurskod: TDA567. Kursnam
+ n: Testning\, felsökning och verifiering\, Förel
+ äsning
+LOCATION:ED. Byggnad: ED-blocket. Våningsplan: 5
+DESCRIPTION:MPSYS-1 \nTIDAL-3 \nTKITE-2
+  \nTKITE-3 \nTIDAL-3.002 AMN\nID 202
+ 7821
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241211T121500Z
+DTEND:20241211T140000Z
+UID:2065087-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Före
+ läsning
+LOCATION:SB-H1. Byggnad: SB2. Våningsplan: E
+DESCRIPTION:TKITE-2\nID 2065087
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241212T070000Z
+DTEND:20241212T084500Z
+UID:2027820-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT084GU. Kursnamn: Testning\, fel
+ sökning & verifiering\, Kurskod: TDA567. Kursnam
+ n: Testning\, felsökning och verifiering\, Förel
+ äsning
+LOCATION:EB. Byggnad: ED-blocket. Våningsplan: 4
+DESCRIPTION:MPSYS-1 \nTIDAL-3 \nTKITE-2
+  \nTKITE-3 \nTIDAL-3.002 AMN\nID 202
+ 7820
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241212T090000Z
+DTEND:20241212T104500Z
+UID:2027819-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT084GU. Kursnamn: Testning\, f
+ elsökning & verifiering\, Kurskod: TDA567. Kur
+ snamn: Testning\, felsökning och verifiering\,
+  Övning
+LOCATION:ES51. Byggnad: ED-blocket. Våningsplan: 5
+DESCRIPTION:MPSYS-1 \nTIDAL-3 \nTKITE-2
+  \nTKITE-3 \nTIDAL-3.002 AMN\nID 202
+ 7819
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241212T121500Z
+DTEND:20241212T140000Z
+UID:1975717-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Hand
+ ledning
+LOCATION:EG-2514. Byggnad: ED-blocket. Våningsplan: E \nE
+ G-2516. Byggnad: ED-blocket. Våningsplan: E \nEG-3503.
+  Byggnad: ED-blocket. Våningsplan: 2 \nEG-3504. Byggna
+ d: ED-blocket. Våningsplan: 2 \nEG-3505. Byggnad: ED-b
+ locket. Våningsplan: 2 \nEG-3506. Byggnad: ED-blocket.
+  Våningsplan: 2
+DESCRIPTION:TKITE-2\nID 1975717
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241212T141500Z
+DTEND:20241212T160000Z
+UID:1975716-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Hand
+ ledning
+LOCATION:EG-2514. Byggnad: ED-blocket. Våningsplan: E \nE
+ G-2516. Byggnad: ED-blocket. Våningsplan: E \nEG-3503.
+  Byggnad: ED-blocket. Våningsplan: 2 \nEG-3504. Byggna
+ d: ED-blocket. Våningsplan: 2 \nEG-3505. Byggnad: ED-b
+ locket. Våningsplan: 2 \nEG-3506. Byggnad: ED-blocket.
+  Våningsplan: 2
+DESCRIPTION:TKITE-2\nID 1975716
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241213T121500Z
+DTEND:20241213T140000Z
+UID:1975713-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Hand
+ ledning
+LOCATION:EG-2514. Byggnad: ED-blocket. Våningsplan: E \nE
+ G-2516. Byggnad: ED-blocket. Våningsplan: E \nEG-3503.
+  Byggnad: ED-blocket. Våningsplan: 2 \nEG-3504. Byggna
+ d: ED-blocket. Våningsplan: 2 \nEG-3505. Byggnad: ED-b
+ locket. Våningsplan: 2 \nEG-3506. Byggnad: ED-blocket.
+  Våningsplan: 2
+DESCRIPTION:TKITE-2\nID 1975713
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241213T141500Z
+DTEND:20241213T160000Z
+UID:1975712-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Hand
+ ledning
+LOCATION:EG-2514. Byggnad: ED-blocket. Våningsplan: E \nE
+ G-2516. Byggnad: ED-blocket. Våningsplan: E \nEG-3503.
+  Byggnad: ED-blocket. Våningsplan: 2 \nEG-3504. Byggna
+ d: ED-blocket. Våningsplan: 2 \nEG-3505. Byggnad: ED-b
+ locket. Våningsplan: 2 \nEG-3506. Byggnad: ED-blocket.
+  Våningsplan: 2
+DESCRIPTION:TKITE-2\nID 1975712
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241216T121500Z
+DTEND:20241216T140000Z
+UID:2027818-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT084GU. Kursnamn: Testning\, fe
+ lsökning & verifiering\, Kurskod: TDA567. Kursn
+ amn: Testning\, felsökning och verifiering\, La
+ boration
+LOCATION:ED2480. Byggnad: ED-blocket. Våningsplan: 2
+DESCRIPTION:MPSYS-1 \nTIDAL-3 \nTKITE-2
+  \nTKITE-3 \nTIDAL-3.002 AMN\nID 202
+ 7818
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241216T141500Z
+DTEND:20241216T160000Z
+UID:2027817-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT084GU. Kursnamn: Testning\, fel
+ sökning & verifiering\, Kurskod: TDA567. Kursnam
+ n: Testning\, felsökning och verifiering\, Förel
+ äsning
+LOCATION:ED. Byggnad: ED-blocket. Våningsplan: 5
+DESCRIPTION:MPSYS-1 \nTIDAL-3 \nTKITE-2
+  \nTKITE-3 \nTIDAL-3.002 AMN\nID 202
+ 7817
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241218T121500Z
+DTEND:20241218T140000Z
+UID:2065088-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Före
+ läsning
+LOCATION:SB-H1. Byggnad: SB2. Våningsplan: E
+DESCRIPTION:TKITE-2\nID 2065088
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241219T070000Z
+DTEND:20241219T084500Z
+UID:2027816-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT084GU. Kursnamn: Testning\, fel
+ sökning & verifiering\, Kurskod: TDA567. Kursnam
+ n: Testning\, felsökning och verifiering\, Förel
+ äsning
+LOCATION:EB. Byggnad: ED-blocket. Våningsplan: 4
+DESCRIPTION:MPSYS-1 \nTIDAL-3 \nTKITE-2
+  \nTKITE-3 \nTIDAL-3.002 AMN\nID 202
+ 7816
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241219T090000Z
+DTEND:20241219T104500Z
+UID:2027815-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT084GU. Kursnamn: Testning\, f
+ elsökning & verifiering\, Kurskod: TDA567. Kur
+ snamn: Testning\, felsökning och verifiering\,
+  Övning
+LOCATION:ES51. Byggnad: ED-blocket. Våningsplan: 5
+DESCRIPTION:MPSYS-1 \nTIDAL-3 \nTKITE-2
+  \nTKITE-3 \nTIDAL-3.002 AMN\nID 202
+ 7815
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241219T121500Z
+DTEND:20241219T140000Z
+UID:1975707-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Hand
+ ledning
+LOCATION:EG-2514. Byggnad: ED-blocket. Våningsplan: E \nE
+ G-2516. Byggnad: ED-blocket. Våningsplan: E \nEG-3503.
+  Byggnad: ED-blocket. Våningsplan: 2 \nEG-3504. Byggna
+ d: ED-blocket. Våningsplan: 2 \nEG-3505. Byggnad: ED-b
+ locket. Våningsplan: 2 \nEG-3506. Byggnad: ED-blocket.
+  Våningsplan: 2
+DESCRIPTION:TKITE-2\nID 1975707
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241219T141500Z
+DTEND:20241219T160000Z
+UID:1975706-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Hand
+ ledning
+LOCATION:EG-2514. Byggnad: ED-blocket. Våningsplan: E \nE
+ G-2516. Byggnad: ED-blocket. Våningsplan: E \nEG-3503.
+  Byggnad: ED-blocket. Våningsplan: 2 \nEG-3504. Byggna
+ d: ED-blocket. Våningsplan: 2 \nEG-3505. Byggnad: ED-b
+ locket. Våningsplan: 2 \nEG-3506. Byggnad: ED-blocket.
+  Våningsplan: 2
+DESCRIPTION:TKITE-2\nID 1975706
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241220T121500Z
+DTEND:20241220T140000Z
+UID:1975705-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Hand
+ ledning
+LOCATION:EG-2514. Byggnad: ED-blocket. Våningsplan: E \nE
+ G-2516. Byggnad: ED-blocket. Våningsplan: E \nEG-3503.
+  Byggnad: ED-blocket. Våningsplan: 2 \nEG-3504. Byggna
+ d: ED-blocket. Våningsplan: 2 \nEG-3505. Byggnad: ED-b
+ locket. Våningsplan: 2 \nEG-3506. Byggnad: ED-blocket.
+  Våningsplan: 2
+DESCRIPTION:TKITE-2\nID 1975705
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241220T141500Z
+DTEND:20241220T160000Z
+UID:1975704-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Hand
+ ledning
+LOCATION:EG-2514. Byggnad: ED-blocket. Våningsplan: E \nE
+ G-2516. Byggnad: ED-blocket. Våningsplan: E \nEG-3503.
+  Byggnad: ED-blocket. Våningsplan: 2 \nEG-3504. Byggna
+ d: ED-blocket. Våningsplan: 2 \nEG-3505. Byggnad: ED-b
+ locket. Våningsplan: 2 \nEG-3506. Byggnad: ED-blocket.
+  Våningsplan: 2
+DESCRIPTION:TKITE-2\nID 1975704
+END:VEVENT
+END:VCALENDAR
