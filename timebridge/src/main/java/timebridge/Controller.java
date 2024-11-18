@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,7 @@ class Controller {
         return "Hello, World!";
     }
 
+    @CrossOrigin(origins = "http://localhost:5173") // Your frontend's origin
     @GetMapping("/upload")
     public ResponseEntity<Calendar> uploadCalendar(@RequestParam String ical) {
         try {
@@ -44,17 +46,18 @@ class Controller {
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:5173") // Your frontend's origin
     @GetMapping("/download")
     public ResponseEntity<byte[]> downloadCalendar(@RequestParam String ical) {
         try {
-        // Create a URL object and open a connection to the iCalendar URL
-        URL url = new URL(ical);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            // Create a URL object and open a connection to the iCalendar URL
+            URL url = new URL(ical);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-        // Check if the request was successful
-        if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-            return ResponseEntity.badRequest().build();
-        }
+            // Check if the request was successful
+            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                return ResponseEntity.badRequest().build();
+            }
 
             // Read the iCalendar file data from the URL
             try (InputStream inputStream = connection.getInputStream()) {
@@ -69,10 +72,10 @@ class Controller {
                 HttpHeaders headers = new HttpHeaders();
                 headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=calendar-event.ics");
                 headers.add(HttpHeaders.CONTENT_TYPE, "text/calendar; charset=UTF-8");
-                
+
                 // Response
                 return new ResponseEntity<>(contentBytes, headers, HttpStatus.OK);
-            } 
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).build();
