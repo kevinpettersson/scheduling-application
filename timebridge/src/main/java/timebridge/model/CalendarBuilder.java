@@ -9,6 +9,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.regex.*;
 
 public abstract class CalendarBuilder {
 
@@ -19,10 +20,9 @@ public abstract class CalendarBuilder {
 
         // Create a BufferedReader from the normalized iCal data
         BufferedReader reader = new BufferedReader(
-            new StringReader(normalizedIcs)
-        );
+                new StringReader(normalizedIcs));
 
-        // Parse events from the  BufferedReader
+        // Parse events from the BufferedReader
         ArrayList<Event> events = parseEvents(reader);
 
         // Create and return a new Calendar object with the parsed events
@@ -34,8 +34,8 @@ public abstract class CalendarBuilder {
     private static String normalizeIcs(String ics) throws IOException {
         BufferedReader reader = new BufferedReader(new StringReader(ics));
         StringWriter writer = new StringWriter();
-    
-        for (String line; (line = reader.readLine()) != null; ) {
+
+        for (String line; (line = reader.readLine()) != null;) {
             writer.write(line.startsWith(" ") ? line.trim() : "\n" + line.trim());
         }
 
@@ -44,7 +44,7 @@ public abstract class CalendarBuilder {
 
     // Method to parse events from the input BufferedReader
     private static ArrayList<Event> parseEvents(BufferedReader reader)
-        throws IOException {
+            throws IOException {
         ArrayList<Event> events = new ArrayList<>();
         String line;
 
@@ -52,15 +52,15 @@ public abstract class CalendarBuilder {
         while ((line = reader.readLine()) != null) {
             // Check if the line indicates the start of an event, and parse it
             if (line.startsWith("BEGIN:VEVENT")) {
-                events.add(parseEvent(reader));
+                events.addAll(parseEvent(reader));
             }
         }
         return events;
     }
 
     // Method to parse a single event from the input BufferedReader
-    private static Event parseEvent(BufferedReader reader) throws IOException {
-        Course course = new Course("mockname", "mockcode");
+    private static ArrayList<Event> parseEvent(BufferedReader reader) throws IOException {
+        ArrayList<Course> courses = new ArrayList<>();
         String activity = null;
         Interval interval = new Interval();
         ArrayList<Location> locations = new ArrayList<Location>();
@@ -69,7 +69,9 @@ public abstract class CalendarBuilder {
         // Read each line until the end of the event
         while (!(line = reader.readLine().trim()).equals("END:VEVENT")) {
             // Skip if line does not have prefix
-            if (!line.contains(":")) { continue; }
+            if (!line.contains(":")) {
+                continue;
+            }
 
             // Extract the prefix of the line and remove it from the line
             String prefix = line.substring(0, line.indexOf(':'));
@@ -87,7 +89,8 @@ public abstract class CalendarBuilder {
                     break;
                 // Parse and set the summary (course & activity) of the event
                 case "SUMMARY":
-                    activity = parseSummary(line);
+                    courses = parseCourses(line);
+                    activity = parseActivity(line);
                     break;
                 // Parse and add the location(s) of the event
                 case "LOCATION":
@@ -98,22 +101,67 @@ public abstract class CalendarBuilder {
                     break;
             }
         }
-    
-        // Create and return a new Event object with the parsed details
-        return new Event(course, activity, interval, locations);
+
+        ArrayList<Event> events = new ArrayList<>();
+
+        for (Course course : courses) {
+            events.add(new Event(course, activity, interval, locations));
+        }
+
+        return events;
     }
 
     // Method to parse a datetime string and return codea ZonedDateTime object
     private static ZonedDateTime parseDateTime(String line) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
-            "yyyyMMdd'T'HHmmss'Z'"
-        );
+                "yyyyMMdd'T'HHmmss'Z'");
         return ZonedDateTime.parse(line, formatter.withZone(ZoneOffset.UTC));
     }
 
-    // Method to parse the summary (course & activity) of an event
-    private static String parseSummary(String line) {
-        return line;
+    // Method to parse the course from the summary
+    private static ArrayList<Course> parseCourses(String line) {
+        ArrayList<Course> courses = new ArrayList<>();
+        String tempLine = line;
+
+        // Remove activity from line
+        tempLine = tempLine.replaceAll(",[^,]*$", "");
+
+        // Remove all backslashes
+        tempLine = tempLine.replaceAll("\\\\", "");
+
+        // Find course code
+        String pattern = "Kurskod:\\s(\\S+)\\.\\sKursnamn:\\s(.*?)(?=Kurskod:|$)";
+
+        // Create a Pattern object
+        Pattern regex = Pattern.compile(pattern);
+
+        // Create a Matcher object
+        Matcher matcher = regex.matcher(tempLine);
+
+        // Create Course objects from the matches
+        while (matcher.find()) {
+            Course temp = new Course(matcher.group(1), matcher.group(2));
+            courses.add(temp);
+        }
+
+        // Remove unwanted chars and substrings from course names
+        for (Course course : courses) {
+            // Remove trailing commas from course names
+            String str = course.getName().trim();
+            if (str.charAt(str.length() - 1) == ',') {
+                course.setName(str.substring(0, str.length() - 1));
+            }
+
+            // Remove "Rubrik:" from course names
+            str.replace("Rubrik:", "");
+        }
+
+        return courses;
+    }
+
+    // Method to parse the activity from the summary
+    private static String parseActivity(String line) {
+        return line.replaceAll(".*,(\\s*[^,]+)$", "$1").trim();
     }
 
     // Method to parse the location(s) of an event
@@ -121,7 +169,7 @@ public abstract class CalendarBuilder {
         ArrayList<Location> locations = new ArrayList<>();
 
         line = line.replace("\\n", "\n");
-        line  = line.trim();
+        line = line.trim();
         ArrayList<String> locationList = new ArrayList<String>(Arrays.asList(line.split("\n")));
 
         for (String location : locationList) {
@@ -129,12 +177,18 @@ public abstract class CalendarBuilder {
                 continue;
             }
 
+            System.out.println(location);
+
             int firstDotIndex = location.indexOf(".");
             int secondDotIndex = location.indexOf(".", firstDotIndex + 1);
+            if (secondDotIndex == -1) {
+                secondDotIndex = location.length();
+            }
 
             String room = location.substring(0, firstDotIndex);
-            String building = location.substring(location.indexOf("Byggnad:"), secondDotIndex).replace("Byggnad:", "").trim();
-            
+            String building = location.substring(location.indexOf("Byggnad:"), secondDotIndex).replace("Byggnad:", "")
+                    .trim();
+
             locations.add(new Location(building, room));
         }
 
