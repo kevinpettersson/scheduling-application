@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import timebridge.model.*;
 
@@ -80,5 +81,10 @@ class Controller {
             e.printStackTrace();
             return ResponseEntity.status(500).build();
         }
+
+        // Ta in Calendar JSON och Settings JSON
+        // Skapa Calendar objekt från Calendar JSON
+        // Skapa Settings objekt från Settings JSON
+        // Skapa ny calendar objekt från Calendar objekt och Settings objekt
     }
 }
