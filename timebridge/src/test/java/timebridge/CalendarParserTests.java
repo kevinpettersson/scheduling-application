@@ -1,5 +1,4 @@
 package timebridge;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -53,5 +52,9 @@ public class CalendarParserTests {
         
        assertNotNull(iCalContent);
        assertTrue(iCalContent.contains("BEGIN:VCALENDAR"));
+       assertTrue(iCalContent.contains("END:VCALENDAR"));
+
+       assertEquals(2, iCalContent.split("BEGIN:VEVENT").length);
+       assertEquals(2, iCalContent.split("END:VEVENT").length);
     }
 }
