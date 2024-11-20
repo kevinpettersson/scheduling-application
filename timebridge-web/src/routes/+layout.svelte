@@ -17,7 +17,7 @@
 	<!-- Render this on all other pages -->
 	<ModeWatcher />
 	<Sidebar.Provider>
-		<AppSidebar />
+		<AppSidebar/>
 		<main class="h-dvh p-2 pl-0">
 			{@render children?.()}
 		</main>
