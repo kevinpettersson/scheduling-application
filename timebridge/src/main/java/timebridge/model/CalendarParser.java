@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public abstract class CalendarParser {
@@ -37,9 +38,16 @@ public abstract class CalendarParser {
         sb.append("SUMMARY:" + event.getCourse().getCode()).append(" - " + event.getActivity()).append("\n"); 
         sb.append("LOCATION:");  
         boolean flag = true;
+        ArrayList buildings = new ArrayList<String>();
         for (Location location : event.getLocations()) {
-            sb.append("Byggnad: " + location.getBuilding()).append(", ");
-            sb.append("Rum: " + location.getRoom()).append(" \\ ");
+            if(!buildings.contains(location.getBuilding())){
+                sb.append("Byggnad: " + location.getBuilding()).append(", ");
+                sb.append("Rum: " + location.getRoom()).append(" \\ ");
+                buildings.add(location.getBuilding());
+            }
+            else{
+                sb.append("Rum: " + location.getRoom()).append(" \\ ");
+            }
         }
         sb.append("\n");
         sb.append("DESCRIPTION:" + (event.getCourse().getName()) + "\n");
@@ -47,6 +55,7 @@ public abstract class CalendarParser {
         
         return sb.toString();
     }
+    
 
     private static String getUniqueIdetifier() {
         return UUID.randomUUID().toString() + "@timebridge.se";
@@ -64,3 +73,4 @@ public abstract class CalendarParser {
     }
     
 }
+
