@@ -1,0 +1,39 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+METHOD:PUBLISH
+X-WR-CALNAME:TimeEdit-DIT213GU\, Obje
+ ktorienterat programmering...-2024
+ 1118
+X-WR-CALDESC:Date limit -
+X-PUBLISHED-TTL:PT20M
+CALSCALE:GREGORIAN
+PRODID:-//TimeEdit\\\, //TimeEdit//EN
+BEGIN:VEVENT
+DTSTART:20241120T121500Z
+DTEND:20241120T140000Z
+UID:2093100-569704435-0@timeedit.com
+DTSTAMP:20241118T103315Z
+LAST-MODIFIED:20241118T103315Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Före
+ läsning
+LOCATION:SB-H1. Byggnad: SB2. Våningsplan: E
+DESCRIPTION:TKITE-2\nID 2093100
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20241120T141500Z
+DTEND:20241120T160000Z
+UID:1975734-569704435-0@timeedit.com
+DTSTAMP:20241118T102901Z
+LAST-MODIFIED:20241118T102901Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektoriente
+ rat programmeringsprojekt\, Kurskod: TDA367. Ku
+ rsnamn: Objektorienterat programmeringsprojekt\
+ , Övning
+LOCATION:SB-D023. Byggnad: SB1. Våningsplan: -1 \nSB-D025. Byggn
+ ad: SB1. Våningsplan: -1 \nSB-D080. Byggnad: SB1. Våningsplan
+ : -1
+DESCRIPTION:TKITE-2\nID 1975734
+END:VEVENT
+END:VCALENDAR
