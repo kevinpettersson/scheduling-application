@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import timebridge.model.*;
 
 @RestController
@@ -81,10 +87,27 @@ class Controller {
             e.printStackTrace();
             return ResponseEntity.status(500).build();
         }
+    }
 
-        // Ta in Calendar JSON och Settings JSON
-        // Skapa Calendar objekt från Calendar JSON
-        // Skapa Settings objekt från Settings JSON
-        // Skapa ny calendar objekt från Calendar objekt och Settings objekt
+    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping("/modify")
+    public ResponseEntity<Calendar> modifyCalendar(
+            @RequestParam ArrayList<String> courseFilter,
+            @RequestParam ArrayList<String> activityFilter,
+            @RequestParam ArrayList<String> summaryFormat,
+            @RequestParam ArrayList<String> descriptionFormat,
+            @RequestParam ArrayList<String> locationFormat,
+            @RequestBody Calendar calendar) throws Exception {
+
+        // Construct the Settings object directly using the ArrayLists
+        Settings settingsObj = new Settings(courseFilter, activityFilter, summaryFormat, descriptionFormat,
+                locationFormat);
+
+        // Create a CalendarEditor object and build the modified calendar
+        CalendarEditor editor = new CalendarEditor(calendar, settingsObj);
+        Calendar resultCalendar = editor.build();
+
+        // Return the modified calendar
+        return ResponseEntity.ok(resultCalendar);
     }
 }

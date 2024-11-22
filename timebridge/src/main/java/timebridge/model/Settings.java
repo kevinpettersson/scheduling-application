@@ -1,9 +1,6 @@
 package timebridge.model;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class Settings {
     private ArrayList<String> courseFilter;
@@ -12,28 +9,14 @@ public class Settings {
     private ArrayList<String> descriptionFormat;
     private ArrayList<String> locationFormat;
 
-    // Constructor that takes a JSON object
-    public Settings(String jsonSettings) throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(jsonSettings);
-
-        this.courseFilter = parseArray(root, "courseFilter");
-        this.activityFilter = parseArray(root, "activityFilter");
-        this.summaryFormat = parseArray(root, "summaryFormat");
-        this.descriptionFormat = parseArray(root, "descriptionFormat");
-        this.locationFormat = parseArray(root, "locationFormat");
-    }
-
-    // Helper method to parse an array field from the JSON node
-    private ArrayList<String> parseArray(JsonNode root, String fieldName) {
-        ArrayList<String> list = new ArrayList<>();
-        JsonNode arrayNode = root.get(fieldName);
-        if (arrayNode != null && arrayNode.isArray()) {
-            for (Iterator<JsonNode> it = arrayNode.elements(); it.hasNext();) {
-                list.add(it.next().asText());
-            }
-        }
-        return list;
+    // Regular constructor
+    public Settings(ArrayList<String> courseFilter, ArrayList<String> activityFilter, ArrayList<String> summaryFormat,
+            ArrayList<String> descriptionFormat, ArrayList<String> locationFormat) {
+        this.courseFilter = courseFilter;
+        this.activityFilter = activityFilter;
+        this.summaryFormat = summaryFormat;
+        this.descriptionFormat = descriptionFormat;
+        this.locationFormat = locationFormat;
     }
 
     public ArrayList<String> getCourseFilter() {

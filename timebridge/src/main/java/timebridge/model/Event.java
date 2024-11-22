@@ -7,44 +7,61 @@ public class Event {
     private String activity;
     private Interval interval;
     private ArrayList<Location> locations;
+    private EventFormat format;
 
-    public Event(Course course, String activity, Interval interval, ArrayList<Location> locations){
+    public Event() {
+        this.course = new Course();
+        this.activity = "";
+        this.interval = new Interval();
+        this.locations = new ArrayList<Location>();
+        this.format = new EventFormat();
+    }
+
+    public Event(Course course, String activity, Interval interval, ArrayList<Location> locations) {
         this.course = course;
         this.activity = activity;
         this.interval = interval;
         this.locations = locations;
+        this.format = new EventFormat();
     }
 
-    public Course getCourse(){
+    public Course getCourse() {
         return this.course;
     }
 
-    public void setCourse(Course course){
+    public void setCourse(Course course) {
         this.course = course;
     }
 
-    public String getActivity(){
+    public String getActivity() {
         return this.activity;
-    }  
+    }
 
-    public void setActivity(String activity){
+    public void setActivity(String activity) {
         this.activity = activity;
     }
-    
-    public Interval getInterval(){
-        return this.interval;
-    }     
 
-    public void setInterval(Interval interval){
+    public Interval getInterval() {
+        return this.interval;
+    }
+
+    public void setInterval(Interval interval) {
         this.interval = interval;
     }
-    
-    public ArrayList<Location> getLocations(){
+
+    public ArrayList<Location> getLocations() {
         return this.locations;
     }
 
-    public void setLocations(ArrayList<Location> locations){
+    public void setLocations(ArrayList<Location> locations) {
         this.locations = locations;
     }
-}
 
+    public void setFormat(EventFormat format) {
+        this.format = format;
+    }
+
+    public EventFormat getFormat() {
+        return this.format;
+    }
+}
