@@ -10,14 +10,15 @@ public class Calendar {
     private String name;
     private ArrayList<Event> events;
 
-    public Calendar(String name, ArrayList<Event> events) {
-        this.name = name;
-        this.events = events;
-    }
-
     public Calendar() {
         this.name = "";
         this.events = new ArrayList<>();
+    }
+
+    public Calendar(String name, ArrayList<Event> events) {
+        this.id = java.util.UUID.randomUUID().toString();
+        this.name = name;
+        this.events = events;
     }
 
     public String getId() {
@@ -46,5 +47,9 @@ public class Calendar {
 
     public void addEvent(Event event) {
         events.add(event);
+    }
+
+    public void addEvents(ArrayList<Event> events) {
+        this.events.addAll(events);
     }
 }
