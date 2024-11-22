@@ -72,8 +72,13 @@ public class CalendarEditor {
     private String formatLocation(Event event) {
         StringBuilder location = new StringBuilder();
         for (Location loc : event.getLocations()) {
-            location.append("Byggnad: ").append(loc.getBuilding()).append(", ");
-            location.append("Rum: ").append(loc.getRoom());
+            if (settings.getLocationFormat().contains("building")) {
+                location.append("Byggnad: ").append(loc.getBuilding()).append(", ");
+            }
+
+            if (settings.getLocationFormat().contains("room")) {
+                location.append("Rum: ").append(loc.getRoom());
+            }
 
             if (event.getLocations().indexOf(loc) != event.getLocations().size() - 1) {
                 location.append(" \n ");
