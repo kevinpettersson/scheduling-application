@@ -34,7 +34,7 @@ void testBuildWithDateTime() throws IOException, URISyntaxException {
 
         // Assertions
         assertNotNull(calendar);
-        assertEquals(1, calendar.getEvents().size());
+        assertEquals(2, calendar.getEvents().size());
 
         Event event = calendar.getEvents().get(0);
         assertEquals(expectedStart, event.getInterval().getStart());

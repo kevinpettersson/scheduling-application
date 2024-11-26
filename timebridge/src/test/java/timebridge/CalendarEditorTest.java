@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.StringUtils;
@@ -30,6 +31,17 @@ public class CalendarEditorTest {
     private ArrayList<String> summaryFormat = new ArrayList<>();
     private ArrayList<String> descriptionFormat = new ArrayList<>();
     private ArrayList<String> locationFormat = new ArrayList<>();
+
+    @BeforeEach
+    public void setUp(){
+        // Instance variable setup before each test.
+        ArrayList<String> courseFilter = new ArrayList<>();
+        ArrayList<String> activityFilter = new ArrayList<>();
+        ArrayList<String> summaryFormat = new ArrayList<>();
+        ArrayList<String> descriptionFormat = new ArrayList<>();
+        ArrayList<String> locationFormat = new ArrayList<>();
+    }
+
 
     public String getTextFile(String file) throws IOException, URISyntaxException{
         // Retrive the ics-file from the given path and turn it into a String.
