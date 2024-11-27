@@ -23,7 +23,7 @@ public abstract class CalendarBuilder {
                 new StringReader(normalizedIcs));
 
         // Parse events from the BufferedReader
-        ArrayList<Event> events = parseEvents(reader);
+        ArrayList<EventInterface> events = parseEvents(reader);
 
         // Create and return a new Calendar object with the parsed events
         return new Calendar("My Calendar", events);
@@ -43,9 +43,9 @@ public abstract class CalendarBuilder {
     }
 
     // Method to parse events from the input BufferedReader
-    private static ArrayList<Event> parseEvents(BufferedReader reader)
+    private static ArrayList<EventInterface> parseEvents(BufferedReader reader)
             throws IOException {
-        ArrayList<Event> events = new ArrayList<>();
+        ArrayList<EventInterface> events = new ArrayList<>();
         String line;
 
         // Read each line from the input
@@ -59,7 +59,7 @@ public abstract class CalendarBuilder {
     }
 
     // Method to parse a single event from the input BufferedReader
-    private static ArrayList<Event> parseEvent(BufferedReader reader) throws IOException {
+    private static ArrayList<EventInterface> parseEvent(BufferedReader reader) throws IOException {
         ArrayList<Course> courses = new ArrayList<>();
         String activity = null;
         Interval interval = new Interval();
@@ -102,10 +102,16 @@ public abstract class CalendarBuilder {
             }
         }
 
-        ArrayList<Event> events = new ArrayList<>();
+        ArrayList<EventInterface> events = new ArrayList<>();
 
         for (Course course : courses) {
-            events.add(new Event(course, activity, interval, locations));
+            EventInterface event = new Event();
+            event = new SchoolEvent(event);
+            ((SchoolEvent) event).setCourse(course);
+            ((SchoolEvent) event).setLocation(locations.get(0).getBuilding());
+            event.setActivity(activity);
+            event.setInterval(interval);
+            events.add(event);
         }
 
         return events;

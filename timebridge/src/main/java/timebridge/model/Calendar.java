@@ -8,14 +8,14 @@ public class Calendar {
     private String id;
 
     private String name;
-    private ArrayList<Event> events;
+    private ArrayList<EventInterface> events;
 
     public Calendar() {
         this.name = "";
         this.events = new ArrayList<>();
     }
 
-    public Calendar(String name, ArrayList<Event> events) {
+    public Calendar(String name, ArrayList<EventInterface> events) {
         this.id = java.util.UUID.randomUUID().toString();
         this.name = name;
         this.events = events;
@@ -37,19 +37,19 @@ public class Calendar {
         this.name = name;
     }
 
-    public ArrayList<Event> getEvents() {
+    public ArrayList<EventInterface> getEvents() {
         return events;
     }
 
-    public void setEvents(ArrayList<Event> events) {
+    public void setEvents(ArrayList<EventInterface> events) {
         this.events = events;
     }
 
-    public void addEvent(Event event) {
+    public void addEvent(EventInterface event) {
         events.add(event);
     }
 
-    public void addEvents(ArrayList<Event> events) {
+    public void addEvents(ArrayList<EventInterface> events) {
         this.events.addAll(events);
     }
 }

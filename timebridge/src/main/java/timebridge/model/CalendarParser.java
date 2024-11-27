@@ -17,7 +17,7 @@ public abstract class CalendarParser {
         icalContent.append("PRODID:-//Your Organization//Your Product//EN\n");
 
         // Add each event to the calendar
-        for (Event event : calendar.getEvents()) {
+        for (EventInterface event : calendar.getEvents()) {
             icalContent.append(writeEvent(event));
         }
 
@@ -26,7 +26,7 @@ public abstract class CalendarParser {
         return icalContent.toString();
     }
 
-    private static String writeEvent(Event event){
+    private static String writeEvent(EventInterface event){
         StringBuilder sb = new StringBuilder();
         // Build each event
         sb.append("BEGIN:VEVENT\n");
@@ -35,11 +35,11 @@ public abstract class CalendarParser {
         sb.append("UID:" + getUniqueIdetifier()).append("\n");
         sb.append("DTSTAMP:" + getCurrentTimestamp(ZonedDateTime.now(ZoneOffset.UTC))).append("\n");
         sb.append("LAST-MODIFIED:" + getCurrentTimestamp(ZonedDateTime.now(ZoneOffset.UTC))).append("\n");
-        sb.append("SUMMARY:" + event.getCourse().getCode()).append(" - " + event.getActivity()).append("\n"); 
+        sb.append("SUMMARY:" + ((SchoolEvent) event).getCourse().getCode()).append(" - " + event.getActivity()).append("\n"); 
         sb.append("LOCATION:");  
         boolean flag = true;
         ArrayList buildings = new ArrayList<String>();
-        for (Location location : event.getLocations()) {
+        for (Location location : ((SchoolEvent) event).getLocations()) {
             if(!buildings.contains(location.getBuilding())){
                 sb.append("Byggnad: " + location.getBuilding()).append(", ");
                 sb.append("Rum: " + location.getRoom()).append(" \\ ");
@@ -50,7 +50,7 @@ public abstract class CalendarParser {
             }
         }
         sb.append("\n");
-        sb.append("DESCRIPTION:" + (event.getCourse().getName()) + "\n");
+        sb.append("DESCRIPTION:" + (((SchoolEvent) event).getCourse().getName()) + "\n");
         sb.append("END:VEVENT\n");
         
         return sb.toString();

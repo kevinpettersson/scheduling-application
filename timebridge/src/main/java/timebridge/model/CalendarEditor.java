@@ -13,17 +13,17 @@ public class CalendarEditor {
 
     // Builds a new Calendar with filtered and formatted events
     public Calendar build() {
-        Calendar resultCalendar = new Calendar(calendar.getName(), new ArrayList<Event>());
+        Calendar resultCalendar = new Calendar(calendar.getName(), new ArrayList<EventInterface>());
         resultCalendar.addEvents(filterEvents());
         formatEvents(resultCalendar);
         return resultCalendar;
     }
 
     // Filters events based on course and activity settings
-    private ArrayList<Event> filterEvents() {
-        ArrayList<Event> filteredEvents = new ArrayList<>();
-        for (Event event : calendar.getEvents()) {
-            if (settings.getCourseFilter().contains(event.getCourse().getCode())
+    private ArrayList<EventInterface> filterEvents() {
+        ArrayList<EventInterface> filteredEvents = new ArrayList<>();
+        for (EventInterface event : calendar.getEvents()) {
+            if (settings.getCourseFilter().contains(((SchoolEvent) event).getCourse().getCode())
                     && settings.getActivityFilter().contains(event.getActivity())) {
                 filteredEvents.add(event);
             }
@@ -33,19 +33,19 @@ public class CalendarEditor {
 
     // Formats events in the result calendar
     private void formatEvents(Calendar resultCalendar) {
-        for (Event event : resultCalendar.getEvents()) {
+        for (EventInterface event : resultCalendar.getEvents()) {
             String summary = formatSummary(event);
             String description = formatDescription(event);
             String location = formatLocation(event);
 
-            event.getFormat().setSummary(summary);
-            event.getFormat().setDescription(description);
-            event.getFormat().setLocation(location);
+            ((SchoolEvent)event).getFormat().setSummary(summary);
+            ((SchoolEvent)event).getFormat().setDescription(description);
+            ((SchoolEvent)event).getFormat().setLocation(location);
         }
     }
 
     // Formats the summary of an event based on settings
-    private String formatSummary(Event event) {
+    private String formatSummary(EventInterface event) {
         StringBuilder summary = new StringBuilder();
         for (String field : settings.getSummaryFormat()) {
             appendField(summary, field, event);
@@ -57,7 +57,7 @@ public class CalendarEditor {
     }
 
     // Formats the description of an event based on settings
-    private String formatDescription(Event event) {
+    private String formatDescription(EventInterface event) {
         StringBuilder description = new StringBuilder();
         for (String field : settings.getDescriptionFormat()) {
             appendField(description, field, event);
@@ -69,9 +69,9 @@ public class CalendarEditor {
     }
 
     // Formats the location of an event
-    private String formatLocation(Event event) {
+    private String formatLocation(EventInterface event) {
         StringBuilder location = new StringBuilder();
-        for (Location loc : event.getLocations()) {
+        for (Location loc : ((SchoolEvent)event).getLocations()) {
             if (settings.getLocationFormat().contains("building")) {
                 location.append("Byggnad: ").append(loc.getBuilding()).append(", ");
             }
@@ -80,7 +80,7 @@ public class CalendarEditor {
                 location.append("Rum: ").append(loc.getRoom());
             }
 
-            if (event.getLocations().indexOf(loc) != event.getLocations().size() - 1) {
+            if (((SchoolEvent)event).getLocations().indexOf(loc) != ((SchoolEvent)event).getLocations().size() - 1) {
                 location.append(" \n ");
             }
         }
@@ -88,13 +88,13 @@ public class CalendarEditor {
     }
 
     // Appends the specified field of an event to the builder
-    private void appendField(StringBuilder builder, String field, Event event) {
+    private void appendField(StringBuilder builder, String field, EventInterface event) {
         switch (field) {
             case "code":
-                builder.append(event.getCourse().getCode());
+                builder.append(((SchoolEvent)event).getCourse().getCode());
                 break;
             case "name":
-                builder.append(event.getCourse().getName());
+                builder.append(((SchoolEvent)event).getCourse().getName());
                 break;
             case "activity":
                 builder.append(event.getActivity());
