@@ -1,0 +1,12 @@
+BEGIN:VCALENDAR
+BEGIN:VEVENT
+DTSTART:20231120T150000Z
+DTEND:20231120T160000Z
+SUMMARY:Kurskod: DIT213GU. Kursnamn: Objektorientera
+ t programmeringsprojekt\, Kurskod: TDA367. Kursna
+ mn: Objektorienterat programmeringsprojekt\, Före
+ läsning
+LOCATION:SB-H1. Byggnad: SB2. Våningsplan: E
+END:VEVENT
+END:VCALENDAR
+
