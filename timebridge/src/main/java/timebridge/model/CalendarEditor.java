@@ -14,7 +14,6 @@ public class CalendarEditor {
     // Builds a new Calendar with filtered and formatted events
     public Calendar build() {
         Calendar resultCalendar = new Calendar(calendar.getName(), new ArrayList<Event>());
-        resultCalendar.addEvents(filterEvents());
         formatEvents(resultCalendar);
         return resultCalendar;
     }

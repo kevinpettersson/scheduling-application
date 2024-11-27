@@ -39,6 +39,7 @@ public abstract class CalendarParser {
         sb.append("LOCATION:");  
         boolean flag = true;
         ArrayList buildings = new ArrayList<String>();
+        
         for (Location location : event.getLocations()) {
             if(!buildings.contains(location.getBuilding())){
                 sb.append("Byggnad: " + location.getBuilding()).append(", ");
