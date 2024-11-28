@@ -7,14 +7,14 @@ public class Event {
     private String activity;
     private Interval interval;
     private ArrayList<Location> locations;
-    private EventFormat format;
+    private Boolean visibility;
 
     public Event() {
         this.course = new Course();
         this.activity = "";
         this.interval = new Interval();
         this.locations = new ArrayList<Location>();
-        this.format = new EventFormat();
+        this.visibility = true;
     }
 
     public Event(Course course, String activity, Interval interval, ArrayList<Location> locations) {
@@ -22,7 +22,7 @@ public class Event {
         this.activity = activity;
         this.interval = interval;
         this.locations = locations;
-        this.format = new EventFormat();
+        this.visibility = true;
     }
 
     public Course getCourse() {
@@ -57,11 +57,11 @@ public class Event {
         this.locations = locations;
     }
 
-    public void setFormat(EventFormat format) {
-        this.format = format;
+    public Boolean getVisibility() {
+        return this.visibility;
     }
 
-    public EventFormat getFormat() {
-        return this.format;
+    public void setVisibility(Boolean visibility) {
+        this.visibility = visibility;
     }
 }
