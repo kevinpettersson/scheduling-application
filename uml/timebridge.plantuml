@@ -1,0 +1,163 @@
+@startuml timebridge
+!include https://raw.githubusercontent.com/bschwarz/puml-themes/master/themes/sketchy-outline/puml-theme-sketchy-outline.puml
+
+skinparam backgroundColor ivory
+skinparam linetype ortho
+
+frame "Spring Boot REST API" {
+    package "Model" {
+        class Calendar {
+            # id: String
+            # name: String
+            # events: ArrayList<Event>
+            # format: Format
+
+            ~ Calendar()
+            ~ Calendar(String name, ArrayList<Event> events)
+
+            + getId(): String
+            + getName(): String
+            + getEvents(): ArrayList<Event>
+            + getFormat(): EventFormat
+
+            + setId(String id): void
+            + setName(String name): void
+            + setEvents(ArrayList<Event> events): void
+            + setFormat(Format format): void
+
+            + filterEvents(ArrayList<String> codes,ArrayList<String> activities): void
+        }
+
+        class Event {
+            # course: Course
+            # activity: Activity
+            # interval: Interval
+            # locations: ArrayList<Location>
+            # visibility: Boolean
+
+            ~ Event()
+            ~ Event(Course course, Activity activity, Interval interval, ArrayList<Location> locations)
+
+            + getCourse(): Course
+            + getActivity(): Activity
+            + getInterval(): Interval
+            + getLocations(): ArrayList<Location>
+
+            + setCourse(Course course): void
+            + setActivity(Activity activity): void
+            + setInterval(Interval interval): void
+            + setLocations(ArrayList<Location> locations): void
+        }
+
+        class Course {
+            # name: String
+            # code: String
+
+            ~ Course()
+            ~ Course(String name, String code)
+
+            + getName(): String
+            + getCode(): String
+
+            + setName(String name): void
+            + setCode(String code): void
+        }
+
+        class Activity {
+            # type: String
+
+            ~ Activity()
+            ~ Activity(String type)
+
+            + getType(): String
+            + setType(String type): void
+        }
+
+        class Interval {
+            # start: ZonedDateTime
+            # end: ZonedDateTime
+
+            ~ Interval()
+            ~ Interval(ZonedDateTime start, ZonedDateTime end)
+
+            + getStart(): ZonedDateTime
+            + getEnd(): ZonedDateTime
+
+            + setStart(ZonedDateTime start): void
+            + setEnd(ZonedDateTime end): void
+        }
+
+        class Location {
+            # building: String
+            # room: String
+
+            ~ Location()
+            ~ Location(String building, String room)
+
+            + getBuilding(): String
+            + getRoom(): String
+
+            + setBuilding(String building): void
+            + setRoom(String room): void
+        }
+
+        class Format {
+            # ArrayList<String> summary
+            # ArrayList<String> description
+            # ArrayList<String> location
+
+            ~ EventFormat()
+            ~ EventFormat(ArrayList<String> summary, ArrayList<String> description, ArrayList<String> location)
+
+            + getSummary(): ArrayList<String>
+            + getDescription(): ArrayList<String>
+            + getLocation(): ArrayList<String>
+
+            + setSummary(ArrayList<String> summary): void
+            + setDescription(ArrayList<String> description): void
+            + setLocation(ArrayList<String> location): void
+        }
+    }
+
+    package "Service" {
+
+        class CalendarParser {
+            + parse(String iCal): Calendar
+        }
+
+        class CalendarSerializer {
+            + serialize(Calendar calendar): String
+        }
+    }
+
+    class Controller {
+        + uploadCalendar(String iCalUrl): Calendar
+        + downloadCalendar(String iCalUrl): IcsFile
+        + modifyCalenar(Calendar calendar, Filter filter, Format format): Calendar
+    }
+
+    Calendar *-l- Event
+    Calendar *-- Format
+
+    Event *-l- Course
+    Event *-- Activity
+    Event *-- Interval
+    Event *-- Location
+
+    Controller ..> CalendarParser : <<uses>>
+    Controller ..> CalendarSerializer : <<uses>>
+    Controller .l.> Calendar: <<uses>>
+}
+
+node "Sveltekit Web Application" #line:red;line.bold;text:red; {
+
+}
+
+Controller -[#pink,thickness=3]-> "Sveltekit Web Application" : <<HTTP Response>>
+"Sveltekit Web Application" -[#pink,thickness=3]-> Controller : <<HTTP Request>>
+
+
+
+
+
+@enduml
