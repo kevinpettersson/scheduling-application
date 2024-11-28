@@ -103,6 +103,8 @@ class Controller {
         Settings settingsObj = new Settings(courseFilter, activityFilter, summaryFormat, descriptionFormat,
                 locationFormat);
 
+        calendar.filterEvents(courseFilter, activityFilter);
+
         // Create a CalendarEditor object and build the modified calendar
         CalendarEditor editor = new CalendarEditor(calendar, settingsObj);
         Calendar resultCalendar = editor.build();

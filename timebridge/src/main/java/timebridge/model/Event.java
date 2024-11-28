@@ -7,6 +7,7 @@ public class Event {
     private String activity;
     private Interval interval;
     private ArrayList<Location> locations;
+    private Boolean visibility;
     private EventFormat format;
 
     public Event() {
@@ -14,6 +15,7 @@ public class Event {
         this.activity = "";
         this.interval = new Interval();
         this.locations = new ArrayList<Location>();
+        this.visibility = true;
         this.format = new EventFormat();
     }
 
@@ -22,6 +24,7 @@ public class Event {
         this.activity = activity;
         this.interval = interval;
         this.locations = locations;
+        this.visibility = true;
         this.format = new EventFormat();
     }
 
@@ -55,6 +58,14 @@ public class Event {
 
     public void setLocations(ArrayList<Location> locations) {
         this.locations = locations;
+    }
+
+    public Boolean getVisibility() {
+        return this.visibility;
+    }
+
+    public void setVisibility(Boolean visibility) {
+        this.visibility = visibility;
     }
 
     public void setFormat(EventFormat format) {
