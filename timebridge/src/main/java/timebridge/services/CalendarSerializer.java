@@ -11,7 +11,7 @@ import timebridge.model.*;
 
 public class CalendarSerializer {
     
-    private static final String ORG = "Group 12";
+    private static final String ORG = "Chalmers";
     private static final String PRODUCT = "TimeBridge";
     private static final String BEGIN_CALENDAR = "BEGIN:VCALENDAR\n";
     private static final String END_CALENDAR = "END:VCALENDAR\n";
@@ -28,7 +28,7 @@ public class CalendarSerializer {
     private static final String LOCATION = "LOCATION:";
     private static final String DESCRIPTION = "DESCRIPTION:";
 
-    private StringBuilder sb;
+    private final StringBuilder sb;
 
     public CalendarSerializer() {
         sb = new StringBuilder();
@@ -42,7 +42,7 @@ public class CalendarSerializer {
 
         // Add each event to the calendar
         for (Event event : calendar.getEvents()) {
-            serializeEvent(event, calendar);
+            serializeEvent(event, calendar.getFormat());
         }
 
         sb.append(END_CALENDAR);
@@ -58,89 +58,67 @@ public class CalendarSerializer {
         sb.append(DTSTAMP).append(serializeTimestamp(ZonedDateTime.now(ZoneOffset.UTC))).append("\n");
         sb.append(LAST_MODIFIED).append(serializeTimestamp(ZonedDateTime.now(ZoneOffset.UTC))).append("\n");
 
+        formatSummary(event, format);
+        formatLocation(event, format);
+        formatDescription(event, format);
+
+        sb.append(END_EVENT);
+    }
+
+    private void formatSummary(Event event, Format format) {
         sb.append(SUMMARY);
-        for (String field : format.getSummary()) {
-            if (field.equals("code")) {
-                sb.append(event.getCourse().getCode());
-            }
-            else if (field.equals("activity")) {
-                sb.append(event.getActivity());
-            }
-            else if (field.equals("name")) {
-                sb.append(event.getCourse().getName());
-            }
-
-            // Add separator if not last field
-            if (format.getSummary().indexOf(field) != format.getSummary().size() - 1) {
-                sb.append(" - ");
-            }
+        for (String field : format.getSummary()) { // [code, activity]
+            appendField(event, field, format);
         }
+        sb.append("\n");
+    }
 
+    private void formatLocation(Event event, Format format) {
         sb.append(LOCATION);
-        
-        
-        
-    }
-
-    public static String parse(Calendar calendar) throws IOException {
-        // Start building the iCalendar string
-        StringBuilder icalContent = new StringBuilder();
-
-
-        // Add each event to the calendar
-        for (Event event : calendar.getEvents()) {
-            icalContent.append(writeEvent(event));
-        }
-
-        icalContent.append(END_CALENDAR);
-
-        return icalContent.toString();
-    }
-
-    private String writeEvent(Event event){
-        StringBuilder sb = new StringBuilder();
-        // Build each event
-        sb.append(BEGIN_EVENT);
-        sb.append(DTSTART).append(event.getInterval().getStart()).append("\n");
-        sb.append(DTEND).append(event.getInterval().getEnd()).append("\n");
-        sb.append(UID + getUniqueIdetifier()).append("\n");
-        sb.append("DTSTAMP:" + serializeTimestamp(ZonedDateTime.now(ZoneOffset.UTC))).append("\n");
-        sb.append("LAST-MODIFIED:" + serializeTimestamp(ZonedDateTime.now(ZoneOffset.UTC))).append("\n");
-        sb.append("SUMMARY:" + event.getCourse().getCode()).append(" - " + event.getActivity()).append("\n"); 
-        sb.append("LOCATION:");  
-        boolean flag = true;
-        ArrayList buildings = new ArrayList<String>();
-        
-        for (Location location : event.getLocations()) {
-            if(!buildings.contains(location.getBuilding())){
-                sb.append("Byggnad: " + location.getBuilding()).append(", ");
-                sb.append("Rum: " + location.getRoom()).append(" \\ ");
-                buildings.add(location.getBuilding());
+        for (Location loc : event.getLocations()) {
+            if (format.getLocation().contains("building")) {
+                sb.append("Byggnad: ").append(loc.getBuilding()).append(", ");
             }
-            else{
-                sb.append("Rum: " + location.getRoom()).append(" \\ ");
+            if (format.getLocation().contains("room")) {
+                sb.append("Rum: ").append(loc.getRoom());
             }
         }
         sb.append("\n");
-        sb.append("DESCRIPTION:" + (event.getCourse().getName()) + "\n");
-        sb.append("END:VEVENT\n");
-        
-        return sb.toString();
     }
-    
+
+    private void formatDescription(Event event, Format format) {
+        sb.append(DESCRIPTION);
+        for (String field : format.getDescription()) { // [code, activity]
+            appendField(event, field, format);
+        }
+        sb.append("\n");
+    }
+
+    private void appendField(Event event, String field, Format format) {
+        if (field.equals("code")) {
+            sb.append(event.getCourse().getCode());
+        }
+        else if (field.equals("activity")) {
+            sb.append(event.getActivity());
+        }
+        else if (field.equals("name")) {
+            sb.append(event.getCourse().getName());
+        }
+
+        // Add separator if not last field
+        if (format.getSummary().indexOf(field) != format.getSummary().size() - 1) {
+            sb.append(" - ");
+        }
+    }
+
 
     private String getUniqueIdetifier() {
         return UUID.randomUUID().toString() + "@timebridge.se";
     }
     
     private String serializeTimestamp(ZonedDateTime dateTime) {
-        // Get the current UTC time and format it to iCal format
-
         ZonedDateTime utcDateTime = dateTime.withZoneSameInstant(ZoneOffset.UTC);
-
-        // Format to iCalendar format: YYYYMMDDTHHMMSSZ
         DateTimeFormatter icalFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'");
-
         return utcDateTime.format(icalFormatter);
     }
     

@@ -12,6 +12,13 @@ public class Format {
         this.summary = new ArrayList<>();
         this.description = new ArrayList<>();
         this.location = new ArrayList<>();
+
+        // Set default values
+        this.summary.add("code");
+        this.summary.add("activity");
+        this.description.add("name");
+        this.location.add("building");
+        this.location.add("room");
     }
 
     // Regular constructor

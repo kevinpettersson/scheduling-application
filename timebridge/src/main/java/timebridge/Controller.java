@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import timebridge.services.*;
+import timebridge.model.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
-
-import timebridge.model.*;
 
 @RestController
 class Controller {
@@ -44,7 +44,8 @@ class Controller {
             // Read the iCalendar file data from the URL
             try (InputStream inputStream = connection.getInputStream()) {
                 String icsData = new String(inputStream.readAllBytes());
-                Calendar calendar = CalendarBuilder.build(icsData);
+                CalendarParser parser = new CalendarParser();
+                Calendar calendar = parser.parse(icsData);
                 return ResponseEntity.ok(calendar);
             }
         } catch (Exception e) {
@@ -69,8 +70,12 @@ class Controller {
             // Read the iCalendar file data from the URL
             try (InputStream inputStream = connection.getInputStream()) {
                 String icsData = new String(inputStream.readAllBytes());
-                Calendar calendar = CalendarBuilder.build(icsData);
-                String icsContent = CalendarParser.parse(calendar);
+
+                CalendarParser parser = new CalendarParser();
+                CalendarSerializer serializer = new CalendarSerializer();
+
+                Calendar calendar = parser.parse(icsData);
+                String icsContent = serializer.serialize(calendar);
 
                 // Convert content to bytes
                 byte[] contentBytes = icsContent.getBytes(StandardCharsets.UTF_8);
@@ -99,15 +104,7 @@ class Controller {
             @RequestParam ArrayList<String> locationFormat,
             @RequestBody Calendar calendar) throws Exception {
 
-        // Construct the Settings object directly using the ArrayLists
-        Settings settingsObj = new Settings(courseFilter, activityFilter, summaryFormat, descriptionFormat,
-                locationFormat);
-
-        // Create a CalendarEditor object and build the modified calendar
-        CalendarEditor editor = new CalendarEditor(calendar, settingsObj);
-        Calendar resultCalendar = editor.build();
-
-        // Return the modified calendar
-        return ResponseEntity.ok(resultCalendar);
+        calendar.filterEvents(courseFilter, activityFilter);
+        return ResponseEntity.ok(calendar);
     }
 }

@@ -3,15 +3,13 @@ package timebridge.model;
 import java.util.ArrayList;
 import org.springframework.data.annotation.Id;
 
-import timebridge.converters.CalendarSerializer;
-
 public class Calendar {
     @Id
     private String id;
 
     private String name;
-    private ArrayList<Event> events;
     private Format format;
+    private ArrayList<Event> events;
 
     public Calendar() {
         this.id = java.util.UUID.randomUUID().toString();
@@ -71,9 +69,15 @@ public class Calendar {
         this.events.addAll(events);
     }
 
-    public String toIcal() {
-        // add ical parser logic here
-        return CalendarSerializer.serialize(this);
+    // Filters events based on course and activity settings
+    public void filterEvents(ArrayList<String> codeFilter,ArrayList<String> activityFilter) {
+        for (Event event : this.events) {
+            if (codeFilter.contains(event.getCourse().getCode()) && activityFilter.contains(event.getActivity())) {
+                event.setVisibility(true);
+            }
+            else {
+                event.setVisibility(false);
+            }
+        }
     }
-
 }

@@ -14,14 +14,10 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import timebridge.model.Calendar;
-import timebridge.model.CalendarBuilder;
-import timebridge.model.CalendarEditor;
 import timebridge.model.Event;
-import timebridge.model.Settings;
+import timebridge.services.CalendarParser;
 
 @SpringBootTest
 public class CalendarEditorTest {
@@ -50,30 +46,30 @@ public class CalendarEditorTest {
 
     @Test
     public void testFilteringTwoEvents() throws IOException, URISyntaxException{
-        
-       String ics = getTextFile("two_events");
 
-       Calendar calendar = CalendarBuilder.build(ics);
+        String ics = getTextFile("two_events");
 
-       courseFilter.add("DIT213GU");
-       activityFilter.add("Föreläsning");
-       summaryFormat.add("code");
-       summaryFormat.add("activity");
-       descriptionFormat.add("name");
-       locationFormat.add("room");
+        CalendarParser parser = new CalendarParser();
+        Calendar calendar = parser.parse(ics);
 
-       Settings settings = new Settings(courseFilter,activityFilter,summaryFormat,descriptionFormat,locationFormat);
-       
-        CalendarEditor editor = new CalendarEditor(calendar, settings);   
-        Calendar filteredCalendar = editor.build();
+        courseFilter.add("DIT213GU");
+        activityFilter.add("Föreläsning");
+        summaryFormat.add("code");
+        summaryFormat.add("activity");
+        descriptionFormat.add("name");
+        locationFormat.add("room");
 
-        for (Event event : filteredCalendar.getEvents()) {
-            assertEquals("DIT213GU - Föreläsning", event.getFormat().getSummary());
-            assertEquals("Objektorienterat programmeringsprojekt", event.getFormat().getDescription());
-            assertFalse(event.getFormat().getLocation().contains("Byggnad:"));
+        // Filter the calendar
+        calendar.filterEvents(courseFilter, activityFilter);
+
+        for (Event event : calendar.getEvents()) {
+            if (event.getVisibility().equals(false)) {
+                continue;
+            }
+            assertEquals("DIT213GU", event.getCourse().getCode());
+            assertEquals("Objektorienterat programmeringsprojekt", event.getCourse().getName());
+            assertEquals("Föreläsning", event.getActivity());
         }
-
-       
     }
     
 }
