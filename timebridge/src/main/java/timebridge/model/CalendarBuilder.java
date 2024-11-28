@@ -177,8 +177,6 @@ public abstract class CalendarBuilder {
                 continue;
             }
 
-            System.out.println(location);
-
             int firstDotIndex = location.indexOf(".");
             int secondDotIndex = location.indexOf(".", firstDotIndex + 1);
             if (secondDotIndex == -1) {
