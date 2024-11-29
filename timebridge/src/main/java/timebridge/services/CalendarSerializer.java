@@ -10,7 +10,7 @@ import java.util.UUID;
 import timebridge.model.*;
 
 public class CalendarSerializer {
-    
+
     private static final String ORG = "Chalmers";
     private static final String PRODUCT = "TimeBridge";
     private static final String BEGIN_CALENDAR = "BEGIN:VCALENDAR\n";
@@ -42,11 +42,14 @@ public class CalendarSerializer {
 
         // Add each event to the calendar
         for (Event event : calendar.getEvents()) {
-            serializeEvent(event, calendar.getFormat());
+            // Only serialize visible events
+            if (event.getVisibility()) {
+                serializeEvent(event, calendar.getFormat());
+            }
         }
 
         sb.append(END_CALENDAR);
-        
+
         return sb.toString();
     }
 
@@ -67,8 +70,8 @@ public class CalendarSerializer {
 
     private void formatSummary(Event event, Format format) {
         sb.append(SUMMARY);
-        for (String field : format.getSummary()) { // [code, activity]
-            appendField(event, field, format);
+        for (String field : format.getSummary()) {
+            appendField(event, field, format.getSummary());
         }
         sb.append("\n");
     }
@@ -88,38 +91,35 @@ public class CalendarSerializer {
 
     private void formatDescription(Event event, Format format) {
         sb.append(DESCRIPTION);
-        for (String field : format.getDescription()) { // [code, activity]
-            appendField(event, field, format);
+        for (String field : format.getDescription()) {
+            appendField(event, field, format.getDescription());
         }
         sb.append("\n");
     }
 
-    private void appendField(Event event, String field, Format format) {
+    private void appendField(Event event, String field, ArrayList<String> formatInstance) {
         if (field.equals("code")) {
             sb.append(event.getCourse().getCode());
-        }
-        else if (field.equals("activity")) {
+        } else if (field.equals("activity")) {
             sb.append(event.getActivity());
-        }
-        else if (field.equals("name")) {
+        } else if (field.equals("name")) {
             sb.append(event.getCourse().getName());
         }
 
         // Add separator if not last field
-        if (format.getSummary().indexOf(field) != format.getSummary().size() - 1) {
+        if (formatInstance.indexOf(field) != formatInstance.size() - 1) {
             sb.append(" - ");
         }
     }
 
-
     private String getUniqueIdetifier() {
         return UUID.randomUUID().toString() + "@timebridge.se";
     }
-    
+
     private String serializeTimestamp(ZonedDateTime dateTime) {
         ZonedDateTime utcDateTime = dateTime.withZoneSameInstant(ZoneOffset.UTC);
         DateTimeFormatter icalFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'");
         return utcDateTime.format(icalFormatter);
     }
-    
+
 }

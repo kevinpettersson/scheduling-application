@@ -1,7 +1,9 @@
 package timebridge;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -15,24 +17,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import timebridge.services.*;
-import timebridge.model.*;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.type.TypeReference;
+import timebridge.services.CalendarParser;
+import timebridge.services.CalendarSerializer;
+import timebridge.model.Calendar;
 
 @RestController
-class Controller {
+@CrossOrigin(origins = "http://localhost:5173") // Your frontend's origin
+public class Controller {
 
-    @CrossOrigin(origins = "http://localhost:5173") // Your frontend's origin
-    @GetMapping("/hello")
-    public String sayHello() {
-        return "Hello, World!";
-    }
-
-    @CrossOrigin(origins = "http://localhost:5173") // Your frontend's origin
     @GetMapping("/upload")
-    public ResponseEntity<Calendar> uploadCalendar(@RequestParam String ical) {
+    public ResponseEntity<Calendar> uploadCalendar(@RequestParam String ical)
+            throws MalformedURLException, IOException {
         try {
             // Create a URL object and open a connection to the iCalendar URL
             URL url = new URL(ical);
@@ -40,70 +35,55 @@ class Controller {
 
             // Check if the request was successful
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
 
             // Read the iCalendar file data from the URL
-            try (InputStream inputStream = connection.getInputStream()) {
-                String icsData = new String(inputStream.readAllBytes());
-                CalendarParser parser = new CalendarParser();
-                Calendar calendar = parser.parse(icsData);
-                return ResponseEntity.ok(calendar);
-            }
+            InputStream inputStream = connection.getInputStream();
+            String icsData = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+            CalendarParser parser = new CalendarParser();
+            Calendar calendar = parser.parse(icsData);
+
+            return ResponseEntity.ok(calendar);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:5173") // Your frontend's origin
-    @GetMapping("/download")
-    public ResponseEntity<byte[]> downloadCalendar(@RequestParam String ical) {
+    @PostMapping("/download")
+    public ResponseEntity<byte[]> downloadCalendar(@RequestBody Calendar calendar) throws IOException {
         try {
-            // Create a URL object and open a connection to the iCalendar URL
-            URL url = new URL(ical);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            // Serialize the calendar to iCalendar format
+            CalendarSerializer serializer = new CalendarSerializer();
+            String icsData = serializer.serialize(calendar);
 
-            // Check if the request was successful
-            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                return ResponseEntity.badRequest().build();
-            }
+            // Convert content to bytes
+            byte[] contentBytes = icsData.getBytes(StandardCharsets.UTF_8);
 
-            // Read the iCalendar file data from the URL
-            try (InputStream inputStream = connection.getInputStream()) {
-                String icsData = new String(inputStream.readAllBytes());
+            // Set HTTP headers
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + calendar.getName() + ".ics");
+            headers.add(HttpHeaders.CONTENT_TYPE, "text/calendar; charset=UTF-8");
 
-                CalendarParser parser = new CalendarParser();
-                CalendarSerializer serializer = new CalendarSerializer();
-
-                Calendar calendar = parser.parse(icsData);
-                String icsContent = serializer.serialize(calendar);
-
-                // Convert content to bytes
-                byte[] contentBytes = icsContent.getBytes(StandardCharsets.UTF_8);
-
-                // Set HTTP headers
-                HttpHeaders headers = new HttpHeaders();
-                headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=calendar-event.ics");
-                headers.add(HttpHeaders.CONTENT_TYPE, "text/calendar; charset=UTF-8");
-
-                // Response
-                return new ResponseEntity<>(contentBytes, headers, HttpStatus.OK);
-            }
+            return new ResponseEntity<>(contentBytes, headers, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/modify")
     public ResponseEntity<Calendar> modifyCalendar(
             @RequestParam ArrayList<String> courseFilter,
             @RequestParam ArrayList<String> activityFilter,
             @RequestBody Calendar calendar) throws Exception {
-
-        calendar.filterEvents(courseFilter, activityFilter);
-        return ResponseEntity.ok(calendar);
+        try {
+            calendar.filterEvents(courseFilter, activityFilter);
+            return ResponseEntity.ok(calendar);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
