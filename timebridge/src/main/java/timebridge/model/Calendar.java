@@ -24,9 +24,9 @@ public class Calendar {
         this.events = events;
         this.format = new Format();
     }
-    
-    public Calendar(String iCal){
-       // add parser logic here 
+
+    public Calendar(String iCal) {
+        // add parser logic here
     }
 
     public String getId() {
@@ -36,7 +36,7 @@ public class Calendar {
     public String getName() {
         return name;
     }
-    
+
     public ArrayList<Event> getEvents() {
         return events;
     }
@@ -44,7 +44,7 @@ public class Calendar {
     public Format getFormat() {
         return format;
     }
-    
+
     public void setId(String id) {
         this.id = id;
     }
@@ -70,12 +70,15 @@ public class Calendar {
     }
 
     // Filters events based on course and activity settings
-    public void filterEvents(ArrayList<String> codeFilter,ArrayList<String> activityFilter) {
+    public void filterEvents(ArrayList<String> codeFilter, ArrayList<String> activityFilter) {
         for (Event event : this.events) {
-            if (codeFilter.contains(event.getCourse().getCode()) && activityFilter.contains(event.getActivity())) {
+            boolean courseMatch = codeFilter == null || codeFilter.isEmpty()
+                    || codeFilter.contains(event.getCourse().getCode());
+            boolean activityMatch = activityFilter == null || activityFilter.isEmpty()
+                    || activityFilter.contains(event.getActivity());
+            if (courseMatch && activityMatch) {
                 event.setVisibility(true);
-            }
-            else {
+            } else {
                 event.setVisibility(false);
             }
         }

@@ -1,6 +1,5 @@
 <script lang="ts">
-	import EventTable from '$lib/components/event-table.svelte';
-	import Button from '$lib/components/ui/button/button.svelte';
+	import EventTable from '$lib/components/custom/event-table/event-table.svelte';
 </script>
 
 <div class="flex h-full flex-auto flex-col gap-2">
