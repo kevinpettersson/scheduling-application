@@ -3,32 +3,19 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { superForm, defaults, setError } from 'sveltekit-superforms';
 	import { zod } from 'sveltekit-superforms/adapters';
-	import { _iCalSchema, type iCalSchema } from '$lib/schemas';
+	import { _importSchema, type importSchema } from '$lib/schemas';
 	import { goto } from '$app/navigation';
-	import { calendarStore } from '$lib/stores/session-store';
 	import { Upload } from 'lucide-svelte';
+	import { fetchCalendar } from '$lib/api.svelte';
+	import { calendar } from '$lib/store.svelte';
 
-	const form = superForm(defaults(zod(_iCalSchema)), {
+	const form = superForm(defaults(zod(_importSchema)), {
 		SPA: true,
-		validators: zod(_iCalSchema),
-		async onUpdate({ form }) {
-			// Call an external API with form.data, await the result and update form
+		validators: zod(_importSchema),
+		onUpdate({ form }) {
 			if (form.valid) {
-				let request = `http://localhost:8080/upload?ical=${form.data.url}`;
-
-				const response = await fetch(request, {
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json'
-					}
-				});
-
-				if (!response.ok) {
-					throw new Error(`Failed to upload calendar: ${response.statusText}`);
-				} else {
-					calendarStore.set(await response.json());
-					goto('/editor');
-				}
+				fetchCalendar(form.data.url);
+				goto('/editor');
 			}
 		}
 	});
@@ -59,5 +46,3 @@
 		</Form.Field>
 	</form>
 </div>
-
-

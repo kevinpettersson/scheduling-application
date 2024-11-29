@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 @RestController
 class Controller {
 
+    @CrossOrigin(origins = "http://localhost:5173") // Your frontend's origin
     @GetMapping("/hello")
     public String sayHello() {
         return "Hello, World!";
@@ -95,13 +97,10 @@ class Controller {
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @GetMapping("/modify")
+    @PostMapping("/modify")
     public ResponseEntity<Calendar> modifyCalendar(
             @RequestParam ArrayList<String> courseFilter,
             @RequestParam ArrayList<String> activityFilter,
-            @RequestParam ArrayList<String> summaryFormat,
-            @RequestParam ArrayList<String> descriptionFormat,
-            @RequestParam ArrayList<String> locationFormat,
             @RequestBody Calendar calendar) throws Exception {
 
         calendar.filterEvents(courseFilter, activityFilter);
