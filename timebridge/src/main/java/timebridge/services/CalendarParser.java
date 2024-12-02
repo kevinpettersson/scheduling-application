@@ -16,8 +16,9 @@ import java.util.regex.Pattern;
 
 public class CalendarParser {
 
-    public CalendarParser() {}
-    
+    public CalendarParser() {
+    }
+
     public Calendar parse(String iCal) throws IOException {
         // Normalize the iCal data, so that values are on the same line as the key
         String normalizedIcs = normalizeIcs(iCal);

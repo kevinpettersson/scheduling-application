@@ -1,6 +1,8 @@
 package timebridge.model;
 
 import java.util.ArrayList;
+
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
 public class Calendar {
@@ -12,21 +14,17 @@ public class Calendar {
     private ArrayList<Event> events;
 
     public Calendar() {
-        this.id = java.util.UUID.randomUUID().toString();
+        this.id = new ObjectId().toHexString();
         this.name = new String();
         this.events = new ArrayList<>();
         this.format = new Format();
     }
 
     public Calendar(String name, ArrayList<Event> events) {
-        this.id = java.util.UUID.randomUUID().toString();
+        this.id = new ObjectId().toHexString();
         this.name = name;
         this.events = events;
         this.format = new Format();
-    }
-
-    public Calendar(String iCal) {
-        // add parser logic here
     }
 
     public String getId() {
@@ -45,8 +43,8 @@ public class Calendar {
         return format;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setId(ObjectId id) {
+        this.id = id.toHexString();
     }
 
     public void setName(String name) {
