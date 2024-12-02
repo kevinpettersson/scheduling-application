@@ -7,11 +7,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -103,9 +106,16 @@ public class Controller {
     }
     @PostMapping("/addEvent")
     public ResponseEntity<Calendar> addEvent(
-        @RequestBody Calendar calendar,
+        @RequestParam String calendarId,
         @RequestBody Event event) throws Exception {
             try {
+                // Retrieve the calendar from the database
+                Calendar calendar = repository.findById(calendarId).orElse(null);
+
+                // Check if the calendar exists
+                if (calendar == null) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+                }
                 calendar.addEvent(event);
                 repository.save(calendar);
                 return ResponseEntity.ok(calendar);
@@ -114,6 +124,28 @@ public class Controller {
                 e.printStackTrace();
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
+    }
+
+    @DeleteMapping("/deleteEvent")
+    public ResponseEntity<Calendar> deleteEvent(
+        @RequestParam String calendarId,
+        @RequestParam String eventId) throws Exception {
+        try {
+            // Retrieve the calendar from the database
+            Calendar calendar = repository.findById(calendarId).orElse(null);
+
+            // Check if the calendar exists
+            if (calendar == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+            calendar.deleteEvent(eventId);
+            repository.save(calendar);
+            return ResponseEntity.ok(calendar);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping("/public/{id}")
