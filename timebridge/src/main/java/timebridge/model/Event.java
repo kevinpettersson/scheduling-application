@@ -1,8 +1,11 @@
 package timebridge.model;
 
 import java.util.ArrayList;
-
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 public class Event {
+    @Id
+    private String id;
     private Course course;
     private String activity;
     private Interval interval;
@@ -10,6 +13,7 @@ public class Event {
     private Boolean visibility;
 
     public Event() {
+        this.id = new ObjectId().toHexString();
         this.course = new Course();
         this.activity = "";
         this.interval = new Interval();
@@ -18,11 +22,20 @@ public class Event {
     }
 
     public Event(Course course, String activity, Interval interval, ArrayList<Location> locations) {
+        this.id = new ObjectId().toHexString();
         this.course = course;
         this.activity = activity;
         this.interval = interval;
         this.locations = locations;
         this.visibility = true;
+    }
+
+    public String getId(){
+        return this.id;
+    }
+    
+    public void setId(ObjectId id){
+        this.id = id.toHexString();
     }
 
     public Course getCourse() {

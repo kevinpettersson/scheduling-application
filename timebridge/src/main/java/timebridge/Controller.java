@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import timebridge.services.CalendarParser;
 import timebridge.services.CalendarSerializer;
 import timebridge.model.Calendar;
+import timebridge.model.Event;
 import timebridge.repository.CalendarRepository;
 
 @RestController
@@ -99,6 +100,20 @@ public class Controller {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+    @PostMapping("/addEvent")
+    public ResponseEntity<Calendar> addEvent(
+        @RequestBody Calendar calendar,
+        @RequestBody Event event) throws Exception {
+            try {
+                calendar.addEvent(event);
+                repository.save(calendar);
+                return ResponseEntity.ok(calendar);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
     }
 
     @GetMapping("/public/{id}")
