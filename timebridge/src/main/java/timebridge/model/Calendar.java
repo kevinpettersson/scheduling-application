@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 public class Calendar {
     @Id
@@ -65,6 +67,15 @@ public class Calendar {
 
     public void addEvents(ArrayList<Event> events) {
         this.events.addAll(events);
+    }
+
+    public void deleteEvent(String eventId){
+        for (Event event : events) {
+            if(event.getId().equals(eventId)){
+                events.remove(event);
+                return;
+            }
+        }
     }
 
     // Filters events based on course and activity settings
