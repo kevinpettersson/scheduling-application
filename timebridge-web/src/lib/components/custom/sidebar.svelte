@@ -7,6 +7,7 @@
 	import FilterSettings from './filter-settings.svelte';
 	import FormatSettings from './format-settings.svelte';
 	import { downloadCalendar } from '$lib/api.svelte';
+	import ExportDrawer from './export-drawer.svelte';
 </script>
 
 <Sidebar.Root variant="floating">
@@ -27,8 +28,6 @@
 	<Sidebar.Footer class="flex-row items-center">
 		<ModeToggle />
 		<Separator orientation="vertical" class="h-5/6 min-h-px" />
-		<button on:click={downloadCalendar} class={`${buttonVariants({ variant: "default" })} flex-grow`}>
-			Export Calendar
-		</button>
+		<ExportDrawer />
 	</Sidebar.Footer>
 </Sidebar.Root>
