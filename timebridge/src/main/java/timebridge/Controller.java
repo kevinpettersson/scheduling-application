@@ -105,9 +105,16 @@ public class Controller {
     }
     @PostMapping("/addEvent")
     public ResponseEntity<Calendar> addEvent(
-        @RequestBody Calendar calendar,
+        @RequestParam String calendarId,
         @RequestBody Event event) throws Exception {
             try {
+                // Retrieve the calendar from the database
+                Calendar calendar = repository.findById(calendarId).orElse(null);
+
+                // Check if the calendar exists
+                if (calendar == null) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+                }
                 calendar.addEvent(event);
                 repository.save(calendar);
                 return ResponseEntity.ok(calendar);
