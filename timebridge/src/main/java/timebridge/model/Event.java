@@ -11,6 +11,7 @@ public class Event {
     private Interval interval;
     private ArrayList<Location> locations;
     private Boolean visibility;
+    private ArrayList<Attendee> attendees;
 
     public Event() {
         this.id = new ObjectId().toHexString();
@@ -28,6 +29,7 @@ public class Event {
         this.interval = interval;
         this.locations = locations;
         this.visibility = true;
+        this.attendees = attendees;
     }
 
     public String getId(){
@@ -76,5 +78,13 @@ public class Event {
 
     public void setVisibility(Boolean visibility) {
         this.visibility = visibility;
+    }
+
+    public ArrayList<Attendee> getAttendees() {
+        return attendees;
+    }
+    
+    public void setAttendees(ArrayList<Attendee> attendees) {
+        this.attendees = attendees;
     }
 }
