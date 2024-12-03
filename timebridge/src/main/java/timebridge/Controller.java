@@ -148,6 +148,29 @@ public class Controller {
         }
     }
 
+    @PostMapping("/saveEvent")
+    public ResponseEntity<Calendar> saveEvent(
+        @RequestParam String calendarId,
+        @RequestBody Event newEventDetails) throws Exception {
+        try {
+            // Retrieve the calendar from the database
+            Calendar calendar = repository.findById(calendarId).orElse(null);
+
+            // Check if the calendar exists
+            if (calendar == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+
+            calendar.saveEvent(newEventDetails);
+            repository.save(calendar);
+            return ResponseEntity.ok(calendar);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @GetMapping("/public/{id}")
     public ResponseEntity<byte[]> getPublicCalendar(@PathVariable String id) {
         try {

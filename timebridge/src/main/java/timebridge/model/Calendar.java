@@ -6,6 +6,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 
 public class Calendar {
     @Id
@@ -70,12 +71,35 @@ public class Calendar {
     }
 
     public void deleteEvent(String eventId){
-        for (Event event : events) {
+        for (Event event : this.events) {
             if(event.getId().equals(eventId)){
                 events.remove(event);
                 return;
             }
         }
+    }
+
+    // Replaces existing event with new specification if id matches.
+    // If event has no id, set a new id and add event to calendar.
+    public void saveEvent(Event event){
+        String Id = event.getId();
+
+        if(Id != null && !Id.isEmpty()){
+            for (int i = 0; i < events.size(); i++) {
+                if(events.get(i).getId().equals(Id)){
+                    events.set(i, event);
+                    return;
+                }
+            }
+        }
+        if(Id == null || Id.isEmpty()){
+            event.setId(new ObjectId());
+        }
+        addEvent(event);
+    }
+
+    private boolean isValidId(String id) {
+        return id != null && !id.isEmpty();
     }
 
     // Filters events based on course and activity settings
