@@ -6,11 +6,11 @@
 	import TimeCell from './event-cell-time.svelte';
 	import LocationCell from './event-cell-location.svelte';
 	import ActionsCell from './event-cell-actions.svelte';
+	import AddEvent from '$lib/components/custom/add-event.svelte';
 
 	let events = $derived(calendar.events);
 	let format = $derived(calendar.format);
 </script>
-
 <Table.Root class="w-full">
 	<Table.Header>
 		<Table.Row>
@@ -18,7 +18,7 @@
 			<Table.Head>Event Description</Table.Head>
 			<Table.Head>Time</Table.Head>
 			<Table.Head>Location</Table.Head>
-			<Table.Head>Actions</Table.Head>
+			<Table.Head></Table.Head>
 		</Table.Row>
 	</Table.Header>
 	<Table.Body>
