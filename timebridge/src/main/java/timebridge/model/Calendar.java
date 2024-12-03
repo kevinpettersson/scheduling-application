@@ -98,10 +98,6 @@ public class Calendar {
         addEvent(event);
     }
 
-    private boolean isValidId(String id) {
-        return id != null && !id.isEmpty();
-    }
-
     // Filters events based on course and activity settings
     public void filterEvents(ArrayList<String> codeFilter, ArrayList<String> activityFilter) {
         for (Event event : this.events) {
