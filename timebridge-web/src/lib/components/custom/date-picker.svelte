@@ -1,5 +1,6 @@
 <script lang="ts">
     import CalendarIcon from "lucide-svelte/icons/calendar";
+    import { createEventDispatcher } from 'svelte';
     import {
       type DateValue,
       DateFormatter,
@@ -15,6 +16,9 @@
     });
    
     let value = $state<DateValue>();
+  import { writable } from 'svelte/store';
+
+  export const dateValue = writable<DateValue | null>(null);
   </script>
    
   <Popover.Root>
@@ -34,6 +38,6 @@
       {/snippet}
     </Popover.Trigger>
     <Popover.Content class="w-auto p-0">
-      <Calendar bind:value type="single" initialFocus />
+      <Calendar bind:value type="single" initialFocus/>
     </Popover.Content>
   </Popover.Root>
