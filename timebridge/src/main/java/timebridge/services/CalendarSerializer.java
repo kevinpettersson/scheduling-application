@@ -7,7 +7,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import timebridge.model.*;
+import timebridge.model.Attendee;
+import timebridge.model.Calendar;
+import timebridge.model.Event;
+import timebridge.model.Format;
+import timebridge.model.Location;
+
 
 public class CalendarSerializer {
 
@@ -64,6 +69,7 @@ public class CalendarSerializer {
         formatSummary(event, format);
         formatLocation(event, format);
         formatDescription(event, format);
+        formatAttendee(event);
 
         sb.append(END_EVENT);
     }
@@ -95,6 +101,12 @@ public class CalendarSerializer {
             appendField(event, field, format.getDescription());
         }
         sb.append("\n");
+    }
+    
+    private void formatAttendee(Event event) {
+        for (Attendee attendee : event.getAttendees()) {
+            sb.append("ATTENDEE;CN=\"").append(attendee.getName()).append("\":mailto:").append(attendee.getMail()).append("\n");
+        }
     }
 
     private void appendField(Event event, String field, ArrayList<String> formatInstance) {
