@@ -105,7 +105,7 @@ public class CalendarSerializer {
     
     private void formatAttendee(Event event) {
         for (Attendee attendee : event.getAttendees()) {
-            sb.append("ATTENDEE;CN=\"").append(attendee.getName()).append("\":mailto:").append(attendee.getMail()).append("\n");
+            sb.append("ATTENDEE;CN=").append(attendee.getName()).append(":mailto:").append(attendee.getMail()).append("\n");
         }
     }
 
