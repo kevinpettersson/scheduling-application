@@ -109,8 +109,12 @@ public class CalendarParser {
 
         ArrayList<Event> events = new ArrayList<>();
 
+        // TEMP create a list of attendees, this needs to be implemented properly
+        // by checking if the ical file contains attendees for each event.
+        ArrayList<Attendee> attendees = new ArrayList<>();
+
         for (Course course : courses) {
-            events.add(new Event(course, activity, interval, locations));
+            events.add(new Event(course, activity, interval, locations, attendees));
         }
 
         return events;

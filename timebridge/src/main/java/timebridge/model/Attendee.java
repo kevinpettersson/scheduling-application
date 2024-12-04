@@ -1,13 +1,12 @@
 package timebridge.model;
 
-
 public class Attendee {
     private String name;
     private String mail;
 
     public Attendee() {
-        this.name = "";
-        this.mail = "";
+        this.name = new String();
+        this.mail = new String();
     }
 
     public Attendee(String mail, String name) {
@@ -27,7 +26,7 @@ public class Attendee {
         return mail;
     }
 
-    public void setMail(String code) {
+    public void setMail(String mail) {
         this.mail = mail;
     }
 }
