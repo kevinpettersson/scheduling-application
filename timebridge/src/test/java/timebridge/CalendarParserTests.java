@@ -83,7 +83,7 @@ public class CalendarParserTests {
         assertFalse(iCalContent.contains("BEGIN:VEVENT"));
         assertFalse(iCalContent.contains("END:VEVENT"));
     }
-/* 
+
     @Test
     public void testParseOneEvent() throws IOException, URISyntaxException{
         String ics = getTextFile("one_event");
@@ -157,5 +157,5 @@ public class CalendarParserTests {
             assertTrue(formattedStart.matches("\\d{8}T\\d{6}Z"));
         }
     }
-        */
+        
 }
