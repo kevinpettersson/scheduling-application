@@ -40,7 +40,10 @@
 <div 
 	class="flex h-screen flex-col items-center justify-center view9" 
 	>
-	<h1 class="mb-6 font-bold" style="font-size: 4rem; color: black; margin-bottom: 14rem;">TimeBridge</h1>
+	<h1 class="mb-6 font-bold" style="font-size: 4rem; color: black; margin-bottom: 16rem;"
+	>
+		TimeBridge
+	</h1>
 
 	<form method="GET" use:enhance>
 		<Form.Field {form} name="url">
@@ -60,7 +63,9 @@
 					</div>
 				{/snippet}
 			</Form.Control>
-			<Form.FieldErrors />
+			<div style="min-height: 4rem; margin-top: -6rem; display: flex; align-items: center;">
+				<Form.FieldErrors />
+			</div>
 		</Form.Field>
 	</form>
 </div>
