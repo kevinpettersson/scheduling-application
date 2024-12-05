@@ -14,11 +14,10 @@
 <Table.Root class="w-full">
 	<Table.Header>
 		<Table.Row>
-			<Table.Head>Event Summary</Table.Head>
+			<Table.Head>Event Title</Table.Head>
 			<Table.Head>Event Description</Table.Head>
 			<Table.Head>Time</Table.Head>
 			<Table.Head>Location</Table.Head>
-			<Table.Head>Actions</Table.Head>
 		</Table.Row>
 	</Table.Header>
 	<Table.Body>
@@ -28,7 +27,6 @@
 				<DescriptionCell {event} {format} />
 				<TimeCell {event} />
 				<LocationCell {event} {format} />
-				<ActionsCell {event} />
 			</Table.Row>
 		{/each}
 	</Table.Body>

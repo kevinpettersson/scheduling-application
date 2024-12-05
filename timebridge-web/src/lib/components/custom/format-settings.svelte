@@ -30,9 +30,9 @@
 <div class="flex flex-col space-y-2 rounded border border-dashed p-3 pt-2">
 	<Select.Root type="multiple" name="selectedCourses" bind:value={summaryFormat}>
 		<div>
-			<Label for="selectedCourses">Summary</Label>
+			<Label for="selectedCourses">Title</Label>
 			<p class="text-xs text-muted-foreground">
-				Select fields to include in the event summary, in order.
+				Select fields to include in the event title, in order.
 			</p>
 		</div>
 		<Select.Trigger>

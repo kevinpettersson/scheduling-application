@@ -27,10 +27,10 @@
 						<Label for="link" class="sr-only">Link</Label>
 						<Input id="link" value="http://localhost:8080/public/{calendar.id}" readonly />
 					</div>
-					<Button variant="outline" size="icon" class="px-3">
+					<!-- <Button variant="outline" size="icon" class="px-3">
 						<span class="sr-only"> Copy </span>
 						<Copy class="h-4 w-4" />
-					</Button>
+					</Button> -->
 				</div>
 				<Separator />
 			</div>
