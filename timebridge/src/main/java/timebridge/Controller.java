@@ -1,36 +1,42 @@
 package timebridge;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.type.TypeReference;
-
-import timebridge.model.*;
+import timebridge.services.CalendarParser;
+import timebridge.services.CalendarSerializer;
+import timebridge.model.Calendar;
+import timebridge.model.Event;
+import timebridge.repository.CalendarRepository;
 
 @RestController
-class Controller {
+@CrossOrigin(origins = "http://localhost:5173") // Your frontend's origin
+public class Controller {
 
-    @GetMapping("/hello")
-    public String sayHello() {
-        return "Hello, World!";
-    }
+    @Autowired
+    private CalendarRepository repository;
 
-    @CrossOrigin(origins = "http://localhost:5173") // Your frontend's origin
     @GetMapping("/upload")
-    public ResponseEntity<Calendar> uploadCalendar(@RequestParam String ical) {
+    public ResponseEntity<Calendar> uploadCalendar(@RequestParam String ical)
+            throws MalformedURLException, IOException {
         try {
             // Create a URL object and open a connection to the iCalendar URL
             URL url = new URL(ical);
@@ -38,76 +44,160 @@ class Controller {
 
             // Check if the request was successful
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
 
             // Read the iCalendar file data from the URL
-            try (InputStream inputStream = connection.getInputStream()) {
-                String icsData = new String(inputStream.readAllBytes());
-                Calendar calendar = CalendarBuilder.build(icsData);
-                return ResponseEntity.ok(calendar);
-            }
+            InputStream inputStream = connection.getInputStream();
+            String icsData = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+            CalendarParser parser = new CalendarParser();
+            Calendar calendar = parser.parse(icsData);
+
+            // Save the calendar to the database
+            repository.save(calendar);
+
+            return ResponseEntity.ok(calendar);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:5173") // Your frontend's origin
-    @GetMapping("/download")
-    public ResponseEntity<byte[]> downloadCalendar(@RequestParam String ical) {
+    @PostMapping("/download")
+    public ResponseEntity<byte[]> downloadCalendar(@RequestBody Calendar calendar) throws IOException {
         try {
-            // Create a URL object and open a connection to the iCalendar URL
-            URL url = new URL(ical);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            // Serialize the calendar to iCalendar format
+            CalendarSerializer serializer = new CalendarSerializer();
+            String icsData = serializer.serialize(calendar);
 
-            // Check if the request was successful
-            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                return ResponseEntity.badRequest().build();
-            }
+            // Convert content to bytes
+            byte[] contentBytes = icsData.getBytes(StandardCharsets.UTF_8);
 
-            // Read the iCalendar file data from the URL
-            try (InputStream inputStream = connection.getInputStream()) {
-                String icsData = new String(inputStream.readAllBytes());
-                Calendar calendar = CalendarBuilder.build(icsData);
-                String icsContent = CalendarParser.parse(calendar);
+            // Set HTTP headers
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + calendar.getName() + ".ics");
+            headers.add(HttpHeaders.CONTENT_TYPE, "text/calendar; charset=UTF-8");
 
-                // Convert content to bytes
-                byte[] contentBytes = icsContent.getBytes(StandardCharsets.UTF_8);
-
-                // Set HTTP headers
-                HttpHeaders headers = new HttpHeaders();
-                headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=calendar-event.ics");
-                headers.add(HttpHeaders.CONTENT_TYPE, "text/calendar; charset=UTF-8");
-
-                // Response
-                return new ResponseEntity<>(contentBytes, headers, HttpStatus.OK);
-            }
+            return new ResponseEntity<>(contentBytes, headers, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
-    @GetMapping("/modify")
+    @PostMapping("/modify")
     public ResponseEntity<Calendar> modifyCalendar(
             @RequestParam ArrayList<String> courseFilter,
             @RequestParam ArrayList<String> activityFilter,
-            @RequestParam ArrayList<String> summaryFormat,
-            @RequestParam ArrayList<String> descriptionFormat,
-            @RequestParam ArrayList<String> locationFormat,
             @RequestBody Calendar calendar) throws Exception {
+        try {
+            // Filter events based on course and activity filters
+            calendar.filterEvents(courseFilter, activityFilter);
 
-        // Construct the Settings object directly using the ArrayLists
-        Settings settingsObj = new Settings(courseFilter, activityFilter, summaryFormat, descriptionFormat,
-                locationFormat);
+            // Save the modified calendar to the database
+            // If the calendar does exist in the database, it will be updated
+            repository.save(calendar);
 
-        // Create a CalendarEditor object and build the modified calendar
-        CalendarEditor editor = new CalendarEditor(calendar, settingsObj);
-        Calendar resultCalendar = editor.build();
+            return ResponseEntity.ok(calendar);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @PostMapping("/addEvent")
+    public ResponseEntity<Calendar> addEvent(
+        @RequestParam String calendarId,
+        @RequestBody Event event) throws Exception {
+            try {
+                // Retrieve the calendar from the database
+                Calendar calendar = repository.findById(calendarId).orElse(null);
 
-        // Return the modified calendar
-        return ResponseEntity.ok(resultCalendar);
+                // Check if the calendar exists
+                if (calendar == null) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+                }
+                calendar.addEvent(event);
+                repository.save(calendar);
+                return ResponseEntity.ok(calendar);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+    }
+
+    @DeleteMapping("/deleteEvent")
+    public ResponseEntity<Calendar> deleteEvent(
+        @RequestParam String calendarId,
+        @RequestParam String eventId) throws Exception {
+        try {
+            // Retrieve the calendar from the database
+            Calendar calendar = repository.findById(calendarId).orElse(null);
+
+            // Check if the calendar exists
+            if (calendar == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+            calendar.deleteEvent(eventId);
+            repository.save(calendar);
+            return ResponseEntity.ok(calendar);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping("/saveEvent")
+    public ResponseEntity<Calendar> saveEvent(
+        @RequestParam String calendarId,
+        @RequestBody Event newEventDetails) throws Exception {
+        try {
+            // Retrieve the calendar from the database
+            Calendar calendar = repository.findById(calendarId).orElse(null);
+
+            // Check if the calendar exists
+            if (calendar == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+
+            calendar.saveEvent(newEventDetails);
+            repository.save(calendar);
+            return ResponseEntity.ok(calendar);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/public/{id}")
+    public ResponseEntity<byte[]> getPublicCalendar(@PathVariable String id) {
+        try {
+            // Retrieve the calendar from the database
+            Calendar calendar = repository.findById(id).orElse(null);
+
+            // Check if the calendar exists
+            if (calendar == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+
+            // Serialize the calendar to iCalendar format
+            CalendarSerializer serializer = new CalendarSerializer();
+            String icsData = serializer.serialize(calendar);
+
+            // Convert content to bytes
+            byte[] contentBytes = icsData.getBytes(StandardCharsets.UTF_8);
+
+            // Set HTTP headers
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + calendar.getName() + ".ics");
+            headers.add(HttpHeaders.CONTENT_TYPE, "text/calendar; charset=UTF-8");
+
+            return new ResponseEntity<>(contentBytes, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

@@ -18,10 +18,18 @@ export type Event = {
     activity: string;
     interval: Interval;
     locations: Location[];
+    visibility: boolean;
+};
+
+export type Format = {
+    summary: string[];
+    description: string[];
+    location: string[];
 };
 
 export type Calendar = {
-    id: string | null; // Temporary null value
+    id: string;
     name: string;
+    format: Format;
     events: Event[];
 };

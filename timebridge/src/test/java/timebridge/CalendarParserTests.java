@@ -18,9 +18,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.StringUtils;
 
 import timebridge.model.Calendar;
-import timebridge.model.CalendarBuilder;
-import timebridge.model.CalendarParser;
 import timebridge.model.Event;
+import timebridge.services.CalendarParser;
+import timebridge.services.CalendarSerializer;
 
 @SpringBootTest
 public class CalendarParserTests {
@@ -34,11 +34,13 @@ public class CalendarParserTests {
     public void testParseEmptyFile() throws IOException, URISyntaxException{
         String ics = getTextFile("empty_file");
 
-        // Build the Calendar object from the String using CalendarBuilder. 
-        Calendar calendar = CalendarBuilder.build(ics);
+        // Build the Calendar object from the String using CalendarBuilder.
+        CalendarParser parser = new CalendarParser();
+        Calendar calendar = parser.parse(ics);
 
         // Convert the Calendar object back to iCalendar-format.
-        String iCalContent = CalendarParser.parse(calendar);
+        CalendarSerializer serializer = new CalendarSerializer();
+        String iCalContent = serializer.serialize(calendar);
 
         // Verify that it's the right format.
         assertTrue(iCalContent.contains("BEGIN:VCALENDAR"));
@@ -52,7 +54,8 @@ public class CalendarParserTests {
     public void testParseEmptyCalendar() throws IOException, URISyntaxException{
         var calendar = new Calendar();
         // Convert the Calendar object back to iCalendar-format.
-        String iCalContent = CalendarParser.parse(calendar);
+        CalendarSerializer serializer = new CalendarSerializer();
+        String iCalContent = serializer.serialize(calendar);
 
         // Verify that it's the right format.
         assertTrue(iCalContent.contains("BEGIN:VCALENDAR"));
@@ -66,9 +69,11 @@ public class CalendarParserTests {
     public void testParseCalendarWithNoEvents() throws IOException, URISyntaxException{
         String ics = getTextFile("no_events");
 
-        Calendar calendar = CalendarBuilder.build(ics);
+        CalendarParser parser = new CalendarParser();
+        Calendar calendar = parser.parse(ics);
 
-        String iCalContent = CalendarParser.parse(calendar);
+        CalendarSerializer serializer = new CalendarSerializer();
+        String iCalContent = serializer.serialize(calendar);
 
         // Validate that the iCalendar-string contains the expected format.
         assertTrue(iCalContent.contains("BEGIN:VCALENDAR"));
@@ -83,9 +88,11 @@ public class CalendarParserTests {
     public void testParseOneEvent() throws IOException, URISyntaxException{
         String ics = getTextFile("one_event");
 
-        Calendar calendar = CalendarBuilder.build(ics);
-       
-        String iCalContent = CalendarParser.parse(calendar);
+        CalendarParser parser = new CalendarParser();
+        Calendar calendar = parser.parse(ics);
+
+        CalendarSerializer serializer = new CalendarSerializer();
+        String iCalContent = serializer.serialize(calendar);
 
         assertNotNull(iCalContent);
         assertTrue(iCalContent.contains("BEGIN:VCALENDAR"));
@@ -101,9 +108,11 @@ public class CalendarParserTests {
         
        String ics = getTextFile("two_events");
 
-       Calendar calendar = CalendarBuilder.build(ics);
-       
-       String iCalContent = CalendarParser.parse(calendar);
+       CalendarParser parser = new CalendarParser();
+       Calendar calendar = parser.parse(ics);
+
+       CalendarSerializer serializer = new CalendarSerializer();
+       String iCalContent = serializer.serialize(calendar);
         
        assertNotNull(iCalContent);
        assertTrue(iCalContent.contains("BEGIN:VCALENDAR"));
@@ -119,9 +128,11 @@ public class CalendarParserTests {
         
         String ics = getTextFile("two_courses");
 
-        Calendar calendar = CalendarBuilder.build(ics);
-        
-        String iCalContent = CalendarParser.parse(calendar);
+        CalendarParser parser = new CalendarParser();
+        Calendar calendar = parser.parse(ics);
+
+        CalendarSerializer serializer = new CalendarSerializer();
+        String iCalContent = serializer.serialize(calendar);
 
         assertNotNull(iCalContent);
         assertTrue(iCalContent.contains("BEGIN:VCALENDAR"));
@@ -146,4 +157,5 @@ public class CalendarParserTests {
             assertTrue(formattedStart.matches("\\d{8}T\\d{6}Z"));
         }
     }
+        
 }

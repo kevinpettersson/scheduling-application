@@ -1,12 +1,11 @@
 <script lang="ts">
 	import '../app.css';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
-	import AppSidebar from '$lib/components/sidebar.svelte';
+	import AppSidebar from '$lib/components/custom/sidebar.svelte';
 	import { ModeWatcher } from 'mode-watcher';
 	import { page } from '$app/stores';
 
 	let { children } = $props();
-	export const ssr = false; // Disable server-side rendering
 </script>
 
 {#if $page.url.pathname === '/'}
@@ -18,7 +17,7 @@
 	<ModeWatcher />
 	<Sidebar.Provider>
 		<AppSidebar/>
-		<main class="h-dvh p-2 pl-0">
+		<main class="h-dvh p-2 pl-0 w-full">
 			{@render children?.()}
 		</main>
 	</Sidebar.Provider>

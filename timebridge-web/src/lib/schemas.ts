@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-// Schema for the iCal URL that is used to fetch the schedule
-export const _iCalSchema = z.object({
+// Import Schema
+export const _importSchema = z.object({
 	url: z
 		.string()
 		.url('Please provide a valid URL.')
@@ -15,13 +15,7 @@ export const _iCalSchema = z.object({
 		),
 });
 
-export type iCalSchema = typeof _iCalSchema;
+export type importSchema = typeof _importSchema;
 
-// Schema for filtering events by course code
-export const _codeSchema = z.object({
-	codes: z
-		.array(z.string().min(1))
-		.min(1, "Please select at least one course."),
-});
-
-export type codeSchema = typeof _codeSchema;
+// Export Schema
+ 

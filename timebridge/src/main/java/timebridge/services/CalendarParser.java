@@ -1,4 +1,6 @@
-package timebridge.model;
+package timebridge.services;
+
+import timebridge.model.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,14 +11,17 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public abstract class CalendarBuilder {
+public class CalendarParser {
 
-    // Method to parse iCal-file to our model
-    public static Calendar build(String ics) throws IOException {
+    public CalendarParser() {
+    }
+
+    public Calendar parse(String iCal) throws IOException {
         // Normalize the iCal data, so that values are on the same line as the key
-        String normalizedIcs = normalizeIcs(ics);
+        String normalizedIcs = normalizeIcs(iCal);
 
         // Create a BufferedReader from the normalized iCal data
         BufferedReader reader = new BufferedReader(
@@ -31,7 +36,7 @@ public abstract class CalendarBuilder {
 
     // Method to normalize iCal data so that the SUMMARY, LOCATION,
     // and other values are on the same line as the key
-    private static String normalizeIcs(String ics) throws IOException {
+    private String normalizeIcs(String ics) throws IOException {
         BufferedReader reader = new BufferedReader(new StringReader(ics));
         StringWriter writer = new StringWriter();
 
@@ -43,7 +48,7 @@ public abstract class CalendarBuilder {
     }
 
     // Method to parse events from the input BufferedReader
-    private static ArrayList<Event> parseEvents(BufferedReader reader)
+    private ArrayList<Event> parseEvents(BufferedReader reader)
             throws IOException {
         ArrayList<Event> events = new ArrayList<>();
         String line;
@@ -59,7 +64,7 @@ public abstract class CalendarBuilder {
     }
 
     // Method to parse a single event from the input BufferedReader
-    private static ArrayList<Event> parseEvent(BufferedReader reader) throws IOException {
+    private ArrayList<Event> parseEvent(BufferedReader reader) throws IOException {
         ArrayList<Course> courses = new ArrayList<>();
         String activity = null;
         Interval interval = new Interval();
@@ -104,22 +109,26 @@ public abstract class CalendarBuilder {
 
         ArrayList<Event> events = new ArrayList<>();
 
+        // TEMP create a list of attendees, this needs to be implemented properly
+        // by checking if the ical file contains attendees for each event.
+        ArrayList<Attendee> attendees = new ArrayList<>();
+
         for (Course course : courses) {
-            events.add(new Event(course, activity, interval, locations));
+            events.add(new Event(course, activity, interval, locations, attendees));
         }
 
         return events;
     }
 
     // Method to parse a datetime string and return codea ZonedDateTime object
-    private static ZonedDateTime parseDateTime(String line) {
+    private ZonedDateTime parseDateTime(String line) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
                 "yyyyMMdd'T'HHmmss'Z'");
         return ZonedDateTime.parse(line, formatter.withZone(ZoneOffset.UTC));
     }
 
     // Method to parse the course from the summary
-    private static ArrayList<Course> parseCourses(String line) {
+    private ArrayList<Course> parseCourses(String line) {
         ArrayList<Course> courses = new ArrayList<>();
         String tempLine = line;
 
@@ -160,12 +169,12 @@ public abstract class CalendarBuilder {
     }
 
     // Method to parse the activity from the summary
-    private static String parseActivity(String line) {
+    private String parseActivity(String line) {
         return line.replaceAll(".*,(\\s*[^,]+)$", "$1").trim();
     }
 
     // Method to parse the location(s) of an event
-    private static ArrayList<Location> parseLocations(String line) {
+    private ArrayList<Location> parseLocations(String line) {
         ArrayList<Location> locations = new ArrayList<>();
 
         line = line.replace("\\n", "\n");

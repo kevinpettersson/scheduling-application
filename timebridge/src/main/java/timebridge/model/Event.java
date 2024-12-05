@@ -1,28 +1,46 @@
 package timebridge.model;
 
 import java.util.ArrayList;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 
 public class Event {
+    @Id
+    private String id;
     private Course course;
     private String activity;
     private Interval interval;
     private ArrayList<Location> locations;
-    private EventFormat format;
+    private Boolean visibility;
+    private ArrayList<Attendee> attendees;
 
     public Event() {
+        this.id = new ObjectId().toHexString();
         this.course = new Course();
         this.activity = "";
         this.interval = new Interval();
         this.locations = new ArrayList<Location>();
-        this.format = new EventFormat();
+        this.visibility = true;
+        this.attendees = new ArrayList<Attendee>();
     }
 
-    public Event(Course course, String activity, Interval interval, ArrayList<Location> locations) {
+    public Event(Course course, String activity, Interval interval, ArrayList<Location> locations,
+            ArrayList<Attendee> attendees) {
+        this.id = new ObjectId().toHexString();
         this.course = course;
         this.activity = activity;
         this.interval = interval;
         this.locations = locations;
-        this.format = new EventFormat();
+        this.visibility = true;
+        this.attendees = attendees;
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id.toHexString();
     }
 
     public Course getCourse() {
@@ -57,11 +75,19 @@ public class Event {
         this.locations = locations;
     }
 
-    public void setFormat(EventFormat format) {
-        this.format = format;
+    public Boolean getVisibility() {
+        return this.visibility;
     }
 
-    public EventFormat getFormat() {
-        return this.format;
+    public void setVisibility(Boolean visibility) {
+        this.visibility = visibility;
+    }
+
+    public ArrayList<Attendee> getAttendees() {
+        return attendees;
+    }
+
+    public void setAttendees(ArrayList<Attendee> attendees) {
+        this.attendees = attendees;
     }
 }
