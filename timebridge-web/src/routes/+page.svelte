@@ -23,14 +23,14 @@
 	const { form: formData, enhance } = form;
 </script>
 
-<div class="flex h-screen flex-col items-center justify-center">
-	<h1 class="mb-6 font-bold">TimeBridge</h1>
+<div class="bg-bridge flex flex-col items-center justify-center">
+	<h1 class="mb-6 text-5xl font-bold bowlby-one-regular">TimeBridge</h1>
 	<form method="GET" use:enhance>
 		<Form.Field {form} name="url">
 			<Form.Control>
 				{#snippet children({ props })}
 					<div
-						class="flex flex-row items-center gap-3 rounded-xl border p-2 pl-3 ring-zinc-700 focus-within:ring"
+						class="flex flex-row items-center gap-3 rounded-xl border bg-white p-2 pl-3 ring-zinc-700 focus-within:ring"
 					>
 						<Input
 							{...props}
@@ -46,3 +46,12 @@
 		</Form.Field>
 	</form>
 </div>
+
+<style>
+	@import url('https://fonts.googleapis.com/css2?family=Bowlby+One&display=swap');
+	.bowlby-one-regular {
+		font-family: 'Bowlby One', sans-serif;
+		font-weight: 400;
+		font-style: normal;
+	}
+</style>

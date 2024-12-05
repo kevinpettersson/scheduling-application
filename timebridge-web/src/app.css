@@ -99,4 +99,20 @@
     scrollbar-width: none;
     /* Firefox */
   }
+
+
+}
+
+.bg-bridge {
+  background-image: url('assets/bg-bridge.svg');
+  background-size: cover;
+  /* Adjusts the size to cover the container */
+  background-repeat: no-repeat;
+  /* Prevents the image from repeating */
+  background-position: center;
+  /* Centers the image */
+  width: 100%;
+  /* Adjust container width */
+  height: 100vh;
+  /* Adjust container height to full viewport */
 }
