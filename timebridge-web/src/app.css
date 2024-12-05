@@ -103,8 +103,8 @@
 
 }
 
-.view9 {
-  background-image: url('assets/View9.svg');
+.bg-bridge {
+  background-image: url('assets/bg-bridge.svg');
   background-size: cover;
   /* Adjusts the size to cover the container */
   background-repeat: no-repeat;
