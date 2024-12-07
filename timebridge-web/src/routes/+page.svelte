@@ -23,7 +23,7 @@
 	const { form: formData, enhance } = form;
 </script>
 
-<div class="bg-bridge flex flex-col items-center justify-center">
+<div class="bg-bridge flex flex-col items-center justify-center color-">
 	<h1 class="bowlby-one-regular mb-6 text-5xl font-bold">TimeBridge</h1>
 	<form method="GET" use:enhance>
 		<Form.Field {form} name="url">

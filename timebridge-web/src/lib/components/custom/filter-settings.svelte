@@ -1,5 +1,4 @@
 <script lang="ts">
-
 	import { Label } from '$lib/components/ui/label/index.js';
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { Badge } from '$lib/components/ui/badge/index.js';
@@ -11,6 +10,7 @@
 
 	// Watch for changes in the courseFilter and activityFilter
 	$inspect(courseFilter, activityFilter).with((type, courseFilter, activityFilter) => {
+		console.log(type, courseFilter, activityFilter);
 		if (type === 'update') {
 			modifyCalendar(courseFilter, activityFilter);
 		}
@@ -22,7 +22,7 @@
 		<Select.Root type="multiple" name="selectedCourses" bind:value={courseFilter}>
 			<div>
 				<Label for="selectedCourses">Course Code</Label>
-				<p class="text-xs text-muted-foreground">Select the course codes to filter events by.</p>
+				<p class="text-muted-foreground text-xs">Select the course codes to filter events by.</p>
 			</div>
 			<Select.Trigger>
 				<div class="flex gap-1">
@@ -52,7 +52,7 @@
 		<Select.Root type="multiple" name="selectedActivities" bind:value={activityFilter}>
 			<div>
 				<Label for="selectedActivities">Activity</Label>
-				<p class="text-xs text-muted-foreground">Select the activities to filter events by.</p>
+				<p class="text-muted-foreground text-xs">Select the activities to filter events by.</p>
 			</div>
 			<Select.Trigger>
 				<div class="scrollbar-hide flex gap-1 overflow-x-auto">
@@ -74,9 +74,7 @@
 				<Select.Group>
 					<Select.GroupHeading>Activity</Select.GroupHeading>
 					{#each calendar.courseActivities() as activity}
-						<Select.Item value={activity}
-							>{activity}</Select.Item
-						>
+						<Select.Item value={activity}>{activity}</Select.Item>
 					{/each}
 				</Select.Group>
 			</Select.Content>

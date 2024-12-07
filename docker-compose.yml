@@ -1,0 +1,35 @@
+services:
+  spring-boot-app:
+    build:
+      context: ./timebridge
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+
+  sveltekit-app:
+    build:
+      context: ./timebridge-web
+      dockerfile: Dockerfile
+    container_name: sveltekit-app
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - spring-boot-app
+      - sveltekit-app
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

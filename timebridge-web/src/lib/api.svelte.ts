@@ -9,7 +9,7 @@ export async function fetchCalendar(url: string) {
     requesting = true;
 
     try {
-        const response = await fetch(`http://localhost:8080/upload?ical=${encodeURIComponent(url)}`);
+        const response = await fetch(`/api/upload?ical=${encodeURIComponent(url)}`);
         calendar.data = await response.json();
     } catch (error) {
         console.error('Error fetching calendar:', error);
@@ -26,7 +26,7 @@ export async function modifyCalendar(courseFilter: string[], activityFilter: str
 
     try {
         const response = await fetch(
-            `http://localhost:8080/modify?courseFilter=${courseFilter}&activityFilter=${activityFilter}`,
+            `/api/modify?courseFilter=${courseFilter}&activityFilter=${activityFilter}`,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -47,7 +47,7 @@ export async function downloadCalendar() {
     requesting = true;
 
     try {
-        const response = await fetch('http://localhost:8080/download', {
+        const response = await fetch('/api/download', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(calendar.data),

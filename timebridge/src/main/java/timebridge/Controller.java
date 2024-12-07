@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import timebridge.services.CalendarParser;
 import timebridge.services.CalendarSerializer;
@@ -28,7 +29,6 @@ import timebridge.model.Event;
 import timebridge.repository.CalendarRepository;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173") // Your frontend's origin
 public class Controller {
 
     @Autowired
@@ -104,32 +104,32 @@ public class Controller {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
     @PostMapping("/addEvent")
     public ResponseEntity<Calendar> addEvent(
-        @RequestParam String calendarId,
-        @RequestBody Event event) throws Exception {
-            try {
-                // Retrieve the calendar from the database
-                Calendar calendar = repository.findById(calendarId).orElse(null);
+            @RequestParam String calendarId,
+            @RequestBody Event event) throws Exception {
+        try {
+            // Retrieve the calendar from the database
+            Calendar calendar = repository.findById(calendarId).orElse(null);
 
-                // Check if the calendar exists
-                if (calendar == null) {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-                }
-                calendar.addEvent(event);
-                repository.save(calendar);
-                return ResponseEntity.ok(calendar);
+            // Check if the calendar exists
+            if (calendar == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
-            catch (Exception e) {
-                e.printStackTrace();
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-            }
+            calendar.addEvent(event);
+            repository.save(calendar);
+            return ResponseEntity.ok(calendar);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @DeleteMapping("/deleteEvent")
     public ResponseEntity<Calendar> deleteEvent(
-        @RequestParam String calendarId,
-        @RequestParam String eventId) throws Exception {
+            @RequestParam String calendarId,
+            @RequestParam String eventId) throws Exception {
         try {
             // Retrieve the calendar from the database
             Calendar calendar = repository.findById(calendarId).orElse(null);
@@ -141,8 +141,7 @@ public class Controller {
             calendar.deleteEvent(eventId);
             repository.save(calendar);
             return ResponseEntity.ok(calendar);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -150,8 +149,8 @@ public class Controller {
 
     @PostMapping("/saveEvent")
     public ResponseEntity<Calendar> saveEvent(
-        @RequestParam String calendarId,
-        @RequestBody Event newEventDetails) throws Exception {
+            @RequestParam String calendarId,
+            @RequestBody Event newEventDetails) throws Exception {
         try {
             // Retrieve the calendar from the database
             Calendar calendar = repository.findById(calendarId).orElse(null);
@@ -164,8 +163,7 @@ public class Controller {
             calendar.saveEvent(newEventDetails);
             repository.save(calendar);
             return ResponseEntity.ok(calendar);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
