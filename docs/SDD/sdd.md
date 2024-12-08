@@ -8,7 +8,7 @@
 4. [References](#references)
 5. [Overview](#overview)
 6. [Design](#design)
-7. [Sequence Diagrams](#sequence diagrams)
+7. [Sequence Diagrams](#sequence-diagrams)
 8. [Testing](#testing)
 
 ## Introduction
@@ -76,7 +76,7 @@ The Spring Boot backend revoles around the following components:
 
 For more detail, a representation of the backend design is shown below:
 
-![design](UML/out/timebridge/timebridge.svg)
+![design](img/timebridge.png)
 
 # Sequence Diagrams
 
@@ -103,4 +103,6 @@ The user clicks the "Export" button. A url is shown, and a download button is di
 # Testing
 
 We use JUnit for unit testing, and Postman for manual testing. You can find the test cases in the `test` directory of the backend application.
+
+
 
