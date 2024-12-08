@@ -8,9 +8,8 @@
 4. [References](#references)
 5. [Overview](#overview)
 6. [Design](#design)
-7. [Implementation](#implementation)
+7. [Sequence Diagrams](#sequence diagrams)
 8. [Testing](#testing)
-9. [Appendix](#appendix)
 
 ## Introduction
 
