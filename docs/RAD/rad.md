@@ -27,26 +27,27 @@ These are the following textual requirements for our project:
 2. Filtering or customizing events shall update the calendar view in real time.
 
 ### GUI Mockups
-From these requirements, we have created GUI mockups in Figma. 
-This is what our Figma prototype looks like of our product:
+Based on these requirements, we created a GUI mockup in Figma. Our goal is to create a user interface that is clean, visually appealing and easy for the user to navigate. 
+This is what our Figma prototype looked like for our product:
 
 ![alt text](image.png)
-![alt text](image-1.png)
+![alt text](image-5.png)
+
+Since our initial Figma prototype, we have made adjustments based on user testing feedback and the constraints of the UI systems we are working with. This is how our current version of the UI looks like:
+
+![alt text](image-9.png)
+![alt text](image-10.png)
+![alt text](image-11.png)
+![alt text](image-12.png)
 
 
 ### User Stories
-• As a user, I want to import my schedule using a TimeEdit link so that I can quickly set up my calendar without manually adding events.
+These are our main epics, with the user stories included:
 
-• As a user, I want to filter my events by course code so that I can view only the activities relevant for me.
+![alt text](image-8.png)
+![alt text](image-7.png)
+![alt text](image-6.png)
 
-• As a user, I want to filter events by activity type (for example lectures and labs) so that I can view only the activities that are relevant for me.
-
-• As a user, I want to filter events by activity type (for example lectures and labs) so that I can view only the activities that are relevant for me.
-
-• As a user, I want to clean up event titles to remove duplicate or unnecessary information so that my calendar is more readable for me.
-
-
-LÄGG IN FRÅN GITLAB HÄR
 
 
 ### DoD: Definition of Done
