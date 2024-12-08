@@ -52,8 +52,8 @@ The backend server is built using Spring Boot, with the following dependencies:
 ### Frontend Client 
 
 The frontend client is built using Svelte, with the following dependencies:
-    - ShadCN: for building Svelte components.
-    - Tailwind CSS: for styling the components.
+- ShadCN: for building Svelte components.
+- Tailwind CSS: for styling the components.
 
 ### Database 
 
