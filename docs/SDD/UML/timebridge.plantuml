@@ -5,159 +5,107 @@ skinparam backgroundColor ivory
 skinparam linetype ortho
 
 frame "Spring Boot REST API" {
-    package "Model" {
+    package "model" {
         class Calendar {
-            # id: String
-            # name: String
-            # events: ArrayList<Event>
-            # format: Format
+            + id : String
+            + name : String
+            + events : List<Event>
+            + format : Format
 
-            ~ Calendar()
-            ~ Calendar(String name, ArrayList<Event> events)
+            + Calendar(name: String, events: List<Event>)
+            + Calendar()
 
-            + getId(): String
-            + getName(): String
-            + getEvents(): ArrayList<Event>
-            + getFormat(): EventFormat
+            + filterEvents(codes: List<String>, activities : List<String>): void
+            + saveEvent(event: Event): void
+            + deleteEvent(event: Event): void
 
-            + setId(String id): void
-            + setName(String name): void
-            + setEvents(ArrayList<Event> events): void
-            + setFormat(Format format): void
-
-            + filterEvents(ArrayList<String> codes,ArrayList<String> activities): void
         }
 
         class Event {
-            # course: Course
-            # activity: Activity
-            # interval: Interval
-            # locations: ArrayList<Location>
-            # visibility: Boolean
-
-            ~ Event()
-            ~ Event(Course course, Activity activity, Interval interval, ArrayList<Location> locations)
-
-            + getCourse(): Course
-            + getActivity(): Activity
-            + getInterval(): Interval
-            + getLocations(): ArrayList<Location>
-
-            + setCourse(Course course): void
-            + setActivity(Activity activity): void
-            + setInterval(Interval interval): void
-            + setLocations(ArrayList<Location> locations): void
+            + id: String
+            + course: Course
+            + activity: String
+            + interval: Interval
+            + locations: List<Location>
+            + attendees: List<Attendee>
+            + visibility: Boolean
+            
+            + Event(course: Course, activity: String, interval: Interval, locations: List<Location>)
+            + Event()
         }
 
         class Course {
             # name: String
             # code: String
 
-            ~ Course()
             ~ Course(String name, String code)
-
-            + getName(): String
-            + getCode(): String
-
-            + setName(String name): void
-            + setCode(String code): void
-        }
-
-        class Activity {
-            # type: String
-
-            ~ Activity()
-            ~ Activity(String type)
-
-            + getType(): String
-            + setType(String type): void
+            ~ Course()
         }
 
         class Interval {
             # start: ZonedDateTime
             # end: ZonedDateTime
-
+            
+            ~ Interval(start: ZonedDateTime, end: ZonedDateTime)
             ~ Interval()
-            ~ Interval(ZonedDateTime start, ZonedDateTime end)
-
-            + getStart(): ZonedDateTime
-            + getEnd(): ZonedDateTime
-
-            + setStart(ZonedDateTime start): void
-            + setEnd(ZonedDateTime end): void
         }
 
         class Location {
-            # building: String
-            # room: String
+            + building: String
+            + room: String
 
-            ~ Location()
-            ~ Location(String building, String room)
-
-            + getBuilding(): String
-            + getRoom(): String
-
-            + setBuilding(String building): void
-            + setRoom(String room): void
+            + Location(building: String, room: String)
+            + Location()
         }
 
         class Format {
-            # ArrayList<String> summary
-            # ArrayList<String> description
-            # ArrayList<String> location
+            + summary: List<String>
+            + description: List<String>
+            + location: List<String>
 
-            ~ EventFormat()
-            ~ EventFormat(ArrayList<String> summary, ArrayList<String> description, ArrayList<String> location)
-
-            + getSummary(): ArrayList<String>
-            + getDescription(): ArrayList<String>
-            + getLocation(): ArrayList<String>
-
-            + setSummary(ArrayList<String> summary): void
-            + setDescription(ArrayList<String> description): void
-            + setLocation(ArrayList<String> location): void
+            + EventFormat(summary: List<String>, description: List<String>, location: List<String))
+            + EventFormat()
         }
     }
 
-    package "Service" {
-
-        class CalendarParser {
-            + parse(String iCal): Calendar
+    package "service" {
+        abstract class CalendarParser {
+            + parse(iCal: String): Calendar
         }
 
-        class CalendarSerializer {
-            + serialize(Calendar calendar): String
+        abstract class CalendarSerializer {
+            + serialize(calendar: Calendar): String
+        }
+    }
+
+    package repository <<MongoRepository<Calendar, String>>> {
+        class CalendarRepository {
+            Updates, Deletes, Inserts, Queries to and from MongoDB. 
         }
     }
 
     class Controller {
-        + uploadCalendar(String iCalUrl): Calendar
-        + downloadCalendar(String iCalUrl): IcsFile
-        + modifyCalenar(Calendar calendar, Filter filter, Format format): Calendar
+        + /upload(url: String): Calendar
+        + /download(Calendar calendar): byte[]
+        + /modify(courseFilter: List<String>, activityFilter: List<String>, calendar: Calendar): Calendar
+        + /saveEvent(calendarId: String, event: Event): Calendar
+        + /deleteEvent(calendarId: String, eventId: String): Calendar
+        + /public/{id}(calendarId: String): byte[]
+
     }
 
-    Calendar *-l- Event
+    Calendar *-- Event
     Calendar *-- Format
 
-    Event *-l- Course
-    Event *-- Activity
+    Event *-- Course
     Event *-- Interval
     Event *-- Location
 
+
+    Controller *-l- CalendarRepository
     Controller ..> CalendarParser : <<uses>>
     Controller ..> CalendarSerializer : <<uses>>
-    Controller .l.> Calendar: <<uses>>
+    Controller ...> Calendar: <<uses>>
 }
-
-node "Sveltekit Web Application" #line:red;line.bold;text:red; {
-
-}
-
-Controller -[#pink,thickness=3]-> "Sveltekit Web Application" : <<HTTP Response>>
-"Sveltekit Web Application" -[#pink,thickness=3]-> Controller : <<HTTP Request>>
-
-
-
-
 
 @enduml
