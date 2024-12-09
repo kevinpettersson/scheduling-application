@@ -3,7 +3,6 @@ variables:
 
 stages:        
   - build
-  - publish
   - deploy
 
 api-build-job:     
@@ -15,7 +14,12 @@ api-build-job:
   services:
     - docker:dind
   script:
+    - echo "Building image..."
     - docker build -t registry.git.chalmers.se/palssons/dit213-group-12/timebridge-api:latest -f timebridge/Dockerfile timebridge/
+    - echo "Login to gitlab..."
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+    - echo "Publishing image..."
+    - docker push registry.git.chalmers.se/palssons/dit213-group-12/timebridge-api
   artifacts:
     paths:
         - timebridge/target/*.jar
@@ -31,29 +35,15 @@ web-build-job:
   services:
     - docker:dind
   script:
+    - echo "Building image..."
     - docker build -t registry.git.chalmers.se/palssons/dit213-group-12/timebridge-web:latest -f timebridge-web/Dockerfile timebridge-web/
+    - echo "Login to gitlab..."
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+    - echo "Publishing image..."
+    - docker push registry.git.chalmers.se/palssons/dit213-group-12/timebridge-web
   artifacts:
     paths:
         - timebridge-web/build
-  only:
-  - main
-
-publish-job:      # This job pushes the docker image to gitlab container registry
-  environment: production
-  image: docker:latest
-  stage: publish  # It only runs when *both* jobs in the test stage complete successfully.
-  tags:
-    - docker-build  # Use the 'docker-build' runner
-  services:
-    - name: docker:dind
-      alias: docker
-  script:
-    - echo "Login to gitlab..."
-    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
-    - echo "Publishing images..."
-    - docker push registry.git.chalmers.se/palssons/dit213-group-12/timebridge-api
-    - docker push registry.git.chalmers.se/palssons/dit213-group-12/timebridge-web
-    - echo "Images successfully published."
   only:
   - main
 
