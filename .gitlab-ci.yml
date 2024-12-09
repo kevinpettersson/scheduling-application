@@ -69,9 +69,9 @@ deploy-job:
     - >
       ssh -i ~/.ssh/id_do_droplet $DROPLET_USER@$DROPLET_IP "
       cd ~/app &&
-      docker-compose pull &&
-      docker-compose down &&
-      docker-compose up -d
+      docker compose pull &&
+      docker compose down &&
+      docker compose up -d
       "
   only:
     - main
