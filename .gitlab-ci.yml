@@ -12,6 +12,8 @@ api-build-job:
   stage: build
   tags:
     - docker-build  # Use the 'docker-build' runner
+  services:
+    - docker:dind
   script:
     - docker build -t registry.git.chalmers.se/palssons/dit213-group-12/timebridge-api:latest -f timebridge/Dockerfile timebridge/
   artifacts:
@@ -26,6 +28,8 @@ web-build-job:
   stage: build
   tags:
     - docker-build  # Use the 'docker-build' runner
+  services:
+    - docker:dind
   script:
     - docker build -t registry.git.chalmers.se/palssons/dit213-group-12/timebridge-web:latest -f timebridge-web/Dockerfile timebridge-web/
   artifacts:
