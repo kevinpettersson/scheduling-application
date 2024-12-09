@@ -31,3 +31,12 @@
 		<ExportDrawer />
 	</Sidebar.Footer>
 </Sidebar.Root>
+
+<style>
+	@import url('https://fonts.googleapis.com/css2?family=Bowlby+One&display=swap');
+	.bowlby-one-regular {
+		font-family: 'Bowlby One', sans-serif;
+		font-weight: 400;
+		font-style: normal;
+	}
+</style>

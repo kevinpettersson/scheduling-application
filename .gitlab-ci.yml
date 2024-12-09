@@ -1,28 +1,38 @@
 variables:
   DOCKER_DRIVER: overlay2
 
-stages:          # List of stages for jobs, and their order of execution
+stages:        
   - build
   - publish
   - deploy
 
-maven-build-job:       # This job runs in the build stage, which runs first.
+api-build-job:     
   environment: production
-  image: maven:latest
+  image: docker:latest
   stage: build
   tags:
     - docker-build  # Use the 'docker-build' runner
   script:
-    - mvn -v
-    - cd timebridge
-    - echo "Compiling the code..."
-    - mvn clean package
+    - docker build -t registry.git.chalmers.se/palssons/dit213-group-12/timebridge-api:latest -f timebridge/Dockerfile timebridge/
   artifacts:
     paths:
         - timebridge/target/*.jar
   only:
   - main
 
+web-build-job:
+  environment: production
+  image: docker:latest
+  stage: build
+  tags:
+    - docker-build  # Use the 'docker-build' runner
+  script:
+    - docker build -t registry.git.chalmers.se/palssons/dit213-group-12/timebridge-web:latest -f timebridge-web/Dockerfile timebridge-web/
+  artifacts:
+    paths:
+        - timebridge-web/build
+  only:
+  - main
 
 publish-job:      # This job pushes the docker image to gitlab container registry
   environment: production
@@ -34,24 +44,40 @@ publish-job:      # This job pushes the docker image to gitlab container registr
     - name: docker:dind
       alias: docker
   script:
-    - echo "Deploying application..."
-    - docker build -t registry.git.chalmers.se/palssons/dit213-group-12/timebridge-api:latest -f timebridge/Dockerfile timebridge/
     - echo "Login to gitlab..."
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
-    - echo "Pushing to gitlab..."
+    - echo "Publishing images..."
     - docker push registry.git.chalmers.se/palssons/dit213-group-12/timebridge-api
-    - echo "Application successfully published."
+    - docker push registry.git.chalmers.se/palssons/dit213-group-12/timebridge-web
+    - echo "Images successfully published."
   only:
   - main
 
-render-deploy:
+deploy-job:
   environment: production
   image: alpine:latest
   stage: deploy
   tags:
     - shell
   script:
-    - curl $api_deploy_hook
+    - apk add --no-cache openssh-client
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo "$BASE64_DEPLOY_SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_do_droplet
+    - chmod 600 ~/.ssh/id_do_droplet
+    - ssh-keyscan -H $DROPLET_IP >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    
+    - scp -i ~/.ssh/id_do_droplet docker-compose.yml $DROPLET_USER@$DROPLET_IP:~/app/
+    - scp -i ~/.ssh/id_do_droplet nginx.conf $DROPLET_USER@$DROPLET_IP:~/app/
+    
+    - >
+      ssh -i ~/.ssh/id_do_droplet $DROPLET_USER@$DROPLET_IP "
+      cd ~/app &&
+      docker-compose pull &&
+      docker-compose down &&
+      docker-compose up -d
+      "
   only:
-  - main
+    - main
   
