@@ -7,7 +7,6 @@
 	import { goto } from '$app/navigation';
 	import { Upload } from 'lucide-svelte';
 	import { fetchCalendar } from '$lib/api.svelte';
-	import { calendar } from '$lib/store.svelte';
 
 	const form = superForm(defaults(zod(_importSchema)), {
 		SPA: true,
