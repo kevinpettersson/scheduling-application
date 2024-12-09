@@ -67,3 +67,30 @@ export async function downloadCalendar() {
         requesting = false;
     }
 }
+
+export async function addEvent( courseCode: string,
+                                courseName: string,
+                                activity: string,
+                                date: string,
+                                startTime: string,
+                                endTime: string,
+                                attendees: string,
+                                location: string){
+        if (requesting) return;
+        requesting = true;
+
+        try {
+            const response = await fetch ('http://localhost:8080/saveEvent?courseCode=${courseCode}&courseName=${courseName}&activity=${activity}&date=${date}&startTime=${startTime}&endTime=${endTime}&attendees=${attendees}&location=${location}', {
+
+
+            })
+ 
+
+        }
+        catch (error) {
+            console.error('Error adding event:', error);
+        } finally {
+            requesting = false;
+        }
+
+}

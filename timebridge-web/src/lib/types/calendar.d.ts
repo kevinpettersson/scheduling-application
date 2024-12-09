@@ -1,3 +1,8 @@
+export type Attendee = {
+    name: string;
+    mail: string;
+}
+
 export type Interval = {
     start: string;
     end: string;
@@ -14,11 +19,13 @@ export type Course = {
 };
 
 export type Event = {
+    id: string;
     course: Course;
     activity: string;
     interval: Interval;
     locations: Location[];
     visibility: boolean;
+    attendees: Attendee[];
 };
 
 export type Format = {

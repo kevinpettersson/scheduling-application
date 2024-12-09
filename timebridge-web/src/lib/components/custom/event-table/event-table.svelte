@@ -6,7 +6,7 @@
 	import TimeCell from './event-cell-time.svelte';
 	import LocationCell from './event-cell-location.svelte';
 	import ActionsCell from './event-cell-actions.svelte';
-	import AddEvent from '$lib/components/custom/add-event.svelte';
+	import AddEvent from '$lib/components/custom/event-table/event-add/add-event.svelte';
 
 	let events = $derived(calendar.events);
 	let format = $derived(calendar.format);

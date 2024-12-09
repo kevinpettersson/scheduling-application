@@ -4,12 +4,17 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import DatePicker from '$lib/components/custom/date-picker.svelte';
-	import { DateFormatter } from '@internationalized/date';
-    import TimePicker from '$lib/components/custom/custom-time-picker.svelte';
+	import { DateFormatter, getLocalTimeZone, today } from '@internationalized/date';
+    import TimePicker from '$lib/components/custom/event-table/event-add/custom-time-picker.svelte';
+	import { _importSchema } from '$lib/schemas';
+	import { defaults, superForm } from 'sveltekit-superforms';
+	import { zod } from 'sveltekit-superforms/adapters';
+	import { fetchCalendar } from '$lib/api.svelte';
+	import { goto } from '$app/navigation';
 
     const df = new DateFormatter("en-US", {
     dateStyle: "long",
-  });
+    });
     
     let courseCode = '';
     let courseName = '';
@@ -26,9 +31,21 @@
 
 
    // function to handle the save, not implemented yet
-	function handleSave(e: CustomEvent<any>): void {
-		throw new Error('Function not implemented.');
-	}
+	function handleSave(): void {
+        const event = {
+            courseCode,
+            courseName,
+            activity,
+            date,
+            startTime,
+            endTime,
+            location,
+            attendees
+        };
+        console.log(event);
+    }
+    
+    let value = today(getLocalTimeZone());
 </script>
 
 <Sheet.Root>
@@ -37,9 +54,12 @@
         <Sheet.Header>
             <Sheet.Title>New Event</Sheet.Title>
             <Sheet.Description>
-                Add a new event to your calendar. Make sure all fields are filled in
+                Add a new event to your calendar. Make sure all fields are filled in!
             </Sheet.Description>
         </Sheet.Header>
+
+        <form method="POST" class="w-full flex flex-col">
+
         <div class="grid gap-4 py-4">
             <!-- Course Code -->
             <div class="grid grid-cols-4 items-center gap-4">
@@ -61,18 +81,22 @@
 
             <!-- Time  ADD CALENDAR HERE!!!! -->
             <div class="grid grid-cols-4 items-center gap-4">
-                <Label for="time" class="text-right">Date</Label>
-                <DatePicker/>
-            </div>
+                <Label for="date" class="text-right">Date</Label>
+            <DatePicker></DatePicker>
+            <script>
+                import { DateValue } from '$lib/components/custom/date-picker.svelte';
+                $: date = DateValue;
+            </script>
+        </div>
 
             <div class="grid grid-cols-4 items-center gap-4">
                 <Label for="startTime" class="text-right">Start time</Label>
-                <TimePicker/>
+                <TimePicker bind:startTime={startTime}/>
             </div>
 
             <div class="grid grid-cols-4 items-center gap-4">
                 <Label for="endTime" class="text-right">End time</Label>
-                <TimePicker/>
+                <TimePicker bind:endTime={endTime}/>
             </div>
 
             <div class="grid grid-cols-4 items-center gap-4">       
@@ -87,8 +111,12 @@
             </div>
 
         </div>
+        </form>
         <Sheet.Footer>
             <Sheet.Close class={buttonVariants({ variant: 'outline' })} on:click={handleSave} disabled={!isFormValid}>Save Event</Sheet.Close>
+
+        <Sheet.Footer>
+        </Sheet.Footer>
         </Sheet.Footer>
 	</Sheet.Content>
 </Sheet.Root>
