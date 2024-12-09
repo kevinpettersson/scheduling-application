@@ -7,19 +7,16 @@
 
 	let courseFilter = $state([]);
 	let activityFilter = $state([]);
-
-	// Watch for changes in the courseFilter and activityFilter
-	$inspect(courseFilter, activityFilter).with((type, courseFilter, activityFilter) => {
-		console.log(type, courseFilter, activityFilter);
-		if (type === 'update') {
-			modifyCalendar(courseFilter, activityFilter);
-		}
-	});
 </script>
 
 <div class="flex flex-col space-y-2 rounded border border-dashed p-3 pt-2">
 	<div class="flex flex-col space-y-2">
-		<Select.Root type="multiple" name="selectedCourses" bind:value={courseFilter}>
+		<Select.Root
+			type="multiple"
+			name="selectedCourses"
+			bind:value={courseFilter}
+			onValueChange={() => modifyCalendar(courseFilter, activityFilter)}
+		>
 			<div>
 				<Label for="selectedCourses">Course Code</Label>
 				<p class="text-muted-foreground text-xs">Select the course codes to filter events by.</p>
@@ -49,7 +46,12 @@
 				</Select.Group>
 			</Select.Content>
 		</Select.Root>
-		<Select.Root type="multiple" name="selectedActivities" bind:value={activityFilter}>
+		<Select.Root
+			type="multiple"
+			name="selectedActivities"
+			bind:value={activityFilter}
+			onValueChange={() => modifyCalendar(courseFilter, activityFilter)}
+		>
 			<div>
 				<Label for="selectedActivities">Activity</Label>
 				<p class="text-muted-foreground text-xs">Select the activities to filter events by.</p>

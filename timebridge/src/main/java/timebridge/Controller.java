@@ -29,6 +29,7 @@ import timebridge.model.Event;
 import timebridge.repository.CalendarRepository;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 public class Controller {
 
     @Autowired

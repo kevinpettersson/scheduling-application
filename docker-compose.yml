@@ -1,5 +1,6 @@
 services:
   spring-boot-app:
+    image: registry.git.chalmers.se/palssons/dit213-group-12/timebridge-api:latest
     build:
       context: ./timebridge
       dockerfile: Dockerfile
@@ -9,6 +10,7 @@ services:
       - app-network
 
   sveltekit-app:
+    image: registry.git.chalmers.se/palssons/dit213-group-12/timebridge-web:latest
     build:
       context: ./timebridge-web
       dockerfile: Dockerfile
@@ -21,7 +23,7 @@ services:
   nginx:
     image: nginx:latest
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
     ports:
       - "80:80"
     depends_on:

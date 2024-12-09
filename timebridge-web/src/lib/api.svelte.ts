@@ -1,5 +1,8 @@
 import { calendar } from './store.svelte';
 
+// Fetch the base API URL from environment variables
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+
 // Prevent re-triggering during update
 let requesting = false
 
@@ -9,7 +12,7 @@ export async function fetchCalendar(url: string) {
     requesting = true;
 
     try {
-        const response = await fetch(`/api/upload?ical=${encodeURIComponent(url)}`);
+        const response = await fetch(`${API_BASE_URL}/upload?ical=${encodeURIComponent(url)}`);
         calendar.data = await response.json();
     } catch (error) {
         console.error('Error fetching calendar:', error);
@@ -26,7 +29,7 @@ export async function modifyCalendar(courseFilter: string[], activityFilter: str
 
     try {
         const response = await fetch(
-            `/api/modify?courseFilter=${courseFilter}&activityFilter=${activityFilter}`,
+            `${API_BASE_URL}/modify?courseFilter=${courseFilter}&activityFilter=${activityFilter}`,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -47,7 +50,7 @@ export async function downloadCalendar() {
     requesting = true;
 
     try {
-        const response = await fetch('/api/download', {
+        const response = await fetch(`${API_BASE_URL}/download`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(calendar.data),
