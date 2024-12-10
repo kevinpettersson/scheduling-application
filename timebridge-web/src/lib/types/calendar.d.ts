@@ -13,11 +13,17 @@ export type Course = {
     code: string;
 };
 
+export type Attendee = {
+    name: string;
+    mail: string;
+};
+
 export type Event = {
     course: Course;
     activity: string;
     interval: Interval;
     locations: Location[];
+    attendees: Attendee[];
     visibility: boolean;
 };
 

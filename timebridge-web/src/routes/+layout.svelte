@@ -14,7 +14,7 @@
 	<!-- Render this on all other pages -->
 	<Sidebar.Provider>
 		<AppSidebar/>
-		<main class="h-dvh p-2 pl-0 w-full">
+		<main class="h-dvh w-full">
 			{@render children?.()}
 		</main>
 	</Sidebar.Provider>
