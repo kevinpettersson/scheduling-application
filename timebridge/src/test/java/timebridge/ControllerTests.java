@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import timebridge.model.Calendar;
 import timebridge.services.CalendarParser;
 import timebridge.services.CalendarSerializer;
 
@@ -26,6 +27,9 @@ class ControllerTests {
      // Mock parsing service
     @Mock
     private CalendarSerializer mockSerializer;  // Mock serializer service
+
+    @Mock
+    private Calendar calendar;
     
     @InjectMocks
     private Controller controller;  // The controller to test
@@ -93,7 +97,21 @@ void testUploadCalendarShouldReturnStatus400BadRequestIfIcalUrlIsEmpty() throws 
 
 // Controller Download Tests:
 @Test
-void testDownloadCalendarShouldReturnStatus200OKIfValidIcalString() throws Exception {
-    mockMvc.perform(get("/download")).andExpect(status().isOk());
+void testDownloadCalendarShouldReturnStatus200OKIfValidCalendar() throws Exception {
+
+    Calendar calendar = new Calendar();
+    calendar.setName("Test Calendar");
+    // You can add more fields to the Calendar if necessary
+
+    // Convert the Calendar object to JSON
+    String calendarJson = objectMapper.writeValueAsString(calendar);
+
+    // Act & Assert: Perform POST request and check for the correct status and headers
+    mockMvc.perform(get("/download")
+            .contentType("application/json")  // Indicate that the request body is JSON
+            .content(calendarJson))  // Send the serialized Calendar object as the body
+            .andExpect(status().isOk())  // Expect HTTP 200 OK
+            .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Test Calendar.ics"))
+            .andExpect(header().string(HttpHeaders.CONTENT_TYPE, "text/calendar; charset=UTF-8"));
 }
 }
