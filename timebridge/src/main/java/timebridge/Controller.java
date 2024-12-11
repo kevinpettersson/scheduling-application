@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import timebridge.services.CalendarParser;
 import timebridge.services.CalendarSerializer;
 import timebridge.model.Calendar;
-import timebridge.model.Event;
+import timebridge.model.event.TimeEditEvent;
 import timebridge.repository.CalendarRepository;
 
 @RestController
@@ -109,7 +109,7 @@ public class Controller {
     @PostMapping("/addEvent")
     public ResponseEntity<Calendar> addEvent(
             @RequestParam String calendarId,
-            @RequestBody Event event) throws Exception {
+            @RequestBody TimeEditEvent event) throws Exception {
         try {
             // Retrieve the calendar from the database
             Calendar calendar = repository.findById(calendarId).orElse(null);
@@ -151,7 +151,7 @@ public class Controller {
     @PostMapping("/saveEvent")
     public ResponseEntity<Calendar> saveEvent(
             @RequestParam String calendarId,
-            @RequestBody Event newEventDetails) throws Exception {
+            @RequestBody TimeEditEvent newEventDetails) throws Exception {
         try {
             // Retrieve the calendar from the database
             Calendar calendar = repository.findById(calendarId).orElse(null);

@@ -8,13 +8,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 
+import timebridge.model.event.TimeEditEvent;
+import timebridge.model.event.eventComponent.Format;
+
 public class Calendar {
     @Id
     private String id;
 
     private String name;
     private Format format;
-    private ArrayList<Event> events;
+    private ArrayList<TimeEditEvent> events;
 
     public Calendar() {
         this.id = new ObjectId().toHexString();
@@ -23,7 +26,7 @@ public class Calendar {
         this.format = new Format();
     }
 
-    public Calendar(String name, ArrayList<Event> events) {
+    public Calendar(String name, ArrayList<TimeEditEvent> events) {
         this.id = new ObjectId().toHexString();
         this.name = name;
         this.events = events;
@@ -38,7 +41,7 @@ public class Calendar {
         return name;
     }
 
-    public ArrayList<Event> getEvents() {
+    public ArrayList<TimeEditEvent> getEvents() {
         return events;
     }
 
@@ -54,7 +57,7 @@ public class Calendar {
         this.name = name;
     }
 
-    public void setEvents(ArrayList<Event> events) {
+    public void setEvents(ArrayList<TimeEditEvent> events) {
         this.events = events;
     }
 
@@ -62,16 +65,16 @@ public class Calendar {
         this.format = format;
     }
 
-    public void addEvent(Event event) {
+    public void addEvent(TimeEditEvent event) {
         events.add(event);
     }
 
-    public void addEvents(ArrayList<Event> events) {
+    public void addEvents(ArrayList<TimeEditEvent> events) {
         this.events.addAll(events);
     }
 
     public void deleteEvent(String eventId){
-        for (Event event : this.events) {
+        for (TimeEditEvent event : this.events) {
             if(event.getId().equals(eventId)){
                 events.remove(event);
                 return;
@@ -81,7 +84,7 @@ public class Calendar {
 
     // Replaces existing event with new specification if id matches.
     // If event has no id, set a new id and add event to calendar.
-    public void saveEvent(Event event){
+    public void saveEvent(TimeEditEvent event){
         String Id = event.getId();
 
         if(Id != null && !Id.isEmpty()){
@@ -100,7 +103,7 @@ public class Calendar {
 
     // Filters events based on course and activity settings
     public void filterEvents(ArrayList<String> codeFilter, ArrayList<String> activityFilter) {
-        for (Event event : this.events) {
+        for (TimeEditEvent event : this.events) {
             boolean courseMatch = codeFilter == null || codeFilter.isEmpty()
                     || codeFilter.contains(event.getCourse().getCode());
             boolean activityMatch = activityFilter == null || activityFilter.isEmpty()

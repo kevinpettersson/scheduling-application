@@ -1,4 +1,4 @@
-package timebridge.model;
+package timebridge.model.event.component;
 
 
 import java.time.ZonedDateTime;

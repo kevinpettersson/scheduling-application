@@ -15,6 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import timebridge.model.*;
+import timebridge.model.event.TimeEditEvent;
+import timebridge.model.event.eventComponent.Location;
 import timebridge.services.*;
 
 
@@ -39,7 +41,7 @@ void testBuildWithDateTime() throws IOException, URISyntaxException {
         assertNotNull(calendar);
         assertEquals(2, calendar.getEvents().size());
 
-        Event event = calendar.getEvents().get(0);
+        TimeEditEvent event = calendar.getEvents().get(0);
         assertEquals(expectedStart, event.getInterval().getStart());
         assertEquals(expectedEnd, event.getInterval().getEnd());
 }
@@ -89,7 +91,7 @@ void testMissingReqField() throws IOException, URISyntaxException{
     assertNotNull(calendar);  // Calendar should be created successfully
     assertEquals(2, calendar.getEvents().size());  // One event should be in the calendar
 
-    Event event = calendar.getEvents().get(0);
+    TimeEditEvent event = calendar.getEvents().get(0);
     //assertNull(event.getInterval().getStart());  // The start time should be null or a default value
     //assertNull(event.getInterval().getEnd());    // The end time should be null or a default value
 
@@ -108,7 +110,7 @@ void test_two_events() throws IOException, URISyntaxException{
     assertEquals(4, calendar.getEvents().size());  // There should be two events in the calendar
 
     // Verify the first event
-    Event event1 = calendar.getEvents().get(0);
+    TimeEditEvent event1 = calendar.getEvents().get(0);
     assertEquals("Föreläsning", event1.getActivity());  // Check the activity
     assertEquals("DIT213GU", event1.getCourse().getCode());  // Check course code
     assertEquals("Objektorienterat programmeringsprojekt", event1.getCourse().getName());  // Check course name
@@ -124,7 +126,7 @@ void test_two_events() throws IOException, URISyntaxException{
     assertEquals(ZonedDateTime.parse("2024-11-20T14:00:00Z"), event1.getInterval().getEnd());
 
     // Verify the second event
-    Event event2 = calendar.getEvents().get(2);
+    TimeEditEvent event2 = calendar.getEvents().get(2);
     assertEquals("Övning", event2.getActivity());  // Check the activity
     assertEquals("DIT213GU", event2.getCourse().getCode());  // Check course code
     assertEquals("Objektorienterat programmeringsprojekt", event2.getCourse().getName());  // Check course name

@@ -18,7 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.StringUtils;
 
 import timebridge.model.Calendar;
-import timebridge.model.Event;
+import timebridge.model.event.TimeEditEvent;
 import timebridge.services.CalendarParser;
 import timebridge.services.CalendarSerializer;
 
@@ -141,7 +141,7 @@ public class CalendarParserTests {
         // defines the expected date-format for verification. 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'").withZone(ZoneOffset.UTC);
 
-        for (Event event : calendar.getEvents()) {
+        for (TimeEditEvent event : calendar.getEvents()) {
             
             ZonedDateTime start = event.getInterval().getStart();
             ZonedDateTime end = event.getInterval().getEnd();

@@ -1,10 +1,15 @@
-package timebridge.model;
+package timebridge.model.event;
 
 import java.util.ArrayList;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
-public class Event {
+import timebridge.model.event.component.Attendee;
+import timebridge.model.event.component.Course;
+import timebridge.model.event.component.Interval;
+import timebridge.model.event.component.Location;
+
+public class TimeEditEvent implements Event {
     @Id
     private String id;
     private Course course;
@@ -13,19 +18,10 @@ public class Event {
     private ArrayList<Location> locations;
     private Boolean visibility;
     private ArrayList<Attendee> attendees;
-
-    public Event() {
-        this.id = new ObjectId().toHexString();
-        this.course = new Course();
-        this.activity = "";
-        this.interval = new Interval();
-        this.locations = new ArrayList<Location>();
-        this.visibility = true;
-        this.attendees = new ArrayList<Attendee>();
-    }
-
-    public Event(Course course, String activity, Interval interval, ArrayList<Location> locations,
-            ArrayList<Attendee> attendees) {
+    
+    
+    public TimeEditEvent(Course course, String activity, Interval interval, ArrayList<Location> locations,
+    ArrayList<Attendee> attendees) {
         this.id = new ObjectId().toHexString();
         this.course = course;
         this.activity = activity;
@@ -34,15 +30,30 @@ public class Event {
         this.visibility = true;
         this.attendees = attendees;
     }
-
+    
     public String getId() {
         return this.id;
     }
-
-    public void setId(ObjectId id) {
-        this.id = id.toHexString();
+    
+    
+    public void setAttendee(String attendee) {
+        // Implementation here
     }
 
+    public String getAttendee() {
+        // Implementation here
+        return null;
+    }
+
+    public void setLocation(ArrayList<Location> location) {
+        // Implementation here
+    }
+
+    public ArrayList<Location> getLocation() {
+        // Implementation here
+        return null;
+    }
+    
     public Course getCourse() {
         return this.course;
     }
@@ -50,11 +61,11 @@ public class Event {
     public void setCourse(Course course) {
         this.course = course;
     }
-
+    
     public String getActivity() {
         return this.activity;
     }
-
+    
     public void setActivity(String activity) {
         this.activity = activity;
     }

@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import timebridge.model.Calendar;
-import timebridge.model.Event;
+import timebridge.model.event.TimeEditEvent;
 import timebridge.services.CalendarParser;
 
 @SpringBootTest
@@ -62,7 +62,7 @@ public class CalendarEditorTest {
         // Filter the calendar
         calendar.filterEvents(courseFilter, activityFilter);
 
-        for (Event event : calendar.getEvents()) {
+        for (TimeEditEvent event : calendar.getEvents()) {
             if (event.getVisibility().equals(false)) {
                 continue;
             }
