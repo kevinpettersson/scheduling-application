@@ -14,8 +14,8 @@ public abstract class EventFactory {
         return new TimeEditEvent(course, activity, interval, locations, attendees);
     }
 
-    static public PersonalEvent createPersonalEvent(String summary, String description, Interval interval, ArrayList<Location> location, String attendees, Boolean visibility){
-        return new PersonalEvent(summary, description, interval, location, attendees, visibility);
+    static public PersonalEvent createPersonalEvent(String summary, String description, Interval interval, ArrayList<Location> location, ArrayList<Attendee> attendees){
+        return new PersonalEvent(summary, description, interval, location, attendees);
     }
 
 }

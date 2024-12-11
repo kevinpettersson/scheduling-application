@@ -1,6 +1,7 @@
 package timebridge.model.event;
 import java.util.ArrayList;
 
+import timebridge.model.event.component.Attendee;
 import timebridge.model.event.component.Interval;
 import timebridge.model.event.component.Location;
 
@@ -8,15 +9,21 @@ public interface Event {
 
     public String getId();
 
+    public String getSummary();
+    public void setSummary(String summary);
+
+    public String getDescription();
+    public void setDescription(String description);
+
     public Interval getInterval();
     public void setInterval(Interval interval);
 
-    public ArrayList<Location> getLocation();
-    public void setLocation(ArrayList<Location> location);
+    public ArrayList<Location> getLocations();
+    public void setLocations(ArrayList<Location> location);
 
+    public ArrayList<Attendee> getAttendees();
+    public void setAttendees(ArrayList<Attendee> attendee);
+    
     public Boolean getVisibility();
     public void setVisibility(Boolean visibility);
-
-    public String getAttendee();
-    public void setAttendee(String attendee);
 }

@@ -1,4 +1,4 @@
-package timebridge.model.event.component;
+package timebridge.model;
 
 import java.util.ArrayList;
 

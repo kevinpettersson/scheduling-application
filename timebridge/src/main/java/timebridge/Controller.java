@@ -118,7 +118,7 @@ public class Controller {
             if (calendar == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
-            calendar.addEvent(event);
+            calendar.saveEvent(event);
             repository.save(calendar);
             return ResponseEntity.ok(calendar);
         } catch (Exception e) {

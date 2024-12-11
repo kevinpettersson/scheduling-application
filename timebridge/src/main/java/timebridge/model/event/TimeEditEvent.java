@@ -12,16 +12,18 @@ import timebridge.model.event.component.Location;
 public class TimeEditEvent implements Event {
     @Id
     private String id;
-    private Course course;
-    private String activity;
+    private String summary;
+    private String description;
     private Interval interval;
     private ArrayList<Location> locations;
     private ArrayList<Attendee> attendees;
     private Boolean visibility;
-    
-    
+
+    private Course course;
+    private String activity;
+
     public TimeEditEvent(Course course, String activity, Interval interval, ArrayList<Location> locations,
-    ArrayList<Attendee> attendees) {
+            ArrayList<Attendee> attendees) {
         this.id = new ObjectId().toHexString();
         this.course = course;
         this.activity = activity;
@@ -30,70 +32,53 @@ public class TimeEditEvent implements Event {
         this.visibility = true;
         this.attendees = attendees;
     }
-    
+
+    @Override
     public String getId() {
-        return this.id;
-    }
-    
-    
-    public void setAttendee(String attendee) {
-        // Implementation here
+        return id;
     }
 
-    public String getAttendee() {
-        // Implementation here
-        return null;
+    @Override
+    public String getSummary() {
+        return summary; // TODO
     }
 
-    public void setLocation(ArrayList<Location> location) {
-        // Implementation here
+    @Override
+    public void setSummary(String summary) {
+        // TODO
     }
 
-    public ArrayList<Location> getLocation() {
-        // Implementation here
-        return null;
-    }
-    
-    public Course getCourse() {
-        return this.course;
+    @Override
+    public String getDescription() {
+        return description; // TODO
     }
 
-    public void setCourse(Course course) {
-        this.course = course;
-    }
-    
-    public String getActivity() {
-        return this.activity;
-    }
-    
-    public void setActivity(String activity) {
-        this.activity = activity;
+    @Override
+    public void setDescription(String description) {
+        // TODO
     }
 
+    @Override
     public Interval getInterval() {
-        return this.interval;
+        return interval;
     }
 
+    @Override
     public void setInterval(Interval interval) {
         this.interval = interval;
     }
 
+    @Override
     public ArrayList<Location> getLocations() {
-        return this.locations;
+        return locations;
     }
 
+    @Override
     public void setLocations(ArrayList<Location> locations) {
         this.locations = locations;
     }
 
-    public Boolean getVisibility() {
-        return this.visibility;
-    }
-
-    public void setVisibility(Boolean visibility) {
-        this.visibility = visibility;
-    }
-
+    @Override
     public ArrayList<Attendee> getAttendees() {
         return attendees;
     }
@@ -101,4 +86,31 @@ public class TimeEditEvent implements Event {
     public void setAttendees(ArrayList<Attendee> attendees) {
         this.attendees = attendees;
     }
+
+    @Override
+    public Boolean getVisibility() {
+        return visibility;
+    }
+
+    @Override
+    public void setVisibility(Boolean visibility) {
+        this.visibility = visibility;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public String getActivity() {
+        return activity;
+    }
+
+    public void setActivity(String activity) {
+        this.activity = activity;
+    }
+
 }

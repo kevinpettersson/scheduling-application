@@ -1,34 +1,40 @@
 package timebridge.model.event;
+
+import timebridge.model.event.component.Attendee;
 import timebridge.model.event.component.Interval;
 import timebridge.model.event.component.Location;
 import org.bson.types.ObjectId;
-
+import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
 
 public class PersonalEvent implements Event {
+    @Id
+    private String id;
     private String summary;
     private String description;
     private Interval interval;
     private ArrayList<Location> locations;
-    private String attendees;
+    private ArrayList<Attendee> attendees;
     private Boolean visibility;
-    private String id;
 
-    public PersonalEvent() {
-
-    }
-
-    public PersonalEvent(String summary, String description, Interval interval, ArrayList<Location> locations, String attendees, Boolean visibility) {
+    public PersonalEvent(String summary, String description, Interval interval, ArrayList<Location> locations,
+            ArrayList<Attendee> attendees) {
+        this.id = new ObjectId().toHexString();
         this.summary = summary;
         this.description = description;
         this.interval = interval;
         this.locations = locations;
         this.attendees = attendees;
-        this.visibility = visibility;
-        this.id = new ObjectId().toHexString();
+        this.visibility = true;
     }
 
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
     public String getSummary() {
         return summary;
     }
@@ -37,7 +43,8 @@ public class PersonalEvent implements Event {
         this.summary = summary;
     }
 
-    public String setDescription() {
+    @Override
+    public String getDescription() {
         return description;
     }
 
@@ -45,47 +52,43 @@ public class PersonalEvent implements Event {
         this.description = description;
     }
 
-    public String getId() {
-        return id;
-    }
-
-
-    public void setAttendee(String attendee) {
-        this.attendees = attendee;
-    }
-
-
-    public String getAttendee() {
-        return attendees;
-    }
-
-
-    public void setInterval(Interval interval) {
-        this.interval = interval;
-    }
-
-
+    @Override
     public Interval getInterval() {
         return interval;
     }
 
-
-    public void setLocation(ArrayList<Location> locations) {
-        this.locations = locations;
+    @Override
+    public void setInterval(Interval interval) {
+        this.interval = interval;
     }
 
-
-    public ArrayList<Location> getLocation() {
+    @Override
+    public ArrayList<Location> getLocations() {
         return locations;
     }
 
-
-    public void setVisibility(Boolean visibility) {
-        this.visibility = visibility;
+    @Override
+    public void setLocations(ArrayList<Location> locations) {
+        this.locations = locations;
     }
 
+    @Override
+    public ArrayList<Attendee> getAttendees() {
+        return attendees;
+    }
+
+    @Override
+    public void setAttendees(ArrayList<Attendee> attendees) {
+        this.attendees = attendees;
+    }
+
+    @Override
     public Boolean getVisibility() {
         return visibility;
     }
 
+    @Override
+    public void setVisibility(Boolean visibility) {
+        this.visibility = visibility;
+    }
 }

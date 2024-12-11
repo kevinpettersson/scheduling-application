@@ -10,10 +10,10 @@ import java.util.UUID;
 import timebridge.model.Calendar;
 import timebridge.model.event.Event;
 import timebridge.model.event.TimeEditEvent;
+import timebridge.model.event.PersonalEvent;
 import timebridge.model.event.component.Attendee;
-import timebridge.model.event.component.Format;
+import timebridge.model.Format;
 import timebridge.model.event.component.Location;
-
 
 public class CalendarSerializer {
 
@@ -50,7 +50,12 @@ public class CalendarSerializer {
         for (Event event : calendar.getEvents()) {
             // Only serialize visible events
             if (event.getVisibility()) {
-                serializeEvent(event, calendar.getFormat());
+
+                if (event instanceof TimeEditEvent) {
+                    serializeEventTE((TimeEditEvent) event, calendar.getFormat());
+                } else if (event instanceof PersonalEvent) {
+                    serializeEventPE((PersonalEvent) event, calendar.getFormat());
+                }
             }
         }
 
@@ -59,7 +64,7 @@ public class CalendarSerializer {
         return sb.toString();
     }
 
-    private void serializeEvent(TimeEditEvent event, Format format) {
+    private void serializeEventTE(TimeEditEvent event, Format format) {
         sb.append(BEGIN_EVENT);
         sb.append(DTSTART).append(serializeTimestamp(event.getInterval().getStart())).append("\n");
         sb.append(DTEND).append(serializeTimestamp(event.getInterval().getEnd())).append("\n");
@@ -103,10 +108,11 @@ public class CalendarSerializer {
         }
         sb.append("\n");
     }
-    
+
     private void formatAttendee(TimeEditEvent event) {
         for (Attendee attendee : event.getAttendees()) {
-            sb.append("ATTENDEE;CN=").append(attendee.getName()).append(":mailto:").append(attendee.getMail()).append("\n");
+            sb.append("ATTENDEE;CN=").append(attendee.getName()).append(":mailto:").append(attendee.getMail())
+                    .append("\n");
         }
     }
 
@@ -133,6 +139,51 @@ public class CalendarSerializer {
         ZonedDateTime utcDateTime = dateTime.withZoneSameInstant(ZoneOffset.UTC);
         DateTimeFormatter icalFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'");
         return utcDateTime.format(icalFormatter);
+    }
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // - - - - - - - - - - - - - - //
+
+    private void serializeEventPE(PersonalEvent event, Format format) {
+        sb.append(BEGIN_EVENT);
+        sb.append(DTSTART).append(serializeTimestamp(event.getInterval().getStart())).append("\n");
+        sb.append(DTEND).append(serializeTimestamp(event.getInterval().getEnd())).append("\n");
+        sb.append(UID).append(getUniqueIdetifier()).append("\n");
+        sb.append(DTSTAMP).append(serializeTimestamp(ZonedDateTime.now(ZoneOffset.UTC))).append("\n");
+        sb.append(LAST_MODIFIED).append(serializeTimestamp(ZonedDateTime.now(ZoneOffset.UTC))).append("\n");
+
+        // formatSummaryPE(event, format);
+        sb.append(SUMMARY);
+        sb.append(event.getSummary());
+        sb.append("\n");
+
+        sb.append(LOCATION);
+        for (Location loc : event.getLocations()) {
+            if (format.getLocation().contains("building")) {
+                sb.append("Byggnad: ").append(loc.getBuilding()).append(", ");
+            }
+            if (format.getLocation().contains("room")) {
+                sb.append("Rum: ").append(loc.getRoom());
+            }
+        }
+        sb.append("\n");
+        formatDescriptionPE(event);
+        formatAttendeePE(event);
+
+        sb.append(END_EVENT);
+    }
+
+    private void formatDescriptionPE(PersonalEvent event) {
+        sb.append(DESCRIPTION);
+        sb.append(event.getDescription());
+        sb.append("\n");
+    }
+
+    private void formatAttendeePE(PersonalEvent event) {
+        for (Attendee attendee : event.getAttendees()) {
+            sb.append("ATTENDEE;CN=").append(attendee.getName()).append(":mailto:").append(attendee.getMail())
+                    .append("\n");
+        }
     }
 
 }
