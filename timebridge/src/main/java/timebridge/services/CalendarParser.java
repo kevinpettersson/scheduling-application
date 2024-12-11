@@ -1,11 +1,11 @@
 package timebridge.services;
 
 import timebridge.model.*;
-import timebridge.model.event.TimeEditEvent;
-import timebridge.model.event.eventComponent.Attendee;
-import timebridge.model.event.eventComponent.Course;
-import timebridge.model.event.eventComponent.Interval;
-import timebridge.model.event.eventComponent.Location;
+import timebridge.model.event.component.Attendee;
+import timebridge.model.event.component.Course;
+import timebridge.model.event.component.Interval;
+import timebridge.model.event.component.Location;
+import timebridge.model.event.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 
 public class CalendarParser {
 
+
     public CalendarParser() {
     }
 
@@ -33,7 +34,7 @@ public class CalendarParser {
                 new StringReader(normalizedIcs));
 
         // Parse events from the BufferedReader
-        ArrayList<TimeEditEvent> events = parseEvents(reader);
+        ArrayList<Event> events = parseEvents(reader);
 
         // Create and return a new Calendar object with the parsed events
         return new Calendar("My Calendar", events);
@@ -53,9 +54,9 @@ public class CalendarParser {
     }
 
     // Method to parse events from the input BufferedReader
-    private ArrayList<TimeEditEvent> parseEvents(BufferedReader reader)
+    private ArrayList<Event> parseEvents(BufferedReader reader)
             throws IOException {
-        ArrayList<TimeEditEvent> events = new ArrayList<>();
+        ArrayList<Event> events = new ArrayList<>();
         String line;
 
         // Read each line from the input
@@ -69,7 +70,7 @@ public class CalendarParser {
     }
 
     // Method to parse a single event from the input BufferedReader
-    private ArrayList<TimeEditEvent> parseEvent(BufferedReader reader) throws IOException {
+    private ArrayList<Event> parseEvent(BufferedReader reader) throws IOException {
         ArrayList<Course> courses = new ArrayList<>();
         String activity = null;
         Interval interval = new Interval();
@@ -112,14 +113,14 @@ public class CalendarParser {
             }
         }
 
-        ArrayList<TimeEditEvent> events = new ArrayList<>();
+        ArrayList<Event> events = new ArrayList<>();
 
         // TEMP create a list of attendees, this needs to be implemented properly
         // by checking if the ical file contains attendees for each event.
         ArrayList<Attendee> attendees = new ArrayList<>();
 
         for (Course course : courses) {
-            events.add(new TimeEditEvent(course, activity, interval, locations, attendees));
+            events.add(EventFactory.createTimeEditEvent(course, activity, interval, locations, attendees));
         }
 
         return events;

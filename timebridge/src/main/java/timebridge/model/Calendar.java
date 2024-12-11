@@ -4,33 +4,29 @@ import java.util.ArrayList;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
-
-import timebridge.model.event.TimeEditEvent;
-import timebridge.model.event.eventComponent.Format;
+import timebridge.model.event.Event;
+import timebridge.model.observers.Observer;
 
 public class Calendar {
     @Id
-    private String id;
+    private final String id;
 
     private String name;
-    private Format format;
-    private ArrayList<TimeEditEvent> events;
+    private ArrayList<Event> events;
+    private ArrayList<Observer> observers;
 
     public Calendar() {
         this.id = new ObjectId().toHexString();
         this.name = new String();
         this.events = new ArrayList<>();
-        this.format = new Format();
+        this.observers = new ArrayList<Observer>();
     }
 
-    public Calendar(String name, ArrayList<TimeEditEvent> events) {
+    public Calendar(String name, ArrayList<Event> events) {
         this.id = new ObjectId().toHexString();
         this.name = name;
         this.events = events;
-        this.format = new Format();
+        this.observers = new ArrayList<Observer>();
     }
 
     public String getId() {
@@ -41,78 +37,41 @@ public class Calendar {
         return name;
     }
 
-    public ArrayList<TimeEditEvent> getEvents() {
+    public ArrayList<Event> getEvents() {
         return events;
-    }
-
-    public Format getFormat() {
-        return format;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id.toHexString();
     }
 
     public void setName(String name) {
         this.name = name;
+        notifyObservers();
     }
 
-    public void setEvents(ArrayList<TimeEditEvent> events) {
-        this.events = events;
-    }
-
-    public void setFormat(Format format) {
-        this.format = format;
-    }
-
-    public void addEvent(TimeEditEvent event) {
-        events.add(event);
-    }
-
-    public void addEvents(ArrayList<TimeEditEvent> events) {
-        this.events.addAll(events);
-    }
-
-    public void deleteEvent(String eventId){
-        for (TimeEditEvent event : this.events) {
-            if(event.getId().equals(eventId)){
-                events.remove(event);
+    public void saveEvent(Event event) {
+        // Update event if already present
+        for (Event e : events) {
+            if(event.getId().equals(e.getId())) {
+                e = event;
+                notifyObservers();
                 return;
             }
         }
+
+        // otherwise save as new event
+        events.add(event);
+        notifyObservers();
     }
 
-    // Replaces existing event with new specification if id matches.
-    // If event has no id, set a new id and add event to calendar.
-    public void saveEvent(TimeEditEvent event){
-        String Id = event.getId();
-
-        if(Id != null && !Id.isEmpty()){
-            for (int i = 0; i < events.size(); i++) {
-                if(events.get(i).getId().equals(Id)){
-                    events.set(i, event);
-                    return;
-                }
-            }
-        }
-        if(Id == null || Id.isEmpty()){
-            event.setId(new ObjectId());
-        }
-        addEvent(event);
+    public void addObserver(Observer observer) {
+        observers.add(observer);
     }
 
-    // Filters events based on course and activity settings
-    public void filterEvents(ArrayList<String> codeFilter, ArrayList<String> activityFilter) {
-        for (TimeEditEvent event : this.events) {
-            boolean courseMatch = codeFilter == null || codeFilter.isEmpty()
-                    || codeFilter.contains(event.getCourse().getCode());
-            boolean activityMatch = activityFilter == null || activityFilter.isEmpty()
-                    || activityFilter.contains(event.getActivity());
-            if (courseMatch && activityMatch) {
-                event.setVisibility(true);
-            } else {
-                event.setVisibility(false);
-            }
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    public void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update(this);
         }
     }
 }

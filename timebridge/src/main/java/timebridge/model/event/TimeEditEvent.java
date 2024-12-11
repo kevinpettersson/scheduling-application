@@ -16,8 +16,8 @@ public class TimeEditEvent implements Event {
     private String activity;
     private Interval interval;
     private ArrayList<Location> locations;
-    private Boolean visibility;
     private ArrayList<Attendee> attendees;
+    private Boolean visibility;
     
     
     public TimeEditEvent(Course course, String activity, Interval interval, ArrayList<Location> locations,

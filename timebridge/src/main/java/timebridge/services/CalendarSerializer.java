@@ -8,10 +8,11 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import timebridge.model.Calendar;
+import timebridge.model.event.Event;
 import timebridge.model.event.TimeEditEvent;
-import timebridge.model.event.eventComponent.Attendee;
-import timebridge.model.event.eventComponent.Format;
-import timebridge.model.event.eventComponent.Location;
+import timebridge.model.event.component.Attendee;
+import timebridge.model.event.component.Format;
+import timebridge.model.event.component.Location;
 
 
 public class CalendarSerializer {
@@ -46,7 +47,7 @@ public class CalendarSerializer {
         sb.append(PRODID);
 
         // Add each event to the calendar
-        for (TimeEditEvent event : calendar.getEvents()) {
+        for (Event event : calendar.getEvents()) {
             // Only serialize visible events
             if (event.getVisibility()) {
                 serializeEvent(event, calendar.getFormat());
