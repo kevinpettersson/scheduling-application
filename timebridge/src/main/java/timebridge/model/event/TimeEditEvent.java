@@ -29,8 +29,8 @@ public class TimeEditEvent implements Event {
         this.activity = activity;
         this.interval = interval;
         this.locations = locations;
-        this.visibility = true;
         this.attendees = attendees;
+        this.visibility = true;
     }
 
     @Override

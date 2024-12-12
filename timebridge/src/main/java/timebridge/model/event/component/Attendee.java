@@ -9,7 +9,7 @@ public class Attendee {
         this.mail = new String();
     }
 
-    public Attendee(String mail, String name) {
+    public Attendee(String name, String mail) {
         this.name = name;
         this.mail = mail;
     }
