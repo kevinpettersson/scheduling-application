@@ -11,8 +11,8 @@ public class Event {
     private String activity;
     private Interval interval;
     private ArrayList<Location> locations;
-    private Boolean visibility;
     private ArrayList<Attendee> attendees;
+    private Boolean visibility;
 
     public Event() {
         this.id = new ObjectId().toHexString();
@@ -20,8 +20,8 @@ public class Event {
         this.activity = "";
         this.interval = new Interval();
         this.locations = new ArrayList<Location>();
-        this.visibility = true;
         this.attendees = new ArrayList<Attendee>();
+        this.visibility = true;
     }
 
     public Event(Course course, String activity, Interval interval, ArrayList<Location> locations,
@@ -31,8 +31,8 @@ public class Event {
         this.activity = activity;
         this.interval = interval;
         this.locations = locations;
-        this.visibility = true;
         this.attendees = attendees;
+        this.visibility = true;
     }
 
     public String getId() {

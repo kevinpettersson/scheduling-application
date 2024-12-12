@@ -6,28 +6,32 @@
 	import TimeCell from './event-cell-time.svelte';
 	import LocationCell from './event-cell-location.svelte';
 	import ActionsCell from './event-cell-actions.svelte';
+	import EventCard from '../event-card.svelte';
+	import type { Event } from '$lib/types/calendar.d.ts';
 
 	let events = $derived(calendar.events);
 	let format = $derived(calendar.format);
+
+	// format the time
+	const timeFormat = {
+		start: {
+			weekday: 'long',
+			month: 'short',
+			day: 'numeric',
+		} as const
+	};
+
+	// get day and date of event
+	function getDay(event: Event) {
+		return new Date(event.interval.start).toLocaleString('en-GB', timeFormat.start);
+	}
+	
 </script>
 
-<Table.Root class="w-full">
-	<Table.Header>
-		<Table.Row>
-			<Table.Head>Event Title</Table.Head>
-			<Table.Head>Event Description</Table.Head>
-			<Table.Head>Time</Table.Head>
-			<Table.Head>Location</Table.Head>
-		</Table.Row>
-	</Table.Header>
-	<Table.Body>
-		{#each events.filter((event) => event.visibility) as event}
-			<Table.Row>
-				<SummaryCell {event} {format} />
-				<DescriptionCell {event} {format} />
-				<TimeCell {event} />
-				<LocationCell {event} {format} />
-			</Table.Row>
-		{/each}
-	</Table.Body>
-</Table.Root>
+
+<div class="grid grid-cols-1 gap-2 w-full p-2 pl-0">
+	{#each events.filter((event) => event.visibility) as event}
+		<EventCard {event} {format} />
+	{/each}
+</div>
+
