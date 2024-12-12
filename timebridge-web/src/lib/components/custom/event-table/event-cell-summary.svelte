@@ -19,6 +19,8 @@
 			{event.course.name}
 		{:else if field === 'activity'}
 			{event.activity}
+		{:else if field === 'null'}
+			{""}
 		{/if}
 
 		{#if index < format.summary.length - 1}

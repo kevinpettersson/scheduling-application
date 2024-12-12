@@ -9,12 +9,6 @@ public interface Event {
 
     public String getId();
 
-    public String getSummary();
-    public void setSummary(String summary);
-
-    public String getDescription();
-    public void setDescription(String description);
-
     public Interval getInterval();
     public void setInterval(Interval interval);
 

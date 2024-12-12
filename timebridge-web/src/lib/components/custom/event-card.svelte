@@ -11,7 +11,7 @@
 
 	// format the title
 	function getTitle() {
-		if (format.summary.length === 0) {
+		if (!format || format.summary.length === 0) {
 			return 'No title';
 		}
 
@@ -34,7 +34,7 @@
 
 	// format the description
 	function getDesc() {
-		if (format.description.length === 0) {
+		if ( !format || format.description.length === 0) {
 			return '. . .';
 		}
 
@@ -57,7 +57,7 @@
 
 	// format the location
 	function getLocation() {
-		if (event.locations.length === 0 || format.location.length === 0) {
+		if (!format || event.locations.length === 0 || format.location.length === 0) {
 			return '. . .';
 		}
 

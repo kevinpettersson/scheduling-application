@@ -39,26 +39,6 @@ public class TimeEditEvent implements Event {
     }
 
     @Override
-    public String getSummary() {
-        return summary; // TODO
-    }
-
-    @Override
-    public void setSummary(String summary) {
-        // TODO
-    }
-
-    @Override
-    public String getDescription() {
-        return description; // TODO
-    }
-
-    @Override
-    public void setDescription(String description) {
-        // TODO
-    }
-
-    @Override
     public Interval getInterval() {
         return interval;
     }

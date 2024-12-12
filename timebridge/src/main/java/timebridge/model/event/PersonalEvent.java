@@ -34,7 +34,6 @@ public class PersonalEvent implements Event {
         return id;
     }
 
-    @Override
     public String getSummary() {
         return summary;
     }
@@ -43,7 +42,6 @@ public class PersonalEvent implements Event {
         this.summary = summary;
     }
 
-    @Override
     public String getDescription() {
         return description;
     }
