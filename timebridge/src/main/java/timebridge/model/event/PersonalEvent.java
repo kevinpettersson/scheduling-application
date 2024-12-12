@@ -28,6 +28,16 @@ public class PersonalEvent implements Event {
         this.attendees = attendees;
         this.visibility = true;
     }
+    public PersonalEvent(){
+        super();
+        this.id = new ObjectId().toHexString();
+        this.summary = new String();
+        this.description = new String();
+        this.interval = new Interval();
+        this.locations = new ArrayList<>();
+        this.attendees = new ArrayList<>();
+        this.visibility = true;
+    }
 
     @Override
     public String getId() {

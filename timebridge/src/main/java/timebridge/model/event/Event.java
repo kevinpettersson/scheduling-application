@@ -20,4 +20,6 @@ public interface Event {
     
     public Boolean getVisibility();
     public void setVisibility(Boolean visibility);
+
 }
+

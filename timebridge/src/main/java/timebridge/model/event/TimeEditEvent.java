@@ -33,6 +33,18 @@ public class TimeEditEvent implements Event {
         this.visibility = true;
     }
 
+    public TimeEditEvent() {
+        super();
+        this.id = new ObjectId().toHexString();
+        this.course = new Course();
+        this.activity = new String();
+        this.interval = new Interval();
+        this.locations = new ArrayList<>();
+        this.attendees = new ArrayList<>();
+        this.visibility = true;
+    }
+ 
+
     @Override
     public String getId() {
         return id;
