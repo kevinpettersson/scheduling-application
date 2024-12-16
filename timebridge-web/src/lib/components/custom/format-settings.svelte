@@ -22,9 +22,9 @@
 		location: [...(includeBuilding ? ['building'] : []), ...(includeRoom ? ['room'] : [])]
 	});
 
-	$effect(() => {
-		calendar.setFormat(format);
-	});
+	// $effect(() => {
+	// 		calendar.setFormat(format);
+	// });
 </script>
 
 <div class="flex flex-col space-y-2 rounded border border-dashed p-3 pt-2">

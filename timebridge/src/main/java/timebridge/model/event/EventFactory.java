@@ -1,22 +1,39 @@
 package timebridge.model.event;
 
+import java.util.ArrayList;
+
 import timebridge.model.event.component.Attendee;
 import timebridge.model.event.component.Course;
 import timebridge.model.event.component.Interval;
-import timebridge.model.event.component.Location;
-import java.util.ArrayList;
-
+import timebridge.model.event.component.Locale;
+import timebridge.model.event.decorator.ActivityDecorator;
+import timebridge.model.event.decorator.CourseDecorator;
+import timebridge.model.event.decorator.LocaleDecorator;
 
 public abstract class EventFactory {
+
+    public Event createEmptyEvent(Interval interval) {
+        Event event = new DefaultEvent();
+        event.setInterval(interval);
+        return event;
+    }
     
-    static public TimeEditEvent createTimeEditEvent(Course course, String activity, Interval interval, ArrayList<Location> locations,
-        ArrayList<Attendee> attendees){
-        return new TimeEditEvent(course, activity, interval, locations, attendees);
+    public static Event createPersonalEvent(Interval interval, String summary, String description, String location, ArrayList<Attendee> attendees) {
+        Event event = new DefaultEvent();
+        event.setInterval(interval);
+        event.setSummary(summary);
+        event.setDescription(description);
+        event.setLocation(location);
+        event.setAttendees(attendees);
+        return event;
     }
 
-    static public PersonalEvent createPersonalEvent(String summary, String description, Interval interval, ArrayList<Location> location, ArrayList<Attendee> attendees){
-        return new PersonalEvent(summary, description, interval, location, attendees);
+    public static Event createTimeEditEvent(Interval interval, Course course, String activity, ArrayList<Locale> locale) {
+        Event event = new DefaultEvent();
+        event.setInterval(interval);
+        event = new CourseDecorator(event, course);
+        event = new ActivityDecorator(event, activity);
+        event = new LocaleDecorator(event, locale);
+        return event;
     }
-
 }
-

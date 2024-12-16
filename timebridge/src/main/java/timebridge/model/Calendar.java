@@ -1,38 +1,38 @@
 package timebridge.model;
 
 import java.util.ArrayList;
-
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import timebridge.model.event.Event;
-import timebridge.model.observers.Observer;
+import timebridge.model.event.component.Course;
 import timebridge.model.event.*;
 
 public class Calendar {
     @Id
-    private final String id;
+    private String id;
 
     private String name;
     private ArrayList<Event> events;
-    private ArrayList<Observer> observers;
     private Format format;
 
     public Calendar() {
         this.id = new ObjectId().toHexString();
         this.name = new String();
         this.events = new ArrayList<>();
-        this.observers = new ArrayList<Observer>();
     }
 
     public Calendar(String name, ArrayList<Event> events) {
         this.id = new ObjectId().toHexString();
         this.name = name;
         this.events = events;
-        this.observers = new ArrayList<Observer>();
     }
 
     public String getId() {
         return id;
+    }
+
+    public void SetId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -45,7 +45,6 @@ public class Calendar {
 
     public void setName(String name) {
         this.name = name;
-        notifyObservers();
     }
 
     public void saveEvent(Event event) {
@@ -53,28 +52,12 @@ public class Calendar {
         for (Event e : events) {
             if (event.getId().equals(e.getId())) {
                 e = event;
-                notifyObservers();
                 return;
             }
         }
 
         // otherwise save as new event
         events.add(event);
-        notifyObservers();
-    }
-
-    public void addObserver(Observer observer) {
-        observers.add(observer);
-    }
-
-    public void removeObserver(Observer observer) {
-        observers.remove(observer);
-    }
-
-    public void notifyObservers() {
-        for (Observer observer : observers) {
-            observer.update(this);
-        }
     }
 
     public Format getFormat() {
@@ -87,17 +70,27 @@ public class Calendar {
 
     public void filterEvents(ArrayList<String> codeFilter, ArrayList<String> activityFilter) {
         for (Event event : this.events) {
-            // Skip personal events
-            if (event instanceof PersonalEvent) {
+            // Skip default events as we can't filter them
+            if (event.getDecoratorProps().isEmpty()) {
                 continue;
             }
 
-            boolean courseMatch = codeFilter == null || codeFilter.isEmpty()
-                    || codeFilter.contains(((TimeEditEvent) event).getCourse().getCode());
-            boolean activityMatch = activityFilter == null || activityFilter.isEmpty()
-                    || activityFilter.contains(((TimeEditEvent) event).getActivity());
+            // Init variables to filter by
+            Course course = new Course(); 
+            String activity = new String();
 
-            if (courseMatch && activityMatch) {
+            // Check if event has course decorator
+            if (event.getDecoratorProps().containsKey(EventDecoratorType.COURSE)) {
+                course = (Course) event.getDecoratorProps().get(EventDecoratorType.COURSE);
+            }
+
+            // Check if event has activity decorator
+            if (event.getDecoratorProps().containsKey(EventDecoratorType.ACTIVITY)) {
+                activity = (String) event.getDecoratorProps().get(EventDecoratorType.ACTIVITY);
+            }
+
+            // filter by course code and activity
+            if ((codeFilter.contains(course.getCode()) || codeFilter.isEmpty()) && (activityFilter.contains(activity) || activityFilter.isEmpty())) {
                 event.setVisibility(true);
             } else {
                 event.setVisibility(false);
@@ -109,7 +102,6 @@ public class Calendar {
         for (Event event : events) {
             if (event.getId().equals(id)) {
                 events.remove(event);
-                notifyObservers();
                 return;
             }
         }

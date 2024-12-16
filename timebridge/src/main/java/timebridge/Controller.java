@@ -7,7 +7,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -20,12 +19,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import timebridge.services.CalendarParser;
 import timebridge.services.CalendarSerializer;
 import timebridge.model.Calendar;
-import timebridge.model.event.TimeEditEvent;
+import timebridge.model.event.Event;
 import timebridge.repository.CalendarRepository;
 
 @RestController
@@ -90,8 +88,16 @@ public class Controller {
     public ResponseEntity<Calendar> modifyCalendar(
             @RequestParam ArrayList<String> courseFilter,
             @RequestParam ArrayList<String> activityFilter,
-            @RequestBody Calendar calendar) throws Exception {
+            @RequestParam String calendarId) throws Exception {
         try {
+            // Retrieve the calendar from the database
+            Calendar calendar = repository.findById(calendarId).orElse(null);
+
+            // Check if the calendar exists
+            if (calendar == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+
             // Filter events based on course and activity filters
             calendar.filterEvents(courseFilter, activityFilter);
 
@@ -109,7 +115,7 @@ public class Controller {
     @PostMapping("/addEvent")
     public ResponseEntity<Calendar> addEvent(
             @RequestParam String calendarId,
-            @RequestBody TimeEditEvent event) throws Exception {
+            @RequestBody Event event) throws Exception {
         try {
             // Retrieve the calendar from the database
             Calendar calendar = repository.findById(calendarId).orElse(null);
@@ -151,7 +157,7 @@ public class Controller {
     @PostMapping("/saveEvent")
     public ResponseEntity<Calendar> saveEvent(
             @RequestParam String calendarId,
-            @RequestBody TimeEditEvent newEventDetails) throws Exception {
+            @RequestBody Event newEventDetails) throws Exception {
         try {
             // Retrieve the calendar from the database
             Calendar calendar = repository.findById(calendarId).orElse(null);

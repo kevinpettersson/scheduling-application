@@ -4,16 +4,9 @@ import java.io.IOException;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.UUID;
-
 import timebridge.model.Calendar;
 import timebridge.model.event.Event;
-import timebridge.model.event.TimeEditEvent;
-import timebridge.model.event.PersonalEvent;
 import timebridge.model.event.component.Attendee;
-import timebridge.model.Format;
-import timebridge.model.event.component.Location;
 
 public class CalendarSerializer {
 
@@ -50,12 +43,7 @@ public class CalendarSerializer {
         for (Event event : calendar.getEvents()) {
             // Only serialize visible events
             if (event.getVisibility()) {
-
-                if (event instanceof TimeEditEvent) {
-                    serializeEventTE((TimeEditEvent) event, calendar.getFormat());
-                } else if (event instanceof PersonalEvent) {
-                    serializeEventPE((PersonalEvent) event, calendar.getFormat());
-                }
+                serializeEvent(event);
             }
         }
 
@@ -64,75 +52,25 @@ public class CalendarSerializer {
         return sb.toString();
     }
 
-    private void serializeEventTE(TimeEditEvent event, Format format) {
+    private void serializeEvent(Event event) {
         sb.append(BEGIN_EVENT);
         sb.append(DTSTART).append(serializeTimestamp(event.getInterval().getStart())).append("\n");
         sb.append(DTEND).append(serializeTimestamp(event.getInterval().getEnd())).append("\n");
-        sb.append(UID).append(getUniqueIdetifier()).append("\n");
+        sb.append(UID).append(event.getId()).append("\n");
         sb.append(DTSTAMP).append(serializeTimestamp(ZonedDateTime.now(ZoneOffset.UTC))).append("\n");
         sb.append(LAST_MODIFIED).append(serializeTimestamp(ZonedDateTime.now(ZoneOffset.UTC))).append("\n");
-
-        formatSummary(event, format);
-        formatLocation(event, format);
-        formatDescription(event, format);
+        sb.append(SUMMARY).append(event.getSummary()).append("\n");
+        sb.append(LOCATION).append(event.getLocation()).append("\n");
+        sb.append(DESCRIPTION).append(event.getDescription()).append("\n");
         formatAttendee(event);
-
         sb.append(END_EVENT);
     }
 
-    private void formatSummary(TimeEditEvent event, Format format) {
-        sb.append(SUMMARY);
-        for (String field : format.getSummary()) {
-            appendField(event, field, format.getSummary());
-        }
-        sb.append("\n");
-    }
-
-    private void formatLocation(TimeEditEvent event, Format format) {
-        sb.append(LOCATION);
-        for (Location loc : event.getLocations()) {
-            if (format.getLocation().contains("building")) {
-                sb.append("Byggnad: ").append(loc.getBuilding()).append(", ");
-            }
-            if (format.getLocation().contains("room")) {
-                sb.append("Rum: ").append(loc.getRoom());
-            }
-        }
-        sb.append("\n");
-    }
-
-    private void formatDescription(TimeEditEvent event, Format format) {
-        sb.append(DESCRIPTION);
-        for (String field : format.getDescription()) {
-            appendField(event, field, format.getDescription());
-        }
-        sb.append("\n");
-    }
-
-    private void formatAttendee(TimeEditEvent event) {
+    private void formatAttendee(Event event) {
         for (Attendee attendee : event.getAttendees()) {
             sb.append("ATTENDEE;CN=").append(attendee.getName()).append(":mailto:").append(attendee.getMail())
                     .append("\n");
         }
-    }
-
-    private void appendField(TimeEditEvent event, String field, ArrayList<String> formatInstance) {
-        if (field.equals("code")) {
-            sb.append(event.getCourse().getCode());
-        } else if (field.equals("activity")) {
-            sb.append(event.getActivity());
-        } else if (field.equals("name")) {
-            sb.append(event.getCourse().getName());
-        }
-
-        // Add separator if not last field
-        if (formatInstance.indexOf(field) != formatInstance.size() - 1) {
-            sb.append(" - ");
-        }
-    }
-
-    private String getUniqueIdetifier() {
-        return UUID.randomUUID().toString() + "@timebridge.se";
     }
 
     private String serializeTimestamp(ZonedDateTime dateTime) {
@@ -140,50 +78,4 @@ public class CalendarSerializer {
         DateTimeFormatter icalFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'");
         return utcDateTime.format(icalFormatter);
     }
-
-    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    // - - - - - - - - - - - - - - //
-
-    private void serializeEventPE(PersonalEvent event, Format format) {
-        sb.append(BEGIN_EVENT);
-        sb.append(DTSTART).append(serializeTimestamp(event.getInterval().getStart())).append("\n");
-        sb.append(DTEND).append(serializeTimestamp(event.getInterval().getEnd())).append("\n");
-        sb.append(UID).append(getUniqueIdetifier()).append("\n");
-        sb.append(DTSTAMP).append(serializeTimestamp(ZonedDateTime.now(ZoneOffset.UTC))).append("\n");
-        sb.append(LAST_MODIFIED).append(serializeTimestamp(ZonedDateTime.now(ZoneOffset.UTC))).append("\n");
-
-        // formatSummaryPE(event, format);
-        sb.append(SUMMARY);
-        sb.append(event.getSummary());
-        sb.append("\n");
-
-        sb.append(LOCATION);
-        for (Location loc : event.getLocations()) {
-            if (format.getLocation().contains("building")) {
-                sb.append("Byggnad: ").append(loc.getBuilding()).append(", ");
-            }
-            if (format.getLocation().contains("room")) {
-                sb.append("Rum: ").append(loc.getRoom());
-            }
-        }
-        sb.append("\n");
-        formatDescriptionPE(event);
-        formatAttendeePE(event);
-
-        sb.append(END_EVENT);
-    }
-
-    private void formatDescriptionPE(PersonalEvent event) {
-        sb.append(DESCRIPTION);
-        sb.append(event.getDescription());
-        sb.append("\n");
-    }
-
-    private void formatAttendeePE(PersonalEvent event) {
-        for (Attendee attendee : event.getAttendees()) {
-            sb.append("ATTENDEE;CN=").append(attendee.getName()).append(":mailto:").append(attendee.getMail())
-                    .append("\n");
-        }
-    }
-
 }

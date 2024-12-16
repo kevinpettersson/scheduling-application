@@ -5,14 +5,14 @@ public class Course {
     private String name;
     private String code;
 
-    public Course() {
-        this.name = "";
-        this.code = "";
-    }
-
     public Course(String code, String name) {
         this.name = name;
         this.code = code;
+    }
+
+    public Course() {
+        this.name = new String();
+        this.code = new String();
     }
 
     public String getName() {

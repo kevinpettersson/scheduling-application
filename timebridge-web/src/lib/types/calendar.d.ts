@@ -19,23 +19,17 @@ export type Attendee = {
 };
 
 export type Event = {
-    course: Course;
+    decoratorProps: any;
+    summary: string;
     activity: string;
+    location: string;
     interval: Interval;
-    locations: Location[];
     attendees: Attendee[];
     visibility: boolean;
-};
-
-export type Format = {
-    summary: string[];
-    description: string[];
-    location: string[];
 };
 
 export type Calendar = {
     id: string;
     name: string;
-    format: Format;
     events: Event[];
 };
