@@ -1,21 +1,26 @@
 package timebridge;
+import java.util.ArrayList;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import timebridge.model.Calendar;
+import timebridge.model.event.Event;
 import timebridge.repository.CalendarRepository;
 import timebridge.services.CalendarParser;
 import timebridge.services.CalendarSerializer;
-//import timebridge.main.Controller;
-
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -63,9 +68,90 @@ void testDeleteEventShouldReturnStatus200IfValidID(){
     String eventId = calendarEvents.getId();
 }
  */
+@Test
+void testDeleteEventShouldReturnStatus200IfValidInputID() throws Exception{
 
+    ResponseEntity<Calendar> response = controller.uploadCalendar(baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics");
+    assertNotNull(response);
+    Calendar calendar = response.getBody();
+    assertNotNull(calendar);
+    String calendarID = calendar.getId(); 
+    ArrayList<Event> calendarEvents = calendar.getEvents();
+    String eventID = calendarEvents.get(0).getId(); 
+    // Delete event
+    mockMvc.perform(delete("/deleteEvent")
+        .param("calendarId", calendarID)
+        .param("eventId", eventID))
+        .andExpect(status().isOk());
 
+}
 
+@Test
+void testDeleteEventShouldReturnStatus404IfInvalidEventID() throws Exception{
+
+    ResponseEntity<Calendar> response = controller.uploadCalendar(baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics");
+    assertNotNull(response);
+    Calendar calendar = response.getBody();
+    assertNotNull(calendar);
+    String calendarID = calendar.getId();
+    String eventID = "invalidEventID"; 
+        // Delete event with invalid ID
+    mockMvc.perform(delete("/deleteEvent")
+        .param("calendarId", calendarID)
+        .param("eventId", eventID))
+        .andExpect(status().isNotFound());
+}
+
+@Test
+void testDeleteEventShouldReturnStatus404IfEmptyEventID() throws Exception{
+
+    ResponseEntity<Calendar> response = controller.uploadCalendar(baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics");
+    assertNotNull(response);
+    Calendar calendar = response.getBody();
+    assertNotNull(calendar);
+    String calendarID = calendar.getId();
+    String eventID = ""; 
+        // Delete event with invalid ID
+    mockMvc.perform(delete("/deleteEvent")
+        .param("calendarId", calendarID)
+        .param("eventId", eventID))
+        .andExpect(status().isNotFound());
+}
+
+@Test
+void testDeleteEventShouldReturnStatus404IfInvalidCalendarID() throws Exception{
+
+    ResponseEntity<Calendar> response = controller.uploadCalendar(baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics");
+    assertNotNull(response);
+    Calendar calendar = response.getBody();
+    assertNotNull(calendar);
+    String calendarID = "InvalidCalendarId";
+    ArrayList<Event> calendarEvents = calendar.getEvents();
+    String eventID = calendarEvents.get(0).getId(); 
+        // Delete event with invalid ID
+    mockMvc.perform(delete("/deleteEvent")
+        .param("calendarId", calendarID)
+        .param("eventId", eventID))
+        .andExpect(status().isNotFound());
+    
+}
+
+@Test
+void testDeleteEventShouldReturnStatus404IfEmptyCalendarID() throws Exception{
+
+    ResponseEntity<Calendar> response = controller.uploadCalendar(baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics");
+    assertNotNull(response);
+    Calendar calendar = response.getBody();
+    assertNotNull(calendar);
+    String calendarID = "";
+    ArrayList<Event> calendarEvents = calendar.getEvents();
+    String eventID = calendarEvents.get(0).getId(); 
+
+    mockMvc.perform(delete("/deleteEvent")
+        .param("calendarId", calendarID)
+        .param("eventId", eventID))
+        .andExpect(status().isNotFound());
+}
 
 
 }
