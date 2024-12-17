@@ -1,10 +1,10 @@
-package timebridge.model;
+package timebridge.model.event.component;
 
-public class Location {
+public class Locale {
     private String building;
     private String room;
 
-    public Location(String building, String room) {
+    public Locale(String building, String room) {
         this.building = building;
         this.room = room;
     }

@@ -18,11 +18,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import timebridge.model.Calendar;
-import timebridge.model.Event;
+import timebridge.model.event.Event;
 import timebridge.repository.CalendarRepository;
 import timebridge.services.CalendarParser;
 import timebridge.services.CalendarSerializer;
@@ -90,8 +89,16 @@ public class Controller {
     public ResponseEntity<Calendar> modifyCalendar(
             @RequestParam ArrayList<String> courseFilter,
             @RequestParam ArrayList<String> activityFilter,
-            @RequestBody Calendar calendar) throws Exception {
+            @RequestParam String calendarId) throws Exception {
         try {
+            // Retrieve the calendar from the database
+            Calendar calendar = repository.findById(calendarId).orElse(null);
+
+            // Check if the calendar exists
+            if (calendar == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+
             // Filter events based on course and activity filters
             calendar.filterEvents(courseFilter, activityFilter);
 
@@ -118,7 +125,7 @@ public class Controller {
             if (calendar == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
-            calendar.addEvent(event);
+            calendar.saveEvent(event);
             repository.save(calendar);
             return ResponseEntity.ok(calendar);
         } catch (Exception e) {

@@ -13,23 +13,23 @@ export type Course = {
     code: string;
 };
 
-export type Event = {
-    course: Course;
-    activity: string;
-    interval: Interval;
-    locations: Location[];
-    visibility: boolean;
+export type Attendee = {
+    name: string;
+    mail: string;
 };
 
-export type Format = {
-    summary: string[];
-    description: string[];
-    location: string[];
+export type Event = {
+    decoratorProps: any;
+    summary: string;
+    activity: string;
+    location: string;
+    interval: Interval;
+    attendees: Attendee[];
+    visibility: boolean;
 };
 
 export type Calendar = {
     id: string;
     name: string;
-    format: Format;
     events: Event[];
 };
