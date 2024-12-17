@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import timebridge.model.Format;
 import timebridge.model.event.component.Attendee;
 import timebridge.model.event.component.Interval;
 

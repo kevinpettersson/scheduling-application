@@ -16,7 +16,7 @@ public class ActivityDecorator extends EventDecorator {
     @Override
     public String getSummary() {
         String result = super.getSummary();
-        return result.isEmpty() ? activity : result + " - " + activity;
+        return result.isEmpty() ? activity :  result + " - " + activity;
     }
 
     @Override
