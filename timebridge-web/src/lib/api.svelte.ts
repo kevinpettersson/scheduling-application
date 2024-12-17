@@ -29,11 +29,10 @@ export async function modifyCalendar(courseFilter: string[], activityFilter: str
 
     try {
         const response = await fetch(
-            `${API_BASE_URL}/modify?courseFilter=${courseFilter}&activityFilter=${activityFilter}`,
+            `${API_BASE_URL}/modify?courseFilter=${courseFilter}&activityFilter=${activityFilter}&calendarId=${calendar.id}`,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(calendar.data),
             }
         );
         calendar.data = await response.json();

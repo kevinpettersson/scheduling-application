@@ -1,37 +1,38 @@
 package timebridge.model;
 
 import java.util.ArrayList;
-
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
+import timebridge.model.event.Event;
+import timebridge.model.event.component.Course;
+import timebridge.model.event.*;
 
 public class Calendar {
     @Id
     private String id;
 
     private String name;
-    private Format format;
     private ArrayList<Event> events;
+    private Format format;
 
     public Calendar() {
         this.id = new ObjectId().toHexString();
         this.name = new String();
         this.events = new ArrayList<>();
-        this.format = new Format();
     }
 
     public Calendar(String name, ArrayList<Event> events) {
         this.id = new ObjectId().toHexString();
         this.name = name;
         this.events = events;
-        this.format = new Format();
     }
 
     public String getId() {
         return id;
+    }
+
+    public void SetId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -42,73 +43,66 @@ public class Calendar {
         return events;
     }
 
-    public Format getFormat() {
-        return format;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id.toHexString();
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setEvents(ArrayList<Event> events) {
-        this.events = events;
+    public void saveEvent(Event event) {
+        // Update event if already present
+        for (Event e : events) {
+            if (event.getId().equals(e.getId())) {
+                e = event;
+                return;
+            }
+        }
+
+        // otherwise save as new event
+        events.add(event);
+    }
+
+    public Format getFormat() {
+        return this.format;
     }
 
     public void setFormat(Format format) {
         this.format = format;
     }
 
-    public void addEvent(Event event) {
-        events.add(event);
-    }
-
-    public void addEvents(ArrayList<Event> events) {
-        this.events.addAll(events);
-    }
-
-    public void deleteEvent(String eventId){
-        for (Event event : this.events) {
-            if(event.getId().equals(eventId)){
-                events.remove(event);
-                return;
-            }
-        }
-    }
-
-    // Replaces existing event with new specification if id matches.
-    // If event has no id, set a new id and add event to calendar.
-    public void saveEvent(Event event){
-        String Id = event.getId();
-
-        if(Id != null && !Id.isEmpty()){
-            for (int i = 0; i < events.size(); i++) {
-                if(events.get(i).getId().equals(Id)){
-                    events.set(i, event);
-                    return;
-                }
-            }
-        }
-        if(Id == null || Id.isEmpty()){
-            event.setId(new ObjectId());
-        }
-        addEvent(event);
-    }
-
-    // Filters events based on course and activity settings
     public void filterEvents(ArrayList<String> codeFilter, ArrayList<String> activityFilter) {
         for (Event event : this.events) {
-            boolean courseMatch = codeFilter == null || codeFilter.isEmpty()
-                    || codeFilter.contains(event.getCourse().getCode());
-            boolean activityMatch = activityFilter == null || activityFilter.isEmpty()
-                    || activityFilter.contains(event.getActivity());
-            if (courseMatch && activityMatch) {
+            // Skip default events as we can't filter them
+            if (event.getDecoratorProps().isEmpty()) {
+                continue;
+            }
+
+            // Init variables to filter by
+            Course course = new Course(); 
+            String activity = new String();
+
+            // Check if event has course decorator
+            if (event.getDecoratorProps().containsKey(EventDecoratorType.COURSE)) {
+                course = (Course) event.getDecoratorProps().get(EventDecoratorType.COURSE);
+            }
+
+            // Check if event has activity decorator
+            if (event.getDecoratorProps().containsKey(EventDecoratorType.ACTIVITY)) {
+                activity = (String) event.getDecoratorProps().get(EventDecoratorType.ACTIVITY);
+            }
+
+            // filter by course code and activity
+            if ((codeFilter.contains(course.getCode()) || codeFilter.isEmpty()) && (activityFilter.contains(activity) || activityFilter.isEmpty())) {
                 event.setVisibility(true);
             } else {
                 event.setVisibility(false);
+            }
+        }
+    }
+
+    public void deleteEvent(String id) {
+        for (Event event : events) {
+            if (event.getId().equals(id)) {
+                events.remove(event);
+                return;
             }
         }
     }

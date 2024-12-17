@@ -1,6 +1,10 @@
 package timebridge.services;
 
 import timebridge.model.*;
+import timebridge.model.event.component.Course;
+import timebridge.model.event.component.Interval;
+import timebridge.model.event.component.Locale;
+import timebridge.model.event.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -66,9 +70,9 @@ public class CalendarParser {
     // Method to parse a single event from the input BufferedReader
     private ArrayList<Event> parseEvent(BufferedReader reader) throws IOException {
         ArrayList<Course> courses = new ArrayList<>();
-        String activity = null;
+        String activity = new String();
         Interval interval = new Interval();
-        ArrayList<Location> locations = new ArrayList<Location>();
+        ArrayList<Locale> locations = new ArrayList<Locale>();
         String line;
 
         // Read each line until the end of the event
@@ -99,7 +103,7 @@ public class CalendarParser {
                     break;
                 // Parse and add the location(s) of the event
                 case "LOCATION":
-                    locations = parseLocations(line);
+                    locations = parseLocales(line);
                     break;
                 // Handle any other prefixes if necessary
                 default:
@@ -109,12 +113,8 @@ public class CalendarParser {
 
         ArrayList<Event> events = new ArrayList<>();
 
-        // TEMP create a list of attendees, this needs to be implemented properly
-        // by checking if the ical file contains attendees for each event.
-        ArrayList<Attendee> attendees = new ArrayList<>();
-
         for (Course course : courses) {
-            events.add(new Event(course, activity, interval, locations, attendees));
+            events.add(EventFactory.createTimeEditEvent(interval, course, activity, locations));
         }
 
         return events;
@@ -174,8 +174,8 @@ public class CalendarParser {
     }
 
     // Method to parse the location(s) of an event
-    private ArrayList<Location> parseLocations(String line) {
-        ArrayList<Location> locations = new ArrayList<>();
+    private ArrayList<Locale> parseLocales(String line) {
+        ArrayList<Locale> locales = new ArrayList<>();
 
         line = line.replace("\\n", "\n");
         line = line.trim();
@@ -196,9 +196,9 @@ public class CalendarParser {
             String building = location.substring(location.indexOf("Byggnad:"), secondDotIndex).replace("Byggnad:", "")
                     .trim();
 
-            locations.add(new Location(building, room));
+            locales.add(new Locale(building, room));
         }
 
-        return locations;
+        return locales;
     }
 }

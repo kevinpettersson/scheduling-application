@@ -1,85 +1,26 @@
 <script lang="ts">
-	import type { Event, Format } from '$lib/types/calendar.d.ts';
+	import type { Event } from '$lib/types/calendar.d.ts';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { MapPin, Text, Users } from 'lucide-svelte';
 
 	// input props
-	let { event, format } = $props<{
+	let { event } = $props<{
 		event: Event;
-		format: Format;
 	}>();
 
 	// format the title
 	function getTitle() {
-		if (format.summary.length === 0) {
-			return 'No title';
-		}
-
-		let title = '';
-		for (const field of format.summary) {
-			if (field === 'code') {
-				title += event.course.code;
-			} else if (field === 'name') {
-				title += event.course.name;
-			} else if (field === 'activity') {
-				title += event.activity;
-			}
-			if (format.summary.indexOf(field) < format.summary.length - 1) {
-				title += ' - ';
-			}
-		}
-
-		return title;
+		return event.summary;
 	}
 
 	// format the description
 	function getDesc() {
-		if (format.description.length === 0) {
-			return '. . .';
-		}
-
-		let desc = '';
-		for (const field of format.description) {
-			if (field === 'code') {
-				desc += event.course.code;
-			} else if (field === 'name') {
-				desc += event.course.name;
-			} else if (field === 'activity') {
-				desc += event.activity;
-			}
-			if (format.description.indexOf(field) < format.description.length - 1) {
-				desc += ' - ';
-			}
-		}
-
-		return desc;
+		return event.description;
 	}
 
 	// format the location
 	function getLocation() {
-		if (event.locations.length === 0 || format.location.length === 0) {
-			return '. . .';
-		}
-
-		let location = '';
-		for (const loc of event.locations) {
-			if (format.location.includes('building') && !location.includes(loc.building)) {
-				location += loc.building;
-				if (format.location.includes('room')) {
-					location += ' ❯ ';
-				}
-			}
-
-			if (format.location.includes('room')) {
-				location += loc.room;
-			}
-
-			if (loc !== event.locations[event.locations.length - 1] && format.location.includes('room')) {
-				location += ' • ';
-			}
-		}
-
-		return location;
+		return event.location;
 	}
 
 	// format the time
