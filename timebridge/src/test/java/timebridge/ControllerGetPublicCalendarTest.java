@@ -38,20 +38,20 @@ void testGetPublicCalendarShouldReturnStatus200OKIfValidCalendarID() throws Exce
     assertNotNull(calendar);
     String calendarID = calendar.getId(); */
 
-    mockMvc.perform(get("/public/{id}", calendarID.toString())).andExpect(status().isOk());
+    mockMvc.perform(get("/calendar/download/{id}", calendarID.toString())).andExpect(status().isOk());
     }
 // We dont upload the calendar in these test since there is no point when we are testing wrong or empty calendarID's
 
 @Test
 void testGetPublicCalendarShouldReturnStatus404NotFoundIfInvalidCalendarID() throws Exception {
     String id = "dfghjklrtyuiop8777";
-    mockMvc.perform(get("/public/{id}", id)).andExpect(status().isNotFound());
+    mockMvc.perform(get("/calendar/download/{id}", id)).andExpect(status().isNotFound());
     }
     
 @Test
 void testGetPublicCalendarShouldReturnStatus404NotFoundIfEmptyCalendarID() throws Exception {
 String id = "";
-mockMvc.perform(get("/public/{id}", id)).andExpect(status().isNotFound());
+mockMvc.perform(get("/calendar/download/{id}", id)).andExpect(status().isNotFound());
 }
 
 }

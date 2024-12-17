@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
+import timebridge.model.event.component.Attendee;
 import timebridge.model.event.component.Course;
 import timebridge.model.event.*;
 
@@ -109,5 +110,22 @@ public class Calendar {
                 .filter(event -> id.equals(event.getId()))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public void SetCourseAttendees(String courseCode, ArrayList<Attendee> attendees) {
+        for (Event event : events) {
+            // If event does not have a course, continue
+            if (!event.getDecoratorProps().containsKey(EventDecoratorType.COURSE)) {
+                continue;
+            }
+
+            // Get course from event
+            Course course = (Course) event.getDecoratorProps().get(EventDecoratorType.COURSE);
+
+            // If codes matches, add attendees
+            if (course.getCode().equals(courseCode)) {
+                event.setAttendees(attendees);
+            }
+        }
     }
 }
