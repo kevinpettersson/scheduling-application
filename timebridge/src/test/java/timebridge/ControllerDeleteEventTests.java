@@ -6,10 +6,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -23,7 +20,7 @@ import timebridge.services.CalendarSerializer;
 @SpringBootTest
 @AutoConfigureMockMvc
 
-class ControllerModifyTests {
+class ControllerDeleteEventTests {
 
     @Autowired
     private MockMvc mockMvc;
@@ -50,26 +47,25 @@ class ControllerModifyTests {
 
     private final String calendarID = "675c23c4c70fc136b330dd27";
 
+
 @Test
 void testControllerInitialization() {
     assertThat(controller).isNotNull();
-} 
-
-@Test 
-void testModifyCalendarShouldReturnStatus200OKIfValidInput() throws Exception {
-    ResponseEntity<Calendar> response = controller.uploadCalendar(baseURL);
-    Calendar responseCalendar = response.getBody();
-    String calendarID = responseCalendar.getId();
-    
-    Calendar validCalendar = new Calendar();
-    validCalendar.setName("Test Calendar");
-    String calendarJson = objectMapper.writeValueAsString(validCalendar);
-    
-    mockMvc.perform(get("/modify")
-            .param("courseFilter", "Course1", "Course2")
-            .param("activityFilter", "Lecture", "Lab")
-            .contentType("application/json")
-            .content(calendarJson))
-            .andExpect(status().isOk());
 }
+
+/* @Test
+void testDeleteEventShouldReturnStatus200IfValidID(){
+    ResponseEntity<Calendar> response = controller.uploadCalendar(baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics");
+    assertNotNull(response);
+    Calendar calendar = response.getBody();
+    assertNotNull(calendar);
+    ArrayList<Event> calendarEvents = calendar.getEvents();
+    String eventId = calendarEvents.getId();
+}
+ */
+
+
+
+
+
 }
