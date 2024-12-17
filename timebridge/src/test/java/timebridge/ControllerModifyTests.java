@@ -65,7 +65,7 @@ void testModifyCalendarShouldReturnStatus200OKIfValidInput() throws Exception {
     validCalendar.setName("Test Calendar");
     String calendarJson = objectMapper.writeValueAsString(validCalendar);
     
-    mockMvc.perform(get("/modify")
+    mockMvc.perform(get("calendar/modify/" + calendarID)
             .param("courseFilter", "Course1", "Course2")
             .param("activityFilter", "Lecture", "Lab")
             .contentType("application/json")

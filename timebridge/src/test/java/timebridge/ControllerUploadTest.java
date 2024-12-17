@@ -58,13 +58,13 @@ void testControllerInitialization() {
 @Test 
 void testUploadCalendarShouldReturnStatus200OKIfValidIcalString() throws Exception {
         String icalUrl = baseURL; //Expected: 200, Was: 200
-    mockMvc.perform(get("/upload").param("ical", icalUrl + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics")).andExpect(status().isOk());
+    mockMvc.perform(get("/calendar/upload").param("ical", icalUrl + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics")).andExpect(status().isOk());
 } //OK
 
 @Test 
 void testUploadCalendarShouldReturnStatus400BadRequestIfInvalidIcal() throws Exception {
         String icalUrl = baseURL + "/ThisFileIsVeryWrongShouldNotWork.ics"; //Expected: 400 Was:200
-    mockMvc.perform(get("/upload")
+    mockMvc.perform(get("/calendar/upload")
             .param("ical", icalUrl))
             .andExpect(status().isBadRequest());
 } //NOK
@@ -72,13 +72,13 @@ void testUploadCalendarShouldReturnStatus400BadRequestIfInvalidIcal() throws Exc
 @Test
 void testUploadCalendarShouldReturnStatus500ServerErrorIfNoHTTPRequest() throws Exception {
         String icalUrl = "/chalmers/web/public/.ics"; //Expected: 500, Was: 500
-    mockMvc.perform(get("/upload").param("ical", icalUrl)).andExpect(status().isInternalServerError()); 
+    mockMvc.perform(get("/calendar/upload").param("ical", icalUrl)).andExpect(status().isInternalServerError()); 
 }//OK
 
 @Test
 void testUploadCalendarShouldReturnStatus400BadRequestIfIcalUrlIsMalformed() throws Exception {
         String icalUrl = baseURL + "invalid-url"; //Expected: 400, Was: 200
-    mockMvc.perform(get("/upload")
+    mockMvc.perform(get("/calendar/upload")
             .param("ical", icalUrl))
             .andExpect(status().isBadRequest());
 } //NOK
@@ -87,7 +87,7 @@ void testUploadCalendarShouldReturnStatus400BadRequestIfIcalUrlIsMalformed() thr
 void testUploadCalendarShouldReturnStatus400BadRequestIfIcalUrlIsTooLong() throws Exception {
         String icalUrl = baseURL +  new String(new char[1001]).replace('\0', 'a'); //Expected: 400, Was: 200
 
-    mockMvc.perform(get("/upload")
+    mockMvc.perform(get("/calendar/upload")
             .param("ical", icalUrl))
             .andExpect(status().isBadRequest());
 } //NOK
@@ -95,7 +95,7 @@ void testUploadCalendarShouldReturnStatus400BadRequestIfIcalUrlIsTooLong() throw
 @Test
 void testUploadCalendarShouldReturnStatus400BadRequestIfIcalUrlIsNull() throws Exception {
         String icalUrl = null; //Expected: 400, Was: 400
-        mockMvc.perform(get("/upload")
+        mockMvc.perform(get("/calendar/upload")
             .param("ical", icalUrl))
             .andExpect(status().isBadRequest());
 } //OK
