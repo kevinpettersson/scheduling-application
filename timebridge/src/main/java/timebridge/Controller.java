@@ -14,8 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import timebridge.dto.EventRequest;
 import timebridge.model.Calendar;
 import timebridge.model.event.Event;
+import timebridge.model.event.EventFactory;
 import timebridge.repository.CalendarRepository;
 import timebridge.services.CalendarParser;
 import timebridge.services.CalendarSerializer;
@@ -26,7 +28,6 @@ public class Controller {
 
     @Autowired
     private CalendarRepository repository;
-
 
     @GetMapping("/upload")
     public ResponseEntity<Calendar> uploadCalendar(@RequestParam String ical)
@@ -110,7 +111,7 @@ public class Controller {
     @PostMapping("/addEvent")
     public ResponseEntity<Calendar> addEvent(
             @RequestParam String calendarId,
-            @RequestBody Event event) throws Exception {
+            @RequestBody EventRequest eventRequest) throws Exception {
         try {
             // Retrieve the calendar from the database
             Calendar calendar = repository.findById(calendarId).orElse(null);
@@ -119,8 +120,58 @@ public class Controller {
             if (calendar == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
+
+            // Create a new personal event
+            Event event = EventFactory.createPersonalEvent(
+                    eventRequest.getInterval(),
+                    eventRequest.getSummary(),
+                    eventRequest.getDescription(),
+                    eventRequest.getLocation(),
+                    eventRequest.getAttendees());
+
+            // Save the event to the calendar
             calendar.saveEvent(event);
             repository.save(calendar);
+
+            return ResponseEntity.ok(calendar);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PutMapping("/modifyEvent")
+    public ResponseEntity<Calendar> modifyEvent(
+            @RequestParam String calendarId,
+            @RequestParam String eventId,
+            @RequestBody EventRequest eventRequest) throws Exception {
+        try {
+            // Retrieve the calendar from the database
+            Calendar calendar = repository.findById(calendarId).orElse(null);
+
+            // Check if the calendar exists
+            if (calendar == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+
+            // Find the event by ID and 
+            Event event = calendar.findEvent(eventId);
+
+            // If event has decorators, you should not modify it
+            if (!event.getDecoratorProps().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+
+            // update its properties
+            event.setSummary(eventRequest.getSummary());
+            event.setDescription(eventRequest.getDescription());
+            event.setInterval(eventRequest.getInterval());
+            event.setAttendees(eventRequest.getAttendees());
+
+            // Save the modified event to the calendar
+            calendar.saveEvent(event);
+            repository.save(calendar);
+
             return ResponseEntity.ok(calendar);
         } catch (Exception e) {
             e.printStackTrace();
@@ -141,28 +192,6 @@ public class Controller {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
             calendar.deleteEvent(eventId);
-            repository.save(calendar);
-            return ResponseEntity.ok(calendar);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    @PostMapping("/saveEvent")
-    public ResponseEntity<Calendar> saveEvent(
-            @RequestParam String calendarId,
-            @RequestBody Event newEventDetails) throws Exception {
-        try {
-            // Retrieve the calendar from the database
-            Calendar calendar = repository.findById(calendarId).orElse(null);
-
-            // Check if the calendar exists
-            if (calendar == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-
-            calendar.saveEvent(newEventDetails);
             repository.save(calendar);
             return ResponseEntity.ok(calendar);
         } catch (Exception e) {

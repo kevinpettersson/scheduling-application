@@ -3,7 +3,7 @@ package timebridge.model;
 import java.util.ArrayList;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import timebridge.model.event.Event;
+
 import timebridge.model.event.component.Course;
 import timebridge.model.event.*;
 
@@ -13,7 +13,6 @@ public class Calendar {
 
     private String name;
     private ArrayList<Event> events;
-    private Format format;
 
     public Calendar() {
         this.id = new ObjectId().toHexString();
@@ -47,27 +46,6 @@ public class Calendar {
         this.name = name;
     }
 
-    public void saveEvent(Event event) {
-        // Update event if already present
-        for (Event e : events) {
-            if (event.getId().equals(e.getId())) {
-                e = event;
-                return;
-            }
-        }
-
-        // otherwise save as new event
-        events.add(event);
-    }
-
-    public Format getFormat() {
-        return this.format;
-    }
-
-    public void setFormat(Format format) {
-        this.format = format;
-    }
-
     public void filterEvents(ArrayList<String> codeFilter, ArrayList<String> activityFilter) {
         for (Event event : this.events) {
             // Skip default events as we can't filter them
@@ -76,7 +54,7 @@ public class Calendar {
             }
 
             // Init variables to filter by
-            Course course = new Course(); 
+            Course course = new Course();
             String activity = new String();
 
             // Check if event has course decorator
@@ -90,12 +68,26 @@ public class Calendar {
             }
 
             // filter by course code and activity
-            if ((codeFilter.contains(course.getCode()) || codeFilter.isEmpty()) && (activityFilter.contains(activity) || activityFilter.isEmpty())) {
+            if ((codeFilter.contains(course.getCode()) || codeFilter.isEmpty())
+                    && (activityFilter.contains(activity) || activityFilter.isEmpty())) {
                 event.setVisibility(true);
             } else {
                 event.setVisibility(false);
             }
         }
+    }
+
+    public void saveEvent(Event event) {
+        // Update event if already present
+        for (Event e : events) {
+            if (event.getId().equals(e.getId())) {
+                e = event;
+                return;
+            }
+        }
+
+        // otherwise save as new event
+        events.add(event);
     }
 
     public void deleteEvent(String id) {
@@ -105,5 +97,17 @@ public class Calendar {
                 return;
             }
         }
+    }
+
+    public Event findEvent(String id) {
+        if (id == null || id.isEmpty()) {
+            throw new IllegalArgumentException("Event ID must not be null or empty");
+        }
+
+        // Use streams for a more functional approach (Java 8+)
+        return events.stream()
+                .filter(event -> id.equals(event.getId()))
+                .findFirst()
+                .orElse(null);
     }
 }
