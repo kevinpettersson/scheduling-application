@@ -7,6 +7,7 @@
 	import FormatSettings from './format-settings.svelte';
 	import { downloadCalendar } from '$lib/api.svelte';
 	import ExportDrawer from './export-drawer.svelte';
+	import Addevent from './event-table/event-add/event-add.svelte';
 </script>
 
 <Sidebar.Root variant="floating">
@@ -25,6 +26,6 @@
 		</Tabs.Root>
 	</Sidebar.Content>
 	<Sidebar.Footer class="flex-row items-center">
-		<ExportDrawer />
+		<ExportDrawer /><Addevent />
 	</Sidebar.Footer>
 </Sidebar.Root>
