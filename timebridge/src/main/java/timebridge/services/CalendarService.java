@@ -22,7 +22,8 @@ import timebridge.model.event.EventFactory;
 
 /**
  * Service class for managing calendar operations.
- * This class provides methods for uploading, modifying, serializing calendars, etc.
+ * <p>This class provides methods for uploading, modifying, serializing calendars, etc.</p>
+ * <p>Purpose of this class is to provide a layer of abstraction between the controller and the model/repository.</p>
  */
 @Service
 public class CalendarService {
@@ -38,9 +39,8 @@ public class CalendarService {
         this.serializer = new CalendarSerializer();
     }
 
-
     /**
-     * Uploads a calendar from a URL and saves it to the database.
+     * Uploads a calendar from a URL, parses it and saves it to the database.
      *
      * @param ical the URL of the iCalendar file to upload.
      * @return the uploaded {@link Calendar} object.
@@ -50,7 +50,6 @@ public class CalendarService {
      * @since 2024-12-19
      * @author Group 12
      */
-    // Upload a calendar from a URL and save it to the database
     public Calendar uploadCalendar(String ical) throws MalformedURLException, IOException {
         try {
             // Open connection and read the iCalendar file data from the URL
@@ -58,7 +57,6 @@ public class CalendarService {
             InputStream inputStream = connection.getInputStream();
             String icsData = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
 
-            // Parse the iCalendar data
             Calendar calendar = parser.parse(icsData);
             repository.save(calendar);
             return calendar;
@@ -69,13 +67,18 @@ public class CalendarService {
     }
 
     /**
-     * @param id
-     * @param courseFilter
-     * @param activityFilter
-     * @return
-     * @throws IOException
+     * Modify the calendar by filtering events, based on course and activity filters.
+     * <p>Retrieves the calendar from the database and saves the modified calendar back to the database.</p>
+     *
+     * @param id the ID of the calendar to modify.
+     * @param courseFilter the list of course codes to filter by.
+     * @param activityFilter the list of activities to filter by.
+     * @return the modified {@link Calendar} object.
+     * @throws IOException if an I/O error occurs.
+     *
+     * @since 2024-12-19
+     * @author Group 12
      */
-    // Modify the calendar by filtering events, based on course and activity filters
     public Calendar modifyCalendar(String id, ArrayList<String> courseFilter, ArrayList<String> activityFilter)
             throws IOException {
         try {
@@ -90,11 +93,16 @@ public class CalendarService {
     }
 
     /**
-     * @param calendarId
-     * @param eventDTO
-     * @return
+     * Adds a new personal event to the calendar and saves it to the database.
+     * <p>Retrieves the calendar from the database and saves the modified calendar back to the database.</p>
+     *
+     * @param calendarId the ID of the calendar to add the event to.
+     * @param eventDTO the event data to add.
+     * @return the modified {@link Calendar} object.
+     *
+     * @since 2024-12-19
+     * @author Group 12
      */
-    // Add a new event to the calendar
     public Calendar addEvent(String calendarId, EventDTO eventDTO) {
         try {
             Calendar calendar = getCalendar(calendarId);
@@ -115,25 +123,26 @@ public class CalendarService {
     }
 
     /**
-     * @param eventDTO
-     * @param eventId
-     * @param calendarId
-     * @return
+     * Modify an existing event in the calendar and save it to the database.
+     *
+     * @param eventDTO the event data to modify.
+     * @param eventId the ID of the event to modify.
+     * @param calendarId the ID of the calendar to modify the event in.
+     * @return the modified {@link Calendar} object.
+     *
+     * @since 2024-12-19
+     * @author Group 12
      */
-    // Modify an existing event in the calendar
     public Calendar modifyEvent(EventDTO eventDTO, String eventId, String calendarId) {
         try {
-            // Fetch calendar and event
-            Calendar calendar = repository.findById(calendarId).orElseThrow();
+            Calendar calendar = getCalendar(calendarId);
             Event event = calendar.findEvent(eventId);
 
-            // Update its properties
             event.setSummary(eventDTO.getSummary());
             event.setDescription(eventDTO.getDescription());
             event.setInterval(eventDTO.getInterval());
             event.setAttendees(eventDTO.getAttendees());
 
-            // Save the modified event to the calendar
             calendar.saveEvent(event);
             repository.save(calendar);
             return calendar;
@@ -144,14 +153,18 @@ public class CalendarService {
     }
 
     /**
-     * @param calendarId
-     * @param eventId
-     * @return
+     * Delete an existing event in the calendar and save the updated calendar to the database.
+     *
+     * @param calendarId the ID of the calendar to delete the event in.
+     * @param eventId the ID of the event to modify.
+     * @return the modified {@link Calendar} object.
+     *
+     * @since 2024-12-19
+     * @author Group 12
      */
-    // Delete event and update the calendar
     public Calendar deleteEvent(String calendarId, String eventId) {
         try {
-            Calendar calendar = repository.findById(calendarId).orElseThrow();
+            Calendar calendar = getCalendar(calendarId);
             calendar.deleteEvent(eventId);
             repository.save(calendar);
             return calendar;
@@ -162,11 +175,15 @@ public class CalendarService {
     }
 
     /**
-     * @param calendarId
-     * @return
-     * @throws IOException
+     * Retrieve the calendar from the database and serialize it to iCalendar format.
+     *
+     * @param calendarId the ID of the calendar to serialize.
+     * @return the serialized iCalendar data as a byte array.
+     * @throws IOException if an I/O error occurs.
+     *
+     * @since 2024-12-19
+     * @author Group 12
      */
-    // Retrieve the calendar from the database and serialize it to iCalendar format
     public byte[] SerializeCalendar(String calendarId) throws IOException {
         try {
             Calendar calendar = getCalendar(calendarId);
@@ -178,11 +195,16 @@ public class CalendarService {
         }
     }
 
+
     /**
-     * @param calendarId
-     * @return
+     * Retrieve the calendar from the database.
+     *
+     * @param calendarId the ID of the calendar to retrieve.
+     * @return the {@link Calendar} object.
+     *
+     * @since 2024-12-19
+     * @author Group 12
      */
-    // Retrieve the calendar from the database by ID
     public Calendar getCalendar(String calendarId) {
         try {
             return repository.findById(calendarId).orElseThrow();
@@ -193,12 +215,13 @@ public class CalendarService {
     }
 
     /**
-     * @param calendarId
-     * @param courseCode
-     * @param attendees
-     * @return
+     * Add attendees all to events of a specific course.
+     *
+     * @return the {@link Calendar} object with modified events.
+     *
+     * @since 2024-12-19
+     * @author Group 12
      */
-    // Add attendees to events of a specific course
     public Calendar setCourseAttendees(String calendarId, String courseCode, ArrayList<Attendee> attendees ) {
         try {
             Calendar calendar = getCalendar(calendarId);
@@ -212,11 +235,13 @@ public class CalendarService {
     }
 
     /**
-     * @param calendarId
-     * @param schema
-     * @return
+     * Set event schemas for all events in the calendar.
+     *
+     * @return the {@link Calendar} object with modified events.
+     *
+     * @since 2024-12-19
+     * @author Group 12
      */
-    // Set event schemas for all events in the calendar
     public Calendar setEventSchemas(String calendarId, EventSchema schema) {
         try {
             Calendar calendar = getCalendar(calendarId);

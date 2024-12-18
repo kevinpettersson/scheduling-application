@@ -18,6 +18,9 @@ import timebridge.model.event.component.Attendee;
 import timebridge.model.event.schema.EventSchema;
 import timebridge.services.CalendarService;
 
+/**
+ * Controller class for handling HTTP requests.
+ */
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
 public class Controller {
