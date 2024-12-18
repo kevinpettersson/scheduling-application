@@ -11,7 +11,7 @@
 		start: {
 			weekday: 'long',
 			month: 'short',
-			day: 'numeric',
+			day: 'numeric'
 		} as const
 	};
 
@@ -19,14 +19,10 @@
 	function getDay(event: Event) {
 		return new Date(event.interval.start).toLocaleString('en-GB', timeFormat.start);
 	}
-	
 </script>
 
-
-<div class="grid grid-cols-1 gap-2 w-full p-2 pl-0">
-	{#each events.filter((event) => event.visibility) as event}
+<div class="grid w-full grid-cols-1 gap-2 p-2 pl-0">
+	{#each events.filter((event) => event.visibility).sort((a, b) => new Date(a.interval.start).getTime() - new Date(b.interval.start).getTime()) as event}
 		<EventCard {event} />
 	{/each}
-	
 </div>
-

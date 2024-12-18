@@ -1,4 +1,5 @@
 import { calendar } from './store.svelte';
+import type { EventDTO, EventSchema, Event } from './types/calendar';
 
 // Fetch the base API URL from environment variables
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
@@ -74,3 +75,70 @@ export async function downloadCalendar() {
         requesting = false;
     }
 }
+
+// Set calendar format by applying a schema
+export async function applySchema(schema: EventSchema) {
+    if (requesting) return;
+    requesting = true;
+
+    try {
+        const { summarySchema, descriptionSchema, locationSchema } = schema;
+        const response = await fetch(`${API_BASE_URL}/calendar/applySchema/${calendar.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                summarySchema,
+                descriptionSchema,
+                locationSchema,
+            }),
+        });
+        calendar.data = await response.json();
+    } catch (error) {
+        console.error('Error applying schema:', error);
+    } finally {
+        requesting = false;
+    }
+}
+
+// Add a new event to the calendar
+export async function addEvent(event: EventDTO) {
+    if (requesting) return;
+    requesting = true;
+
+    // Vi tejpar lite!!
+    event.interval.start = event.interval.start + ':00Z';
+    event.interval.end = event.interval.end + ':00Z';
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/event/add?calendarId=${calendar.id}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(event),
+        });
+        calendar.data = await response.json();
+    } catch (error) {
+        console.error('Error adding event:', error);
+    } finally {
+        requesting = false;
+    }
+}
+
+// Delete an event from the calendar
+export async function deleteEvent(event: Event) {
+    if (requesting) return;
+    requesting = true;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/event/delete?calendarId=${calendar.id}&eventId=${event.id}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+        });
+        calendar.data = await response.json();
+    } catch (error) {
+        console.error('Error deleting event:', error);
+    } finally {
+        requesting = false;
+    }
+}
+
+

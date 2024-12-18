@@ -19,17 +19,32 @@ export type Attendee = {
 };
 
 export type Event = {
-    decoratorProps: any;
+    id: string;
     summary: string;
     activity: string;
     location: string;
     interval: Interval;
     attendees: Attendee[];
     visibility: boolean;
+    decorators: any;
 };
 
 export type Calendar = {
     id: string;
     name: string;
     events: Event[];
+};
+
+export type EventDTO = {
+    summary: string;
+    description: string;
+    location: string;
+    interval: Interval;
+    attendees: Attendee[];
+}
+
+type EventSchema = {
+    summarySchema: String[];
+    descriptionSchema: String[];
+    locationSchema: String[];
 };

@@ -3,32 +3,34 @@
 	import { Label } from '$lib/components/ui/label/index.js';
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { Badge } from '$lib/components/ui/badge/index.js';
-	import { calendar } from '$lib/store.svelte';
+	import type { EventSchema } from '$lib/types/calendar';
+	import { applySchema } from '$lib/api.svelte';
 
 	const fields = [
-		{ value: 'code', label: 'Course Code' },
-		{ value: 'name', label: 'Course Name' },
-		{ value: 'activity', label: 'Activity' }
+		{ value: 'COURSE_CODE', label: 'Course Code' },
+		{ value: 'COURSE_NAME', label: 'Course Name' },
+		{ value: 'ACTIVITY', label: 'Activity' }
 	];
 
-	let summaryFormat = $state(['code', 'activity']);
-	let descFormat = $state(['name']);
+	let summaryFormat = $state(['COURSE_CODE', 'ACTIVITY']);
+	let descFormat = $state(['COURSE_NAME']);
 	let includeRoom = $state(true);
-	let includeBuilding = $state(false);
+	let includeBuilding = $state(true);
 
-	let format = $derived({
-		summary: summaryFormat,
-		description: descFormat,
-		location: [...(includeBuilding ? ['building'] : []), ...(includeRoom ? ['room'] : [])]
+	let schema: EventSchema = $derived({
+		summarySchema: summaryFormat,
+		descriptionSchema: descFormat,
+		locationSchema: [...(includeBuilding ? ['BUILDING'] : []), ...(includeRoom ? ['ROOM'] : [])]
 	});
-
-	// $effect(() => {
-	// 		calendar.setFormat(format);
-	// });
 </script>
 
 <div class="flex flex-col space-y-2 rounded border border-dashed p-3 pt-2">
-	<Select.Root type="multiple" name="selectedCourses" bind:value={summaryFormat}>
+	<Select.Root
+		type="multiple"
+		name="selectedCourses"
+		bind:value={summaryFormat}
+		onValueChange={() => applySchema(schema)}
+	>
 		<div>
 			<Label for="selectedCourses">Title</Label>
 			<p class="text-xs text-muted-foreground">
@@ -60,7 +62,12 @@
 			</Select.Group>
 		</Select.Content>
 	</Select.Root>
-	<Select.Root type="multiple" name="selectedCourses" bind:value={descFormat}>
+	<Select.Root
+		type="multiple"
+		name="selectedCourses"
+		bind:value={descFormat}
+		onValueChange={() => applySchema(schema)}
+	>
 		<div>
 			<Label for="selectedCourses">Description</Label>
 			<p class="text-xs text-muted-foreground">
@@ -98,7 +105,11 @@
 	</div>
 	<div class="flex flex-col space-y-2">
 		<div class="flex items-center space-x-2">
-			<Checkbox id="terms" bind:checked={includeBuilding} aria-labelledby="terms-label" />
+			<Checkbox
+				id="terms"
+				bind:checked={includeBuilding}
+				aria-labelledby="terms-label"
+			/>
 			<Label
 				id="terms-label"
 				for="terms"
@@ -108,7 +119,11 @@
 			</Label>
 		</div>
 		<div class="flex items-center space-x-2">
-			<Checkbox id="terms" bind:checked={includeRoom} aria-labelledby="terms-label" />
+			<Checkbox
+				id="terms"
+				bind:checked={includeRoom}
+				aria-labelledby="terms-label"
+			/>
 			<Label
 				id="terms-label"
 				for="terms"
