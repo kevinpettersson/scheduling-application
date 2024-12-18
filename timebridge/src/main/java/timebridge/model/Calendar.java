@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import timebridge.model.event.component.Attendee;
 import timebridge.model.event.component.Course;
 import timebridge.model.event.*;
+import timebridge.model.event.schema.EventSchema;
 
 public class Calendar {
     @Id
@@ -50,7 +51,7 @@ public class Calendar {
     public void filterEvents(ArrayList<String> codeFilter, ArrayList<String> activityFilter) {
         for (Event event : this.events) {
             // Skip default events as we can't filter them
-            if (event.getDecoratorProps().isEmpty()) {
+            if (event.getDecorators().isEmpty()) {
                 continue;
             }
 
@@ -59,13 +60,13 @@ public class Calendar {
             String activity = new String();
 
             // Check if event has course decorator
-            if (event.getDecoratorProps().containsKey(EventDecoratorType.COURSE)) {
-                course = (Course) event.getDecoratorProps().get(EventDecoratorType.COURSE);
+            if (event.getDecorators().containsKey(EventDecoratorType.COURSE)) {
+                course = (Course) event.getDecorators().get(EventDecoratorType.COURSE);
             }
 
             // Check if event has activity decorator
-            if (event.getDecoratorProps().containsKey(EventDecoratorType.ACTIVITY)) {
-                activity = (String) event.getDecoratorProps().get(EventDecoratorType.ACTIVITY);
+            if (event.getDecorators().containsKey(EventDecoratorType.ACTIVITY)) {
+                activity = (String) event.getDecorators().get(EventDecoratorType.ACTIVITY);
             }
 
             // filter by course code and activity
@@ -115,17 +116,23 @@ public class Calendar {
     public void SetCourseAttendees(String courseCode, ArrayList<Attendee> attendees) {
         for (Event event : events) {
             // If event does not have a course, continue
-            if (!event.getDecoratorProps().containsKey(EventDecoratorType.COURSE)) {
+            if (!event.getDecorators().containsKey(EventDecoratorType.COURSE)) {
                 continue;
             }
 
             // Get course from event
-            Course course = (Course) event.getDecoratorProps().get(EventDecoratorType.COURSE);
+            Course course = (Course) event.getDecorators().get(EventDecoratorType.COURSE);
 
             // If codes matches, add attendees
             if (course.getCode().equals(courseCode)) {
                 event.setAttendees(attendees);
             }
+        }
+    }
+
+    public void SetEventSchemas(EventSchema schema) {
+        for (Event event : events) {
+            event.setSchema(schema);
         }
     }
 }

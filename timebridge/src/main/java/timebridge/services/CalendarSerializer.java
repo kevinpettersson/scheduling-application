@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+
+import org.springframework.stereotype.Service;
 import timebridge.model.Calendar;
 import timebridge.model.event.Event;
 import timebridge.model.event.component.Attendee;
 
+@Service
 public class CalendarSerializer {
 
     private static final String ORG = "Chalmers";

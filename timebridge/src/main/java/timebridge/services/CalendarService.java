@@ -9,12 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import timebridge.model.event.component.Attendee;
+import timebridge.model.event.schema.EventSchema;
 import timebridge.repository.CalendarRepository;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-import timebridge.dto.EventRequest;
+import timebridge.DTO.EventDTO;
 import timebridge.model.Calendar;
 import timebridge.model.event.Event;
 import timebridge.model.event.EventFactory;
@@ -66,15 +67,15 @@ public class CalendarService {
     }
 
     // Add a new event to the calendar
-    public Calendar addEvent(String calendarId, EventRequest eventRequest) {
+    public Calendar addEvent(String calendarId, EventDTO eventDTO) {
         try {
             Calendar calendar = getCalendar(calendarId);
             Event event = EventFactory.createPersonalEvent(
-                    eventRequest.getInterval(),
-                    eventRequest.getSummary(),
-                    eventRequest.getDescription(),
-                    eventRequest.getLocation(),
-                    eventRequest.getAttendees());
+                    eventDTO.getInterval(),
+                    eventDTO.getSummary(),
+                    eventDTO.getDescription(),
+                    eventDTO.getLocation(),
+                    eventDTO.getAttendees());
 
             calendar.saveEvent(event);
             repository.save(calendar);
@@ -86,17 +87,17 @@ public class CalendarService {
     }
 
     // Modify an existing event in the calendar
-    public Calendar modifyEvent(EventRequest eventRequest, String eventId, String calendarId) {
+    public Calendar modifyEvent(EventDTO eventDTO, String eventId, String calendarId) {
         try {
             // Fetch calendar and event
             Calendar calendar = repository.findById(calendarId).orElseThrow();
             Event event = calendar.findEvent(eventId);
 
             // Update its properties
-            event.setSummary(eventRequest.getSummary());
-            event.setDescription(eventRequest.getDescription());
-            event.setInterval(eventRequest.getInterval());
-            event.setAttendees(eventRequest.getAttendees());
+            event.setSummary(eventDTO.getSummary());
+            event.setDescription(eventDTO.getDescription());
+            event.setInterval(eventDTO.getInterval());
+            event.setAttendees(eventDTO.getAttendees());
 
             // Save the modified event to the calendar
             calendar.saveEvent(event);
@@ -148,6 +149,19 @@ public class CalendarService {
         try {
             Calendar calendar = getCalendar(calendarId);
             calendar.SetCourseAttendees(courseCode, attendees);
+            repository.save(calendar);
+            return calendar;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    // Set event schemas for all events in the calendar
+    public Calendar setEventSchemas(String calendarId, EventSchema schema) {
+        try {
+            Calendar calendar = getCalendar(calendarId);
+            calendar.SetEventSchemas(schema);
             repository.save(calendar);
             return calendar;
         } catch (Exception e) {

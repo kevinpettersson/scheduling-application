@@ -1,10 +1,13 @@
 package timebridge.model.event;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import timebridge.model.event.component.Attendee;
 import timebridge.model.event.component.Interval;
+import timebridge.model.event.decorator.EventDecorator;
+import timebridge.model.event.schema.EventSchema;
 
 @JsonDeserialize(as = DefaultEvent.class)
 public interface Event {
@@ -29,6 +32,8 @@ public interface Event {
     public Boolean getVisibility();
     public void setVisibility(Boolean visibility);
 
-    public HashMap<EventDecoratorType, Object> getDecoratorProps();
-    public void setDecoratorProps(HashMap<EventDecoratorType, Object> decoratorProps);
+    public EventSchema getSchema();
+    public void setSchema(EventSchema schema);
+
+    public HashMap<EventDecoratorType, Object> getDecorators();
 }

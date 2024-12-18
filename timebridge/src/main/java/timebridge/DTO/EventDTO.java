@@ -1,12 +1,11 @@
-package timebridge.dto;
+package timebridge.DTO;
 
 import timebridge.model.event.component.Attendee;
 import timebridge.model.event.component.Interval;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class EventRequest {
+public class EventDTO {
 
     private String summary;
 
@@ -19,7 +18,7 @@ public class EventRequest {
     private ArrayList<Attendee> attendees; // Use List instead of ArrayList for flexibility.
 
     // Default constructor
-    public EventRequest() {}
+    public EventDTO() {}
 
     // Getters and Setters
     public String getSummary() {

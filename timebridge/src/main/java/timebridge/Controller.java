@@ -12,10 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import timebridge.dto.EventRequest;
+import timebridge.DTO.EventDTO;
 import timebridge.model.Calendar;
 import timebridge.model.event.component.Attendee;
-import timebridge.repository.CalendarRepository;
+import timebridge.model.event.schema.EventSchema;
 import timebridge.services.CalendarService;
 
 @RestController
@@ -95,9 +95,9 @@ public class Controller {
     @PostMapping("/event/add")
     public ResponseEntity<Calendar> addEvent(
             @RequestParam String calendarId,
-            @RequestBody EventRequest eventRequest) {
+            @RequestBody EventDTO eventDTO) {
         try {
-            return ResponseEntity.ok(service.addEvent(calendarId, eventRequest));
+            return ResponseEntity.ok(service.addEvent(calendarId, eventDTO));
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "Calendar not found with ID: " + calendarId, e);
@@ -114,9 +114,9 @@ public class Controller {
     public ResponseEntity<Calendar> modifyEvent(
             @RequestParam String calendarId,
             @RequestParam String eventId,
-            @RequestBody EventRequest eventRequest) {
+            @RequestBody EventDTO eventDTO) {
         try {
-            return ResponseEntity.ok(service.modifyEvent(eventRequest, eventId, calendarId));
+            return ResponseEntity.ok(service.modifyEvent(eventDTO, eventId, calendarId));
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "Event or Calendar not found with provided IDs.", e);
@@ -155,6 +155,21 @@ public class Controller {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "Calendar not found with ID: " + id, e);}
         catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Unexpected error occurred: " + e.getMessage(), e);
+        }
+    }
+
+    @PutMapping("calendar/applySchema/{id}")
+    public ResponseEntity<Calendar> setEventSchemas(
+            @PathVariable String id,
+            @RequestBody EventSchema schema) {
+        try {
+            return ResponseEntity.ok(service.setEventSchemas(id, schema));
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Calendar not found with ID: " + id, e);
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     "Unexpected error occurred: " + e.getMessage(), e);
         }

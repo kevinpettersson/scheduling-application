@@ -1,5 +1,6 @@
 package timebridge.services;
 
+import org.springframework.stereotype.Service;
 import timebridge.model.*;
 import timebridge.model.event.component.Course;
 import timebridge.model.event.component.Interval;
@@ -18,6 +19,7 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Service
 public class CalendarParser {
 
     public CalendarParser() {
