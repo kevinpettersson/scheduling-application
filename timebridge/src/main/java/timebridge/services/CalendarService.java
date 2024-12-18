@@ -20,6 +20,10 @@ import timebridge.model.Calendar;
 import timebridge.model.event.Event;
 import timebridge.model.event.EventFactory;
 
+/**
+ * Service class for managing calendar operations.
+ * This class provides methods for uploading, modifying, serializing calendars, etc.
+ */
 @Service
 public class CalendarService {
 
@@ -34,6 +38,18 @@ public class CalendarService {
         this.serializer = new CalendarSerializer();
     }
 
+
+    /**
+     * Uploads a calendar from a URL and saves it to the database.
+     *
+     * @param ical the URL of the iCalendar file to upload.
+     * @return the uploaded {@link Calendar} object.
+     * @throws MalformedURLException if the provided URL is malformed.
+     * @throws IOException if an I/O error occurs during the upload process.
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
     // Upload a calendar from a URL and save it to the database
     public Calendar uploadCalendar(String ical) throws MalformedURLException, IOException {
         try {
@@ -52,6 +68,13 @@ public class CalendarService {
         }
     }
 
+    /**
+     * @param id
+     * @param courseFilter
+     * @param activityFilter
+     * @return
+     * @throws IOException
+     */
     // Modify the calendar by filtering events, based on course and activity filters
     public Calendar modifyCalendar(String id, ArrayList<String> courseFilter, ArrayList<String> activityFilter)
             throws IOException {
@@ -66,6 +89,11 @@ public class CalendarService {
         }
     }
 
+    /**
+     * @param calendarId
+     * @param eventDTO
+     * @return
+     */
     // Add a new event to the calendar
     public Calendar addEvent(String calendarId, EventDTO eventDTO) {
         try {
@@ -86,6 +114,12 @@ public class CalendarService {
         }
     }
 
+    /**
+     * @param eventDTO
+     * @param eventId
+     * @param calendarId
+     * @return
+     */
     // Modify an existing event in the calendar
     public Calendar modifyEvent(EventDTO eventDTO, String eventId, String calendarId) {
         try {
@@ -109,6 +143,11 @@ public class CalendarService {
         }
     }
 
+    /**
+     * @param calendarId
+     * @param eventId
+     * @return
+     */
     // Delete event and update the calendar
     public Calendar deleteEvent(String calendarId, String eventId) {
         try {
@@ -122,6 +161,11 @@ public class CalendarService {
         }
     }
 
+    /**
+     * @param calendarId
+     * @return
+     * @throws IOException
+     */
     // Retrieve the calendar from the database and serialize it to iCalendar format
     public byte[] SerializeCalendar(String calendarId) throws IOException {
         try {
@@ -134,6 +178,10 @@ public class CalendarService {
         }
     }
 
+    /**
+     * @param calendarId
+     * @return
+     */
     // Retrieve the calendar from the database by ID
     public Calendar getCalendar(String calendarId) {
         try {
@@ -144,6 +192,12 @@ public class CalendarService {
         }
     }
 
+    /**
+     * @param calendarId
+     * @param courseCode
+     * @param attendees
+     * @return
+     */
     // Add attendees to events of a specific course
     public Calendar setCourseAttendees(String calendarId, String courseCode, ArrayList<Attendee> attendees ) {
         try {
@@ -157,6 +211,11 @@ public class CalendarService {
         }
     }
 
+    /**
+     * @param calendarId
+     * @param schema
+     * @return
+     */
     // Set event schemas for all events in the calendar
     public Calendar setEventSchemas(String calendarId, EventSchema schema) {
         try {
