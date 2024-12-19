@@ -15,7 +15,7 @@
 	let summaryFormat = $state(['COURSE_CODE', 'ACTIVITY']);
 	let descFormat = $state(['COURSE_NAME']);
 	let includeRoom = $state(true);
-	let includeBuilding = $state(true);
+	let includeBuilding = $state(false);
 
 	let schema: EventSchema = $derived({
 		summarySchema: summaryFormat,
@@ -107,8 +107,9 @@
 		<div class="flex items-center space-x-2">
 			<Checkbox
 				id="terms"
-				bind:checked={includeBuilding}
 				aria-labelledby="terms-label"
+				bind:checked={includeBuilding}
+				onCheckedChange={() => applySchema(schema)}
 			/>
 			<Label
 				id="terms-label"
@@ -121,8 +122,9 @@
 		<div class="flex items-center space-x-2">
 			<Checkbox
 				id="terms"
-				bind:checked={includeRoom}
 				aria-labelledby="terms-label"
+				bind:checked={includeRoom}
+				onCheckedChange={() => applySchema(schema)}
 			/>
 			<Label
 				id="terms-label"

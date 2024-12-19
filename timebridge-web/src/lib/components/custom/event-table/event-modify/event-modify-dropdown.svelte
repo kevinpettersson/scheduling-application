@@ -29,23 +29,15 @@
 	let eventState = $state(eventDTO);
 
 	onMount(() => {
-	eventState.summary = event.summary;
-        eventState.description = event.description;
-        eventState.location = event.location;
 
-        // Parse the date strings
-        let startDate = new Date(event.interval.start);
-        let endDate = new Date(event.interval.end);
 
-        // Increment the dates by one day
-        startDate.setDate(startDate.getDate() - 1);
-        endDate.setDate(endDate.getDate() - 1);
 
-        // Convert the dates back to strings
-        eventState.interval.start = startDate.toISOString().split('T')[0];
-        eventState.interval.end = endDate.toISOString().split('T')[0];
-
-        eventState.attendees = event.attendees;
+		eventState.summary = event.summary;
+		eventState.description = event.description;
+		eventState.location = event.location;
+		eventState.interval.start = event.interval.start.replace(':00Z', '');
+		eventState.interval.end = event.interval.end.replace(':00Z', '');
+		eventState.attendees = event.attendees;
 	});
 </script>
 
