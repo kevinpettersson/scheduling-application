@@ -29,12 +29,6 @@ export type Event = {
     decorators: any;
 };
 
-export type Calendar = {
-    id: string;
-    name: string;
-    events: Event[];
-};
-
 export type EventDTO = {
     summary: string;
     description: string;
@@ -47,4 +41,10 @@ type EventSchema = {
     summarySchema: String[];
     descriptionSchema: String[];
     locationSchema: String[];
+};
+
+export type Calendar = {
+    id: string;
+    name: string;
+    events: Event[];
 };

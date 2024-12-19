@@ -4,6 +4,7 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
     import { deleteEvent } from '$lib/api.svelte'; 
+	import EventModify from './event-modify-dropdown.svelte'
 
 	// input props
 	let { event } = $props<{
@@ -21,10 +22,12 @@
 				{#if !event.decorators || event.decorators.length === 0}
 					<DropdownMenu.Item>
 						<PenLine class="mr-2 size-4" />
-						<span>Edit</span>
+						<span>
+							<EventModify {event} />
+						</span>
 					</DropdownMenu.Item>
+					<DropdownMenu.Separator />
 				{/if}
-				<DropdownMenu.Separator />
 				<DropdownMenu.Item>
                     <Trash2 class="mr-2 size-4" />
                     <span onclick={() => deleteEvent(event)} >Delete</span>

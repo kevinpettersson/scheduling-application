@@ -1,5 +1,5 @@
 import { calendar } from './store.svelte';
-import type { EventDTO, EventSchema, Event } from './types/calendar';
+import type { EventDTO, EventSchema, Event, Attendee } from './types/calendar';
 
 // Fetch the base API URL from environment variables
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
@@ -140,5 +140,44 @@ export async function deleteEvent(event: Event) {
         requesting = false;
     }
 }
+
+// Modify an event in the calendar
+export async function modifyEvent(id: string, event: EventDTO) {
+    if (requesting) return;
+    requesting = true;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/event/modify?calendarId=${calendar.id}&eventId=${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(event),
+        });
+        calendar.data = await response.json();
+    } catch (error) {
+        console.error('Error modifying event:', error);
+    } finally {
+        requesting = false;
+    }
+}
+
+// Add attendees to all events of a specific course
+export async function setCourseAttendees(courseCode: string, attendees: Attendee[]) {
+    if (requesting) return;
+    requesting = true;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/calendar/setCourseAttendees/${calendar.id}?courseCode=${courseCode}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ attendees }),
+        });
+        calendar.data = await response.json();
+    } catch (error) {
+        console.error('Error adding attendees:', error);
+    } finally {
+        requesting = false;
+    }
+}
+
 
 
