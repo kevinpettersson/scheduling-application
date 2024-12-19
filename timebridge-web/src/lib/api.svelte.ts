@@ -146,6 +146,10 @@ export async function modifyEvent(id: string, event: EventDTO) {
     if (requesting) return;
     requesting = true;
 
+    // Vi tejpar lite!!
+    event.interval.start = event.interval.start + ':00Z';
+    event.interval.end = event.interval.end + ':00Z';
+
     try {
         const response = await fetch(`${API_BASE_URL}/event/modify?calendarId=${calendar.id}&eventId=${id}`, {
             method: 'PUT',

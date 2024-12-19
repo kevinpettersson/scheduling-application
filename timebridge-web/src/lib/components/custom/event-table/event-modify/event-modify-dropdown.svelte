@@ -28,11 +28,14 @@
 	let eventState = $state(eventDTO);
 
 	onMount(() => {
+
+
+
 		eventState.summary = event.summary;
 		eventState.description = event.description;
 		eventState.location = event.location;
-		eventState.interval.start = event.interval.start;
-		eventState.interval.end = event.interval.end;
+		eventState.interval.start = event.interval.start.replace(':00Z', '');
+		eventState.interval.end = event.interval.end.replace(':00Z', '');
 		eventState.attendees = event.attendees;
 	});
 </script>
