@@ -105,9 +105,8 @@ export async function addEvent(event: EventDTO) {
     if (requesting) return;
     requesting = true;
 
-    // Vi tejpar lite!!
-    event.interval.start = event.interval.start + ':00Z';
-    event.interval.end = event.interval.end + ':00Z';
+    event.interval.start = new Date(event.interval.start).toISOString();
+    event.interval.end = new Date(event.interval.end).toISOString();
 
     try {
         const response = await fetch(`${API_BASE_URL}/event/add?calendarId=${calendar.id}`, {
@@ -147,8 +146,8 @@ export async function modifyEvent(id: string, event: EventDTO) {
     requesting = true;
 
     // Vi tejpar lite!!
-    event.interval.start = event.interval.start + ':00Z';
-    event.interval.end = event.interval.end + ':00Z';
+    event.interval.start = new Date(event.interval.start).toISOString();
+    event.interval.end = new Date(event.interval.end).toISOString();
 
     try {
         const response = await fetch(`${API_BASE_URL}/event/modify?calendarId=${calendar.id}&eventId=${id}`, {

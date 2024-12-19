@@ -15,7 +15,7 @@
 		<Tabs.Root value="filter">
 			<Tabs.List class="grid w-full grid-cols-2">
 				<Tabs.Trigger value="filter">Filter</Tabs.Trigger>
-				<Tabs.Trigger value="format">Format</Tabs.Trigger>
+				<Tabs.Trigger value="format">View</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="filter">
 				<FilterSettings />

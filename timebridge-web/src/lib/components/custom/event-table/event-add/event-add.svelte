@@ -7,7 +7,7 @@
 	import type { EventDTO } from '$lib/types/calendar';
 	import { addEvent } from '$lib/api.svelte';
 
-	let event: EventDTO = {
+	let eventDTO: EventDTO = {
 		summary: '',
 		description: '',
 		location: '',
@@ -18,7 +18,7 @@
 		attendees: []
 	};
 
-	let eventState = $state(event);
+	let eventState = $state(eventDTO);
 </script>
 
 <Sheet.Root>
@@ -56,7 +56,7 @@
 				<input
 					id="endTime"
 					type="datetime-local"
-					name="tartTime"
+					name="startTime"
 					bind:value={eventState.interval.end}
 					class="col-span-3"
 				/>

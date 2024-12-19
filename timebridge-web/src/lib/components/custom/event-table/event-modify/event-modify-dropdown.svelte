@@ -8,6 +8,7 @@
 	import { modifyEvent } from '$lib/api.svelte';
 	import { onMount } from 'svelte';
 
+
     // input props
 	let { event } = $props<{
 		event: Event;
@@ -28,15 +29,23 @@
 	let eventState = $state(eventDTO);
 
 	onMount(() => {
+	eventState.summary = event.summary;
+        eventState.description = event.description;
+        eventState.location = event.location;
 
+        // Parse the date strings
+        let startDate = new Date(event.interval.start);
+        let endDate = new Date(event.interval.end);
 
+        // Increment the dates by one day
+        startDate.setDate(startDate.getDate() - 1);
+        endDate.setDate(endDate.getDate() - 1);
 
-		eventState.summary = event.summary;
-		eventState.description = event.description;
-		eventState.location = event.location;
-		eventState.interval.start = event.interval.start.replace(':00Z', '');
-		eventState.interval.end = event.interval.end.replace(':00Z', '');
-		eventState.attendees = event.attendees;
+        // Convert the dates back to strings
+        eventState.interval.start = startDate.toISOString().split('T')[0];
+        eventState.interval.end = endDate.toISOString().split('T')[0];
+
+        eventState.attendees = event.attendees;
 	});
 </script>
 
@@ -75,7 +84,7 @@
 				<input
 					id="endTime"
 					type="datetime-local"
-					name="tartTime"
+					name="startTime"
 					bind:value={eventState.interval.end}
 					class="col-span-3"
 				/>
