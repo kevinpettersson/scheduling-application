@@ -51,13 +51,13 @@ Since our initial Figma prototype, we have made adjustments based on user testin
 
 
 ### Epics and User Stories
-These are our main epics, which represent a bigger goal that we aim to achieve in this project. Each epic is then broken down into multiple smaller user stories, which works like tasks that all must be completed before the epic is done. 
+These are our main epics, which represent a bigger goal that we aim to achieve in this project. Each epic is then broken down into multiple smaller user stories, which works like tasks that all must be completed before the epic is considered done. 
 
 
 Epic 1 - Minimal Viable Procuct:
 ![alt text](image-13.png)
 
-From this epic, these are the user stories that we have created:
+From this epic, these are the user stories that has been created:
 
 
 User Story 1: _As a developer, I want to call the API and send a Calendar object in JSON format, and convert it to an ICal._
@@ -74,7 +74,12 @@ Acceptance criteria:
 * Each building is only shown once
 * No buildings or rooms are missing
 
-User Story 3: _As a developer, I want to be able to call the API and send a Calendar Object with modification settings, and get back a modified Calendar Object._
+User Story 3: _As a developer, I want to be able to convert an Ical file to a calendar object, to be able to modify the object._
+
+Acceptance criteria:
+* It should be able to convert a valid ical file to a calendar object.
+
+User Story 4: _As a developer, I want to be able to call the API and send a Calendar Object with modification settings, and get back a modified Calendar Object._
 
 Acceptance criteria:
 
@@ -85,12 +90,17 @@ Settings:
 * Filter by course code.
 * Choose if only building or room or both should be visible.
 
-User Story 4: 
+User Story 5: _As a user, I would like to visually see my calendar, on a neat and visually appealing website, that is easy to navigate._
+
+Acceptance criteria:
+* The calendar should be able to be presented to the user as a website interface.
+* It should be easy to navigate and understand
+
 
 Epic 2 - Additional Features:
 ![alt text](image-14.png)
 
-From this epic, these are the user stories that we have created:
+From this epic, these are the user stories that has been created:
 
 User Story 1: _As a user I want to be able to add attendees to every event, so that I easily can distinguish between my own events and my friends events._
 
@@ -98,10 +108,36 @@ Acceptance criteria:
 * Attendees contain Name and Mail
 * Attendees should be optional in an event
 
+User Story 2: _As a user I want to be able to add my own events, edit events and delete events, to be able to make a personalized schedule._
+
+Acceptance criteria:
+* Added events must contain the most basic information
+* Every event should contain an event ID
+* The calendar should be saved to the database
+
+User Story 3: _As a user I want to be able to undo the filters and modifications that I have done to the schedule, to be able to see the original schedule again._
+
+Acceptance criteria
+* A user can undo the last few modifications
+* There is a button for this on the website
+
+User Story 4: _As a developer, I want comprehensive Javadoc documentation for the extensions that have been made, so that I and others reviewing the code can easily understand its purpose, usage and behavior._
+
+Acceptance Criteria:   
+* Every suitable public class, method, and field should have descriptive Javadoc comments.   
+* Parameters, return values, and exceptions should be clearly documented.   
+* Adhere to the [project’s documentation standards/guidelines].
+
 
 Epic 3 - Testing and error handling:
 ![alt text](image-15.png)
 
+From this epic, these are the user stories that has been created:
+
+User Story 1: _As a user, I want the system to handle errors gracefully when importing my schedule using a link, so that I can understand what went wrong and take appropriate action._
+Acceptance criteria:
+* A user should clearly know what went wrong, by seeing a error message on the screen.
+* All error cases should be handeled
 
 
 ### DoD: Definition of Done
