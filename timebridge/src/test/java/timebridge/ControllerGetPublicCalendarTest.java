@@ -35,7 +35,10 @@ class ControllerGetPublicCalendarTest {
     @Test
     void testGetPublicCalendarShouldReturnStatus200OKIfValidCalendarID() throws Exception {
         // Upload a calendar and get the calendar object
-        MvcResult result = mockMvc.perform(post("/calendar/upload").param("ical", baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics")).andExpect(status().isOk()).andReturn();
+        MvcResult result = mockMvc.perform(post("/calendar/upload")
+        .param("ical", baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics"))
+        .andExpect(status().isOk())
+        .andReturn();
         String response = result.getResponse().getContentAsString();
         Calendar calendar = objectMapper.readValue(response, Calendar.class);
 

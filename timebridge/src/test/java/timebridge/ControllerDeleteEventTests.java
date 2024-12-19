@@ -9,13 +9,12 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import timebridge.model.Calendar;
 import timebridge.model.event.Event;
 import timebridge.repository.CalendarRepository;
@@ -62,27 +61,22 @@ void testControllerInitialization() {
     assertThat(controller).isNotNull();
 }
 
-/* @Test
-void testDeleteEventShouldReturnStatus200IfValidID(){
-    ResponseEntity<Calendar> response = controller.uploadCalendar(baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics");
-    assertNotNull(response);
-    Calendar calendar = response.getBody();
-    assertNotNull(calendar);
-    ArrayList<Event> calendarEvents = calendar.getEvents();
-    String eventId = calendarEvents.getId();
-}
- */
 
 @Test
-void testDeleteEventShouldReturnStatus200IfValidInputID() throws Exception{
-
-    ResponseEntity<Calendar> response = controller.uploadCalendar("https://cloud.timeedit.net/chalmers/web/public/ri637Q6QY12Z60Q5Z68086X6y5Z353nQ6351.ics");
-    assertNotNull(response);
-    Calendar calendar = response.getBody();
+void testDeleteEventShouldReturnStatus200IfValidInputID() throws Exception {
+    // Upload a calendar and save the response
+    MvcResult uploadResult = mockMvc.perform(post("/calendar/upload")
+        .param("ical", "https://cloud.timeedit.net/chalmers/web/public/ri637Q6QY12Z60Q5Z68086X6y5Z353nQ6351.ics"))
+        .andExpect(status().isOk())
+        .andReturn();
+    
+    String uploadResponse = uploadResult.getResponse().getContentAsString();
+    Calendar calendar = objectMapper.readValue(uploadResponse, Calendar.class);
     assertNotNull(calendar);
-    String calendarID = calendar.getId(); 
+    String calendarID = calendar.getId();
     ArrayList<Event> calendarEvents = calendar.getEvents();
-    String eventID = calendarEvents.get(0).getId(); 
+    String eventID = calendarEvents.get(0).getId();
+
     // Delete event
     mockMvc.perform(delete("/event/delete")
         .param("calendarId", calendarID)
@@ -90,50 +84,63 @@ void testDeleteEventShouldReturnStatus200IfValidInputID() throws Exception{
         .andExpect(status().isOk());
 }
 
-@Test
-void testDeleteEventShouldReturnStatus404IfInvalidEventID() throws Exception{
 
-    ResponseEntity<Calendar> response = controller.uploadCalendar(baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics");
-    assertNotNull(response);
-    Calendar calendar = response.getBody();
+@Test
+void testDeleteEventShouldReturnStatus404IfInvalidEventID() throws Exception {
+    // Upload a calendar and save the response
+    MvcResult uploadResult = mockMvc.perform(post("/calendar/upload")
+        .param("ical", baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics"))
+        .andExpect(status().isOk())
+        .andReturn();
+
+    String uploadResponse = uploadResult.getResponse().getContentAsString();
+    Calendar calendar = objectMapper.readValue(uploadResponse, Calendar.class);
     assertNotNull(calendar);
     String calendarID = calendar.getId();
-    String eventID = "invalidEventID"; 
-        // Delete event with invalid ID
+    String invalidEventID = "invalidEventID";     //Use an invalid eventID
+
     mockMvc.perform(delete("/deleteEvent")
         .param("calendarId", calendarID)
-        .param("eventId", eventID))
+        .param("eventId", invalidEventID))
         .andExpect(status().isNotFound());
 }
 
 @Test
 void testDeleteEventShouldReturnStatus404IfEmptyEventID() throws Exception{
+    MvcResult uploadResult = mockMvc.perform(post("/calendar/upload")
+        .param("ical", baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics"))
+        .andExpect(status().isOk())
+        .andReturn();
 
-    ResponseEntity<Calendar> response = controller.uploadCalendar(baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics");
-    assertNotNull(response);
-    Calendar calendar = response.getBody();
-    assertNotNull(calendar);
-    String calendarID = calendar.getId();
-    String eventID = ""; 
-        // Delete event with invalid ID
-    mockMvc.perform(delete("/deleteEvent")
-        .param("calendarId", calendarID)
-        .param("eventId", eventID))
-        .andExpect(status().isNotFound());
+        String uploadResponse = uploadResult.getResponse().getContentAsString();
+        Calendar calendar = objectMapper.readValue(uploadResponse, Calendar.class);
+        assertNotNull(calendar);
+        String calendarID = calendar.getId();
+        String emptyEventID = "";  //Empty eventID
+    
+        mockMvc.perform(delete("/deleteEvent")
+            .param("calendarId", calendarID)
+            .param("eventId", emptyEventID))
+            .andExpect(status().isNotFound());
+
 }
 
 @Test
 void testDeleteEventShouldReturnStatus404IfInvalidCalendarID() throws Exception{
 
-    ResponseEntity<Calendar> response = controller.uploadCalendar(baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics");
-    assertNotNull(response);
-    Calendar calendar = response.getBody();
+    MvcResult uploadResult = mockMvc.perform(post("/calendar/upload")
+    .param("ical", "https://cloud.timeedit.net/chalmers/web/public/ri637Q6QY12Z60Q5Z68086X6y5Z353nQ6351.ics"))
+    .andExpect(status().isOk())
+    .andReturn();
+
+    String uploadResponse = uploadResult.getResponse().getContentAsString();
+    Calendar calendar = objectMapper.readValue(uploadResponse, Calendar.class);
     assertNotNull(calendar);
-    String calendarID = "InvalidCalendarId";
+    String calendarID = "InvalidCalendarID"; //Invalid CalendarID
     ArrayList<Event> calendarEvents = calendar.getEvents();
-    String eventID = calendarEvents.get(0).getId(); 
-        // Delete event with invalid ID
-    mockMvc.perform(delete("/deleteEvent")
+    String eventID = calendarEvents.get(0).getId();
+
+    mockMvc.perform(delete("/event/delete")
         .param("calendarId", calendarID)
         .param("eventId", eventID))
         .andExpect(status().isNotFound());
@@ -142,16 +149,19 @@ void testDeleteEventShouldReturnStatus404IfInvalidCalendarID() throws Exception{
 
 @Test
 void testDeleteEventShouldReturnStatus404IfEmptyCalendarID() throws Exception{
+    MvcResult uploadResult = mockMvc.perform(post("/calendar/upload")
+    .param("ical", "https://cloud.timeedit.net/chalmers/web/public/ri637Q6QY12Z60Q5Z68086X6y5Z353nQ6351.ics"))
+    .andExpect(status().isOk())
+    .andReturn();
 
-    ResponseEntity<Calendar> response = controller.uploadCalendar(baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics");
-    assertNotNull(response);
-    Calendar calendar = response.getBody();
+    String uploadResponse = uploadResult.getResponse().getContentAsString();
+    Calendar calendar = objectMapper.readValue(uploadResponse, Calendar.class);
     assertNotNull(calendar);
-    String calendarID = "";
+    String calendarID = ""; //Empty CalendarID
     ArrayList<Event> calendarEvents = calendar.getEvents();
-    String eventID = calendarEvents.get(0).getId(); 
+    String eventID = calendarEvents.get(0).getId();
 
-    mockMvc.perform(delete("/deleteEvent")
+    mockMvc.perform(delete("/event/delete")
         .param("calendarId", calendarID)
         .param("eventId", eventID))
         .andExpect(status().isNotFound());
