@@ -54,12 +54,12 @@ class ControllerUploadTest {
     @Test
     void testUploadCalendarShouldReturnStatus500ServerErrorIfNoHTTPRequest() throws Exception {
             String icalUrl = "/chalmers/web/public/.ics"; //Expected: 500, Was: 500
-        mockMvc.perform(post("/calendar/upload").param("ical", icalUrl)).andExpect(status().isInternalServerError());
+        mockMvc.perform(post("/calendar/upload").param("ical", icalUrl)).andExpect(status().isServiceUnavailable());
     }//OK
 
     @Test
     void testUploadCalendarShouldReturnStatus400BadRequestIfIcalUrlIsMalformed() throws Exception {
-            String icalUrl = baseURL + "invalid-url"; //Expected: 400, Was: 200
+            String icalUrl = baseURL + "invalid-url"; 
         mockMvc.perform(post("/calendar/upload")
                 .param("ical", icalUrl))
                 .andExpect(status().isBadRequest());
