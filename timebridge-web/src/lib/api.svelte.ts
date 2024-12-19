@@ -12,7 +12,13 @@ export async function fetchCalendar(url: string) {
     requesting = true;
 
     try {
-        const response = await fetch(`${API_BASE_URL}/upload?ical=${encodeURIComponent(url)}`);
+        const response = await fetch(
+            `${API_BASE_URL}/calendar/upload?ical=${encodeURIComponent(url)}`,
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+            }
+        );
         calendar.data = await response.json();
     } catch (error) {
         console.error('Error fetching calendar:', error);
@@ -29,9 +35,9 @@ export async function modifyCalendar(courseFilter: string[], activityFilter: str
 
     try {
         const response = await fetch(
-            `${API_BASE_URL}/modify?courseFilter=${courseFilter}&activityFilter=${activityFilter}&calendarId=${calendar.id}`,
+            `${API_BASE_URL}/calendar/modify/${calendar.id}?courseFilter=${courseFilter}&activityFilter=${activityFilter}`,
             {
-                method: 'POST',
+                method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
             }
         );
@@ -49,10 +55,9 @@ export async function downloadCalendar() {
     requesting = true;
 
     try {
-        const response = await fetch(`${API_BASE_URL}/download`, {
-            method: 'POST',
+        const response = await fetch(`${API_BASE_URL}/calendar/download/${calendar.id}`, {
+            method: 'GET',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(calendar.data),
         });
         if (!response.ok) throw new Error('Download failed');
 

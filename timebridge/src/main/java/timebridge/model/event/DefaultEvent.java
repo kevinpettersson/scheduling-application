@@ -2,11 +2,14 @@ package timebridge.model.event;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import timebridge.model.event.component.Attendee;
 import timebridge.model.event.component.Interval;
+import timebridge.model.event.decorator.EventDecorator;
+import timebridge.model.event.schema.EventSchema;
 
 public class DefaultEvent implements Event {
 
@@ -19,7 +22,8 @@ public class DefaultEvent implements Event {
     private Interval interval;
     private ArrayList<Attendee> attendees;
     private Boolean visibility;
-    private HashMap<EventDecoratorType, Object> decoratorProps;
+    private HashMap<EventDecoratorType, Object> decorators;
+    private EventSchema schema;
 
     public DefaultEvent() {
         this.id = new ObjectId().toHexString();
@@ -29,7 +33,8 @@ public class DefaultEvent implements Event {
         this.interval = new Interval();
         this.attendees = new ArrayList<>();
         this.visibility = true;
-        this.decoratorProps = new HashMap<>();
+        this.decorators = new HashMap<>();
+        this.schema = new EventSchema();
     }
 
     @Override
@@ -98,12 +103,13 @@ public class DefaultEvent implements Event {
     }
 
     @Override
-    public HashMap<EventDecoratorType, Object> getDecoratorProps() {
-        return decoratorProps;
-    }
+    public EventSchema getSchema() { return schema; }
 
     @Override
-    public void setDecoratorProps(HashMap<EventDecoratorType, Object> decoratorProps) {
-        this.decoratorProps = decoratorProps;
+    public void setSchema(EventSchema schema) { this.schema = schema; }
+
+    @Override
+    public HashMap<EventDecoratorType, Object> getDecorators() {
+        return decorators;
     }
 }

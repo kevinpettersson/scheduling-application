@@ -27,7 +27,7 @@
 				<div class="flex items-center space-x-2">
 					<div class="grid flex-1 gap-2">
 						<Label for="link" class="sr-only">Link</Label>
-						<Input id="link" value="{API_BASE_URL}/public/{calendar.id}" readonly />
+						<Input id="link" value="{API_BASE_URL}/calendar/download/{calendar.id}" readonly />
 					</div>
 					<!-- <Button variant="outline" size="icon" class="px-3">
 						<span class="sr-only"> Copy </span>

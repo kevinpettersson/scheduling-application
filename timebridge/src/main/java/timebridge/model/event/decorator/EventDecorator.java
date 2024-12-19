@@ -1,14 +1,16 @@
 package timebridge.model.event.decorator;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import timebridge.model.event.Event;
 import timebridge.model.event.EventDecoratorType;
 import timebridge.model.event.component.Attendee;
 import timebridge.model.event.component.Interval;
+import timebridge.model.event.schema.EventSchema;
 
 public abstract class EventDecorator implements Event {
-    private final Event decoratedEvent;
+    protected final Event decoratedEvent;
 
     public EventDecorator(Event decoratedEvent) {
         this.decoratedEvent = decoratedEvent;
@@ -80,12 +82,17 @@ public abstract class EventDecorator implements Event {
     }
 
     @Override
-    public HashMap<EventDecoratorType, Object> getDecoratorProps() {
-        return decoratedEvent.getDecoratorProps();
+    public EventSchema getSchema() {
+        return decoratedEvent.getSchema();
     }
 
     @Override
-    public void setDecoratorProps(HashMap<EventDecoratorType, Object> props) {
-        decoratedEvent.setDecoratorProps(props);
+    public void setSchema(EventSchema schema) {
+        decoratedEvent.setSchema(schema);
+    }
+
+    @Override
+    public HashMap<EventDecoratorType, Object> getDecorators() {
+        return decoratedEvent.getDecorators();
     }
 }
