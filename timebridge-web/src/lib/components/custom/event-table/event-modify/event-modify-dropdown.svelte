@@ -28,9 +28,6 @@
 	let eventState = $state(eventDTO);
 
 	onMount(() => {
-
-
-
 		eventState.summary = event.summary;
 		eventState.description = event.description;
 		eventState.location = event.location;
