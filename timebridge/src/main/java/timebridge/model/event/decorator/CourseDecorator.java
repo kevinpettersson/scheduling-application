@@ -8,6 +8,9 @@ import timebridge.model.event.component.Course;
 import timebridge.model.event.EventDecoratorType;
 import timebridge.model.event.schema.EventSchema;
 
+/**
+ * This class represents a decorator for an event that adds a course to the event.
+ */
 public class CourseDecorator extends EventDecorator {
     private final Course course;
 
@@ -16,6 +19,14 @@ public class CourseDecorator extends EventDecorator {
         this.course = course;
     }
 
+    /**
+     * Returns the customized summary of an event by incorporating the course name and code field based on the schema attributes.
+     *
+     * @return the summary of the event
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
     @Override
     public String getSummary() {
         StringBuilder summary = new StringBuilder();
@@ -40,6 +51,14 @@ public class CourseDecorator extends EventDecorator {
         return summary.toString();
     }
 
+    /**
+     * Returns the customized description of the event by incorporating the course name and code field based on the schema attributes.
+     *
+     * @return the description of the event
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
     @Override
     public String getDescription() {
         StringBuilder desc = new StringBuilder();
@@ -67,7 +86,14 @@ public class CourseDecorator extends EventDecorator {
 
         return desc.toString();
     }
-    
+
+    /**
+     * Returns a map of decorators with an added entry to the HashMap with the decorator type and the value of the course field.
+     * @return the map of decorators
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
     @Override
     public HashMap<EventDecoratorType, Object> getDecorators() {
         HashMap<EventDecoratorType, Object> map = super.getDecorators();

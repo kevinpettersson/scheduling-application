@@ -18,6 +18,12 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Configuration class for MongoDB.
+ *
+ * @since 2024-12-19
+ * @author Group 12
+ */
 @Configuration
 public class MongoConfig extends AbstractMongoClientConfiguration {
     @Value("${spring.data.mongodb.database}")

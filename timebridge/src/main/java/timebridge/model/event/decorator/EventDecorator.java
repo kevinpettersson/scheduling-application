@@ -9,6 +9,9 @@ import timebridge.model.event.component.Attendee;
 import timebridge.model.event.component.Interval;
 import timebridge.model.event.schema.EventSchema;
 
+/**
+ * Represents a decorator for an event.
+ */
 public abstract class EventDecorator implements Event {
     protected final Event decoratedEvent;
 

@@ -7,6 +7,9 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 /**
  * Main class for the application.
+ *
+ * @since 2024-12-19
+ * @author Group 12
  */
 @SpringBootApplication
 @EnableMongoRepositories(basePackages = "timebridge.repository")
