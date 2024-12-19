@@ -32,13 +32,13 @@ class ControllerGetPublicCalendarTest {
 
 @Test
 void testGetPublicCalendarShouldReturnStatus200OKIfValidCalendarID() throws Exception {
-    ResponseEntity<Calendar> response = controller.uploadCalendar(baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics");
+    ResponseEntity<Calendar> response = controller.uploadCalendar(baseURL + "ri637Q6QY12Z60Q5Z68086X6y5Z353nQ6351.ics");
     assertNotNull(response);
     Calendar calendar = response.getBody();
     assertNotNull(calendar);
     String calendarID = calendar.getId(); 
 
-    mockMvc.perform(get("/public/{id}", calendarID.toString())).andExpect(status().isOk());
+    mockMvc.perform(get("/public/{id}", calendarID)).andExpect(status().isOk());
     }
 // We dont upload the calendar in these test since there is no point when we are testing wrong or empty calendarID's
 

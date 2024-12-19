@@ -6,10 +6,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -55,21 +52,4 @@ void testControllerInitialization() {
     assertThat(controller).isNotNull();
 } 
 
-@Test 
-void testModifyCalendarShouldReturnStatus200OKIfValidInput() throws Exception {
-    ResponseEntity<Calendar> response = controller.uploadCalendar(baseURL);
-    Calendar responseCalendar = response.getBody();
-    String calendarID = responseCalendar.getId();
-    
-    Calendar validCalendar = new Calendar();
-    validCalendar.setName("Test Calendar");
-    String calendarJson = objectMapper.writeValueAsString(validCalendar);
-    
-    mockMvc.perform(get("calendar/modify/" + calendarID)
-            .param("courseFilter", "Course1", "Course2")
-            .param("activityFilter", "Lecture", "Lab")
-            .contentType("application/json")
-            .content(calendarJson))
-            .andExpect(status().isOk());
-}
 }

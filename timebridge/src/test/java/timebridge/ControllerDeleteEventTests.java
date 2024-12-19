@@ -21,6 +21,7 @@ import timebridge.model.event.Event;
 import timebridge.repository.CalendarRepository;
 import timebridge.services.CalendarParser;
 import timebridge.services.CalendarSerializer;
+import timebridge.services.CalendarService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -41,6 +42,9 @@ class ControllerDeleteEventTests {
 
     @Mock
     private CalendarSerializer mockSerializer;  // Mock serializer service
+
+    @Mock
+    private CalendarService service;
 
     @Mock
     private Calendar calendar;
@@ -68,10 +72,11 @@ void testDeleteEventShouldReturnStatus200IfValidID(){
     String eventId = calendarEvents.getId();
 }
  */
+
 @Test
 void testDeleteEventShouldReturnStatus200IfValidInputID() throws Exception{
 
-    ResponseEntity<Calendar> response = controller.uploadCalendar(baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics");
+    ResponseEntity<Calendar> response = controller.uploadCalendar("https://cloud.timeedit.net/chalmers/web/public/ri637Q6QY12Z60Q5Z68086X6y5Z353nQ6351.ics");
     assertNotNull(response);
     Calendar calendar = response.getBody();
     assertNotNull(calendar);
@@ -79,11 +84,10 @@ void testDeleteEventShouldReturnStatus200IfValidInputID() throws Exception{
     ArrayList<Event> calendarEvents = calendar.getEvents();
     String eventID = calendarEvents.get(0).getId(); 
     // Delete event
-    mockMvc.perform(delete("/deleteEvent")
+    mockMvc.perform(delete("/event/delete")
         .param("calendarId", calendarID)
         .param("eventId", eventID))
         .andExpect(status().isOk());
-
 }
 
 @Test
