@@ -47,7 +47,7 @@ import timebridge.services.CalendarSerializer;
 @SpringBootTest
 @AutoConfigureMockMvc
 
-class ControllerModifyTests {
+class ControllerAddEventTests {
 
     @Autowired
     private MockMvc mockMvc;
@@ -80,7 +80,7 @@ void testControllerInitialization() {
 } 
 
 @Test
-void testModifyEventShouldReturnStatus200IfValidInput() throws Exception {
+void testAddEventShouldReturnStatus200IfValidInput() throws Exception {
 
     // Step 1: Upload a calendar and retrieve the calendar ID
     MvcResult uploadResult = mockMvc.perform(post("/calendar/upload")
@@ -94,13 +94,9 @@ void testModifyEventShouldReturnStatus200IfValidInput() throws Exception {
     Calendar calendar = objectMapper.readValue(uploadResponse, Calendar.class);
     assertNotNull(calendar);
     String calendarID = calendar.getId();
-    ArrayList<Event> calendarEvents = calendar.getEvents();
-    String eventID = calendarEvents.get(0).getId();
-
     // Step 3: Perform the modify event PUT request
-    MvcResult modifyResult = mockMvc.perform(put("/event/modify")
+    MvcResult modifyResult = mockMvc.perform(post("/event/add")
         .param("calendarId", calendarID)
-        .param("eventId", eventID)  // Ensure we specify the correct event ID
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(modifiedEventDTO)))
         .andExpect(status().isOk())
@@ -109,108 +105,33 @@ void testModifyEventShouldReturnStatus200IfValidInput() throws Exception {
     // Step 4: Parse the response of the modified calendar
     String modifyResponse = modifyResult.getResponse().getContentAsString();
     Calendar modifiedCalendar = objectMapper.readValue(modifyResponse, Calendar.class);
-
     // Step 5: Assert that the event was modified
     assertThat(modifiedCalendar.getEvents().get(0)).isNotEqualTo(calendar.getEvents().get(0));
     assertThat(modifiedCalendar.getEvents().get(0).getId()).isEqualTo(calendar.getEvents().get(0).getId());
 }
 
-
 @Test
-void testModifyEventShouldReturnStatus400IfInvalidCalendarID() throws Exception {
-
+void testAddEventShouldReturnStatus400IfInValidCalendarID() throws Exception {
+    // Step 1: Upload a calendar and retrieve the calendar ID
     MvcResult uploadResult = mockMvc.perform(post("/calendar/upload")
         .param("ical", baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics"))
         .andExpect(status().isOk())
         .andReturn();  
 
-        EventDTO modifiedEventDTO = new EventDTO();
-        String uploadResponse = uploadResult.getResponse().getContentAsString();
-        Calendar calendar = objectMapper.readValue(uploadResponse, Calendar.class);
-        assertNotNull(calendar);
-        String calendarID = "InvalidCalendarID";
-        ArrayList<Event> calendarEvents = calendar.getEvents();
-        String eventID = calendarEvents.get(0).getId();
-
-        mockMvc.perform(put("/event/modify")
+    // Step 2: Prepare the modified event DTO
+    EventDTO modifiedEventDTO = new EventDTO();
+    String uploadResponse = uploadResult.getResponse().getContentAsString();
+    Calendar calendar = objectMapper.readValue(uploadResponse, Calendar.class);
+    assertNotNull(calendar);
+    String calendarID = "InvalidCalendarID";
+    // Step 3: Perform the modify event PUT request
+    MvcResult modifyResult = mockMvc.perform(post("/event/add")
         .param("calendarId", calendarID)
-        .param("eventId", eventID) 
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(modifiedEventDTO)))
-        .andExpect(status().isNotFound());
-
+        .andExpect(status().isOk())
+        .andReturn();  // Store the result in modifyResult
 }
 
-@Test
-void testModifyEventShouldReturnStatusIfInvalidEventID() throws Exception {
 
-    MvcResult uploadResult = mockMvc.perform(post("/calendar/upload")
-        .param("ical", baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics"))
-        .andExpect(status().isOk())
-        .andReturn();  
-
-        EventDTO modifiedEventDTO = new EventDTO();
-        String uploadResponse = uploadResult.getResponse().getContentAsString();
-        Calendar calendar = objectMapper.readValue(uploadResponse, Calendar.class);
-        assertNotNull(calendar);
-        String calendarID = calendar.getId(); ;
-        String eventID = "InvalidEventID";
-
-        mockMvc.perform(put("/event/modify")
-        .param("calendarId", calendarID)
-        .param("eventId", eventID) 
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(modifiedEventDTO)))
-        .andExpect(status().isInternalServerError());
-
-}
-
-@Test
-void testModifyEventShouldReturnStatus400IfEmptyCalendarID() throws Exception {
-
-    MvcResult uploadResult = mockMvc.perform(post("/calendar/upload")
-        .param("ical", baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics"))
-        .andExpect(status().isOk())
-        .andReturn();  
-
-        EventDTO modifiedEventDTO = new EventDTO();
-        String uploadResponse = uploadResult.getResponse().getContentAsString();
-        Calendar calendar = objectMapper.readValue(uploadResponse, Calendar.class);
-        assertNotNull(calendar);
-        ArrayList<Event> calendarEvents = calendar.getEvents();
-        String calendarID = "";
-        String eventID = calendarEvents.get(0).getId();
-
-        mockMvc.perform(put("/event/modify")
-        .param("calendarId", calendarID)
-        .param("eventId", eventID) 
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(modifiedEventDTO)))
-        .andExpect(status().isNotFound());
-
-    }
-
-
-@Test
-void testModifyEventShouldReturnStatus400IfEmptyEventID() throws Exception {
-
-    MvcResult uploadResult = mockMvc.perform(post("/calendar/upload")
-        .param("ical", baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics"))
-        .andExpect(status().isOk())
-        .andReturn();  
-
-        EventDTO modifiedEventDTO = new EventDTO();
-        String uploadResponse = uploadResult.getResponse().getContentAsString();
-        Calendar calendar = objectMapper.readValue(uploadResponse, Calendar.class);
-        assertNotNull(calendar);
-        String calendarID = calendar.getId();
-        String eventID = "";
-
-        mockMvc.perform(put("/event/modify")
-        .param("calendarId", calendarID)
-        .param("eventId", eventID) 
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(modifiedEventDTO)))
-        .andExpect(status().isBadRequest());
-    }
 }
