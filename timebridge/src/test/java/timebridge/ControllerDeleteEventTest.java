@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,42 +13,25 @@ import org.springframework.test.web.servlet.MvcResult;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import timebridge.model.Calendar;
 import timebridge.model.event.Event;
-import timebridge.repository.CalendarRepository;
-import timebridge.services.CalendarParser;
-import timebridge.services.CalendarSerializer;
-import timebridge.services.CalendarService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 
-class ControllerDeleteEventTests {
+class ControllerDeleteEventTest {
 
     @Autowired
     private MockMvc mockMvc;
     
     @Autowired
     private ObjectMapper objectMapper;
-
-    @Mock
-    private CalendarParser mockParser; 
-
-    @Mock
-    private CalendarRepository repository;
-
-    @Mock
-    private CalendarSerializer mockSerializer;  // Mock serializer service
-
-    @Mock
-    private CalendarService service;
-
-    @Mock
-    private Calendar calendar;
     
     @InjectMocks
-    private Controller controller;  // The controller to test
+    private Controller controller;  
 
     private final String baseURL = "https://cloud.timeedit.net/chalmers/web/public/";
 
@@ -60,7 +42,6 @@ class ControllerDeleteEventTests {
 void testControllerInitialization() {
     assertThat(controller).isNotNull();
 }
-
 
 @Test
 void testDeleteEventShouldReturnStatus200IfValidInputID() throws Exception {
@@ -83,7 +64,6 @@ void testDeleteEventShouldReturnStatus200IfValidInputID() throws Exception {
         .param("eventId", eventID))
         .andExpect(status().isOk());
 }
-
 
 @Test
 void testDeleteEventShouldReturnStatus404IfInvalidEventID() throws Exception {

@@ -1,74 +1,40 @@
 package timebridge;
-import org.springframework.http.MediaType;
+import java.util.ArrayList;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-
-//import org.apache.tomcat.util.http.parser.MediaType;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.server.ResponseStatusException;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import timebridge.DTO.EventDTO;
 import timebridge.model.Calendar;
 import timebridge.model.event.Event;
-import timebridge.model.event.component.Attendee;
-import timebridge.model.event.component.Interval;
-import timebridge.repository.CalendarRepository;
-import timebridge.services.CalendarParser;
-import timebridge.services.CalendarSerializer;
 
 
 @SpringBootTest
 @AutoConfigureMockMvc
 
-class ControllerModifyTests {
+class ControllerEventModifyTest {
 
     @Autowired
     private MockMvc mockMvc;
     
     @Autowired
     private ObjectMapper objectMapper;
-
-    @Mock
-    private CalendarParser mockParser; 
-
-    @Mock
-    private CalendarRepository repository;
-
-    @Mock
-    private CalendarSerializer mockSerializer;  // Mock serializer service
-
-    @Mock
-    private Calendar calendar;
     
     @InjectMocks
-    private Controller controller;  // The controller to test
+    private Controller controller; 
 
     private final String baseURL = "https://cloud.timeedit.net/chalmers/web/public/";
 
@@ -115,30 +81,28 @@ void testModifyEventShouldReturnStatus200IfValidInput() throws Exception {
     assertThat(modifiedCalendar.getEvents().get(0).getId()).isEqualTo(calendar.getEvents().get(0).getId());
 }
 
-
 @Test
 void testModifyEventShouldReturnStatus400IfInvalidCalendarID() throws Exception {
 
     MvcResult uploadResult = mockMvc.perform(post("/calendar/upload")
-        .param("ical", baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics"))
-        .andExpect(status().isOk())
-        .andReturn();  
+    .param("ical", baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics"))
+    .andExpect(status().isOk())
+    .andReturn();  
 
-        EventDTO modifiedEventDTO = new EventDTO();
-        String uploadResponse = uploadResult.getResponse().getContentAsString();
-        Calendar calendar = objectMapper.readValue(uploadResponse, Calendar.class);
-        assertNotNull(calendar);
-        String calendarID = "InvalidCalendarID";
-        ArrayList<Event> calendarEvents = calendar.getEvents();
-        String eventID = calendarEvents.get(0).getId();
+    EventDTO modifiedEventDTO = new EventDTO();
+    String uploadResponse = uploadResult.getResponse().getContentAsString();
+    Calendar calendar = objectMapper.readValue(uploadResponse, Calendar.class);
+    assertNotNull(calendar);
+    String calendarID = "InvalidCalendarID";
+    ArrayList<Event> calendarEvents = calendar.getEvents();
+    String eventID = calendarEvents.get(0).getId();
 
-        mockMvc.perform(put("/event/modify")
-        .param("calendarId", calendarID)
-        .param("eventId", eventID) 
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(modifiedEventDTO)))
-        .andExpect(status().isNotFound());
-
+    mockMvc.perform(put("/event/modify")
+    .param("calendarId", calendarID)
+    .param("eventId", eventID) 
+    .contentType(MediaType.APPLICATION_JSON)
+    .content(objectMapper.writeValueAsString(modifiedEventDTO)))
+    .andExpect(status().isNotFound());
 }
 
 @Test
@@ -162,7 +126,6 @@ void testModifyEventShouldReturnStatusIfInvalidEventID() throws Exception {
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(modifiedEventDTO)))
         .andExpect(status().isInternalServerError());
-
 }
 
 @Test
@@ -187,9 +150,7 @@ void testModifyEventShouldReturnStatus400IfEmptyCalendarID() throws Exception {
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(modifiedEventDTO)))
         .andExpect(status().isNotFound());
-
     }
-
 
 @Test
 void testModifyEventShouldReturnStatus400IfEmptyEventID() throws Exception {

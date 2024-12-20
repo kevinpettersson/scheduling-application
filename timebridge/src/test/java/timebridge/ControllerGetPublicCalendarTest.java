@@ -1,19 +1,18 @@
 package timebridge;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.springframework.test.web.servlet.MvcResult;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import timebridge.model.Calendar;
 
 @SpringBootTest
@@ -25,7 +24,7 @@ class ControllerGetPublicCalendarTest {
     private MockMvc mockMvc;
     
     @InjectMocks
-    private Controller controller;  // The controller to test
+    private Controller controller;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -51,13 +50,13 @@ class ControllerGetPublicCalendarTest {
 
     @Test
     void testGetPublicCalendarShouldReturnStatus404NotFoundIfInvalidCalendarID() throws Exception {
-        String id = "dfghjklrtyuiop8777";
-        mockMvc.perform(get("/calendar/download/{id}", id)).andExpect(status().isNotFound());
+            String id = "dfghjklrtyuiop8777";
+            mockMvc.perform(get("/calendar/download/{id}", id)).andExpect(status().isNotFound());
     }
 
     @Test
     void testGetPublicCalendarShouldReturnStatus404NotFoundIfEmptyCalendarID() throws Exception {
-    String id = "";
-    mockMvc.perform(get("/calendar/download/{id}", id)).andExpect(status().isNotFound());
+        String id = "";
+        mockMvc.perform(get("/calendar/download/{id}", id)).andExpect(status().isNotFound());
     }
 }

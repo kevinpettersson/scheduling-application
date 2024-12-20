@@ -1,12 +1,15 @@
 package timebridge.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
+import timebridge.model.event.Event;
+import timebridge.model.event.EventDecoratorType;
 import timebridge.model.event.component.Attendee;
 import timebridge.model.event.component.Course;
-import timebridge.model.event.*;
 import timebridge.model.event.schema.EventSchema;
 
 public class Calendar {
@@ -113,7 +116,8 @@ public class Calendar {
                 .orElse(null);
     }
 
-    public void SetCourseAttendees(String courseCode, ArrayList<Attendee> attendees) {
+    public void SetCourseAttendees(String courseCode, ArrayList<Attendee> attendees) throws IOException {
+        boolean CourseCodeDoesNotExist = true;
         for (Event event : events) {
             // If event does not have a course, continue
             if (!event.getDecorators().containsKey(EventDecoratorType.COURSE)) {
@@ -126,7 +130,11 @@ public class Calendar {
             // If codes matches, add attendees
             if (course.getCode().equals(courseCode)) {
                 event.setAttendees(attendees);
+                CourseCodeDoesNotExist = true;
             }
+        }
+        if (CourseCodeDoesNotExist){
+             throw new IllegalArgumentException("CourseCode does not exist");
         }
     }
 

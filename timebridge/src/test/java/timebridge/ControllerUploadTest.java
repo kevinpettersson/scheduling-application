@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-//import timebridge.main.Controller;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -24,7 +23,7 @@ class ControllerUploadTest {
     private ObjectMapper objectMapper;
     
     @InjectMocks
-    private Controller controller;  // The controller to test
+    private Controller controller;  
 
     private final String baseURL = "https://cloud.timeedit.net/chalmers/web/public/";
 
@@ -34,28 +33,27 @@ class ControllerUploadTest {
     @Test
     void testControllerInitialization() {
         assertThat(controller).isNotNull();
-    } //OK
+    } 
 
-    // Controller Upload Tests:
     @Test
     void testUploadCalendarShouldReturnStatus200OKIfValidIcalString() throws Exception {
-            String icalUrl = baseURL; //Expected: 200, Was: 200
+            String icalUrl = baseURL;
         mockMvc.perform(post("/calendar/upload").param("ical", icalUrl + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics")).andExpect(status().isOk());
-    } //OK
+    }
 
     @Test
     void testUploadCalendarShouldReturnStatus400BadRequestIfInvalidIcal() throws Exception {
-            String icalUrl = baseURL + "ThisFileIsVeryWrongShouldNotWork.ics"; //Expected: 400 Was:200
+            String icalUrl = baseURL + "ThisFileIsVeryWrongShouldNotWork.ics";
         mockMvc.perform(post("/calendar/upload")
                 .param("ical", icalUrl))
                 .andExpect(status().isBadRequest());
-    } //NOK
+    } 
 
     @Test
     void testUploadCalendarShouldReturnStatus500ServerErrorIfNoHTTPRequest() throws Exception {
-            String icalUrl = "/chalmers/web/public/.ics"; //Expected: 500, Was: 500
+            String icalUrl = "/chalmers/web/public/.ics"; 
         mockMvc.perform(post("/calendar/upload").param("ical", icalUrl)).andExpect(status().isServiceUnavailable());
-    }//OK
+    }
 
     @Test
     void testUploadCalendarShouldReturnStatus400BadRequestIfIcalUrlIsMalformed() throws Exception {
@@ -63,23 +61,23 @@ class ControllerUploadTest {
         mockMvc.perform(post("/calendar/upload")
                 .param("ical", icalUrl))
                 .andExpect(status().isBadRequest());
-    } //NOK
+    } 
 
     @Test
     void testUploadCalendarShouldReturnStatus400BadRequestIfIcalUrlIsTooLong() throws Exception {
-            String icalUrl = baseURL +  new String(new char[1001]).replace('\0', 'a'); //Expected: 400, Was: 200
+            String icalUrl = baseURL +  new String(new char[1001]).replace('\0', 'a');
 
             mockMvc.perform(post("/calendar/upload").param("ical", icalUrl))
                 .andExpect(status().isBadRequest());
-    } //NOK
+    } 
 
     @Test
     void testUploadCalendarShouldReturnStatus400BadRequestIfIcalUrlIsNull() throws Exception {
-            String icalUrl = null; //Expected: 400, Was: 400
+            String icalUrl = null; 
             mockMvc.perform(post("/calendar/upload")
                 .param("ical", icalUrl))
                 .andExpect(status().isBadRequest());
-    } //OK
+    } 
 
 }
 
