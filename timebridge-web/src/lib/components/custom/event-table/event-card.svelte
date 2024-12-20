@@ -2,6 +2,7 @@
 	import type { Event } from '$lib/types/calendar.d.ts';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { MapPin, Text, Users } from 'lucide-svelte';
+	import EventDropdown from '$lib/components/custom/event-table/event-modify/event-dropdown.svelte'
 
 	// input props
 	let { event } = $props<{
@@ -52,11 +53,13 @@
 		let attendees = '';
 		for (const attendee of event.attendees) {
 			attendees += attendee.name;
-			attendees += ' - ' + attendee.email;
+			attendees += ' - ' + attendee.mail;
 			if (event.attendees.indexOf(attendee) < event.attendees.length - 1) {
 				attendees += ', ';
 			}
 		}
+
+		return attendees;
 	}
 </script>
 
@@ -78,5 +81,10 @@
 			<Users size="18" class="flex-none" />
 			<span>{getAttendees()}</span>
 		</Card.Description>
+
+
+		<EventDropdown {event}/>
+
+		
 	</Card.Content>
 </Card.Root>

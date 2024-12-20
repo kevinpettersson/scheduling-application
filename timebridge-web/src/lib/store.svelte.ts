@@ -23,19 +23,19 @@ class CalendarStore {
 
     // Get all unique course codes
     courseCodes() {
-        const codes = this.data.events.map(event => event.decoratorProps.COURSE.code);
+        const codes = this.data.events.map(event => event.decorators.COURSE.code);
         return [...new Set(codes)];
     }
 
     // Get all unique course names
     courseNames() {
-        const names = this.data.events.map(event => event.decoratorProps.COURSE.name);
+        const names = this.data.events.map(event => event.decorators.COURSE.name);
         return [...new Set(names)];
     }
 
     // Get all unique activities
     courseActivities() {
-        const activities = this.data.events.map(event => event.decoratorProps.ACTIVITY);
+        const activities = this.data.events.map(event => event.decorators.ACTIVITY);
         return [...new Set(activities)];
     }
 
