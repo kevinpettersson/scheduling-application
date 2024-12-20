@@ -12,6 +12,16 @@ import timebridge.model.event.component.Attendee;
 import timebridge.model.event.component.Course;
 import timebridge.model.event.schema.EventSchema;
 
+/**
+ * <p>Represents a calendar that holds a list of events. </p>
+ * <p> This class provides methods to manage events, including adding, deleting,
+ * filtering, and finding events. It supports assigning attendees to course
+ * events and applying schemas to events. </p>
+ * <p> Each instance has a unique identifier, a name, and a list of events. </p>
+ *
+ * @author Group 12
+ * @since 2024-12-19
+ */
 public class Calendar {
     @Id
     private String id;
@@ -51,6 +61,17 @@ public class Calendar {
         this.name = name;
     }
 
+    /**
+     * <p> Filters events by course code and activity. </p>
+     * <p> This method checks each event in the list and sets their visibility accordingly,
+     * depending on whether each event matches the filters.</p>
+     *
+     * @param codeFilter a list of course codes to filter by.
+     * @param activityFilter a list of activities to filter by.
+     *
+     * @author Group 12
+     * @since 2024-12-19
+     */
     public void filterEvents(ArrayList<String> codeFilter, ArrayList<String> activityFilter) {
         for (Event event : this.events) {
             // Skip default events as we can't filter them
@@ -58,21 +79,17 @@ public class Calendar {
                 continue;
             }
 
-            // Init variables to filter by
             Course course = new Course();
             String activity = new String();
 
-            // Check if event has course decorator
             if (event.getDecorators().containsKey(EventDecoratorType.COURSE)) {
                 course = (Course) event.getDecorators().get(EventDecoratorType.COURSE);
             }
 
-            // Check if event has activity decorator
             if (event.getDecorators().containsKey(EventDecoratorType.ACTIVITY)) {
                 activity = (String) event.getDecorators().get(EventDecoratorType.ACTIVITY);
             }
 
-            // filter by course code and activity
             if ((codeFilter.contains(course.getCode()) || codeFilter.isEmpty())
                     && (activityFilter.contains(activity) || activityFilter.isEmpty())) {
                 event.setVisibility(true);
@@ -82,19 +99,37 @@ public class Calendar {
         }
     }
 
+    /**
+     * <p> Saves or updates and event in the calendar. </p>
+     * <p>
+     * If the event ID already exists, it updates the corresponding event.
+     * Otherwise, it saves the event as a new event.
+     * </p>
+     *
+     * @param event the event to be saved.
+     *
+     * @author Group 12
+     * @since 2024-12-19
+     */
     public void saveEvent(Event event) {
-        // Update event if already present
         for (Event e : events) {
             if (event.getId().equals(e.getId())) {
                 e = event;
                 return;
             }
         }
-
-        // otherwise save as new event
         events.add(event);
     }
 
+    /**
+     * <p> Deletes an event from the calendar. </p>
+     * <p> Removes the event with the specified ID from the calendar. </p>
+     *
+     * @param id the ID of the event to be deleted.
+     *
+     * @author Group 12
+     * @since 2024-12-19
+     */
     public void deleteEvent(String id) {
         for (Event event : events) {
             if (event.getId().equals(id)) {
@@ -104,20 +139,37 @@ public class Calendar {
         }
     }
 
+    /**
+     * <p> Finds an event in the calendar by its ID. </p>
+     *
+     * @param id the ID of the event to be found.
+     * @return {@link Event} object with the specified ID, or null if not found.
+     * @throws IllegalArgumentException if the ID is null or empty.
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
     public Event findEvent(String id) {
         if (id == null || id.isEmpty()) {
             throw new IllegalArgumentException("Event ID must not be null or empty");
         }
 
-        // Use streams for a more functional approach (Java 8+)
         return events.stream()
                 .filter(event -> id.equals(event.getId()))
                 .findFirst()
                 .orElse(null);
     }
 
-    public void SetCourseAttendees(String courseCode, ArrayList<Attendee> attendees) throws IOException {
-        boolean CourseCodeDoesNotExist = true;
+    /**
+     * <p> Finds the events with the specified course code and assigns the attendees to it. </p>
+     *
+     * @param courseCode the course code of the event to assign attendees to.
+     * @param attendees the list of attendees to assign to the events.
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
+    public void SetCourseAttendees(String courseCode, ArrayList<Attendee> attendees) {
         for (Event event : events) {
             // If event does not have a course, continue
             if (!event.getDecorators().containsKey(EventDecoratorType.COURSE)) {
@@ -138,6 +190,14 @@ public class Calendar {
         }
     }
 
+    /**
+     * <p> Applies a schema/format to all events in the calendar. </p>
+     *
+     * @param schema the schema to apply to the events.
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
     public void SetEventSchemas(EventSchema schema) {
         for (Event event : events) {
             event.setSchema(schema);

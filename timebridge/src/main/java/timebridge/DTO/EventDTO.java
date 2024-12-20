@@ -5,6 +5,13 @@ import timebridge.model.event.component.Interval;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents an event, with summary, description, location, interval and attendees.
+ * Used to transfer data between the service and the controller.
+ *
+ * @since 2024-12-19
+ * @author Group 12
+ */
 public class EventDTO {
 
     private String summary;

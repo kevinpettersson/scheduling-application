@@ -1,6 +1,12 @@
 package timebridge.model.event.component;
 
 
+/**
+ * This class represents a course, with name and course code.
+ *
+ * @since 2024-12-19
+ * @author Group 12
+ */
 public class Course {
     private String name;
     private String code;

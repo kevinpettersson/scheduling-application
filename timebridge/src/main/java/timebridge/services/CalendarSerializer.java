@@ -10,6 +10,10 @@ import timebridge.model.Calendar;
 import timebridge.model.event.Event;
 import timebridge.model.event.component.Attendee;
 
+/**
+ * Serializes a {@link Calendar} object to the iCalendar format.
+ * Uses a {@link StringBuilder} to append necessary fields and serialized events.
+ */
 @Service
 public class CalendarSerializer {
 
@@ -29,6 +33,9 @@ public class CalendarSerializer {
     private static final String SUMMARY = "SUMMARY:";
     private static final String LOCATION = "LOCATION:";
     private static final String DESCRIPTION = "DESCRIPTION:";
+    private static final String ATTENDEE = "ATTENDEE;CN=";
+    private static final String DATE_PATTERN = "yyyyMMdd'T'HHmmss'Z'";
+
 
     private final StringBuilder sb;
 
@@ -36,13 +43,21 @@ public class CalendarSerializer {
         sb = new StringBuilder();
     }
 
+    /**
+     * <p> Serializes a {@link Calendar} object to a iCalendar format. </p>
+     *
+     * @param calendar The calendar to serialize.
+     * @return String - The serialized calendar in iCalendar format.
+     * @throws IOException if an I/O error occurs.
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
     public String serialize(Calendar calendar) throws IOException {
-        // Add starting fields
         sb.append(BEGIN_CALENDAR);
         sb.append(VERSION);
         sb.append(PRODID);
 
-        // Add each event to the calendar
         for (Event event : calendar.getEvents()) {
             // Only serialize visible events
             if (event.getVisibility()) {
@@ -55,6 +70,14 @@ public class CalendarSerializer {
         return sb.toString();
     }
 
+    /**
+     * <p> Serializes an {@link Event} object to a iCalendar format. </p>
+     *
+     * @param event The event to serialize.
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
     private void serializeEvent(Event event) {
         sb.append(BEGIN_EVENT);
         sb.append(DTSTART).append(serializeTimestamp(event.getInterval().getStart())).append("\n");
@@ -69,16 +92,33 @@ public class CalendarSerializer {
         sb.append(END_EVENT);
     }
 
+    /**
+     * <p> Formats the attendees of an {@link Event} object to iCalendar format. </p>
+     *
+     * @param event The event to format the attendees of.
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
     private void formatAttendee(Event event) {
         for (Attendee attendee : event.getAttendees()) {
-            sb.append("ATTENDEE;CN=").append(attendee.getName()).append(":mailto:").append(attendee.getMail())
+            sb.append(ATTENDEE).append(attendee.getName()).append(":mailto:").append(attendee.getMail())
                     .append("\n");
         }
     }
 
+    /**
+     * <p> Serializes a {@link ZonedDateTime} object to a iCalendar format. </p>
+     *
+     * @param dateTime The ZonedDateTime object to serialize.
+     * @return String - The serialized timestamp in correct format.
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
     private String serializeTimestamp(ZonedDateTime dateTime) {
         ZonedDateTime utcDateTime = dateTime.withZoneSameInstant(ZoneOffset.UTC);
-        DateTimeFormatter icalFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'");
-        return utcDateTime.format(icalFormatter);
+        DateTimeFormatter iCalFormatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+        return utcDateTime.format(iCalFormatter);
     }
 }

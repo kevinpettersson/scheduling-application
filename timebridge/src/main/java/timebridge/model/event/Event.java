@@ -9,6 +9,9 @@ import timebridge.model.event.component.Interval;
 import timebridge.model.event.decorator.EventDecorator;
 import timebridge.model.event.schema.EventSchema;
 
+/**
+ * This interface represents an event, with summary, description, location, interval and attendees.
+ */
 @JsonDeserialize(as = DefaultEvent.class)
 public interface Event {
 

@@ -26,6 +26,12 @@ import timebridge.model.event.component.Attendee;
 import timebridge.model.event.schema.EventSchema;
 import timebridge.services.CalendarService;
 
+/**
+ * Controller class for handling HTTP requests. Provides endpoints for uploading, downloading, modifying and deleting.
+ *
+ * @since 2024-12-19
+ * @author Group 12
+ */
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
 public class Controller {
