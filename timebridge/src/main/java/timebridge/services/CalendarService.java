@@ -21,8 +21,14 @@ import timebridge.repository.CalendarRepository;
 
 /**
  * Service class for managing calendar operations.
- * <p>This class provides methods for uploading, modifying, serializing calendars, etc.</p>
- * <p>Purpose of this class is to provide a layer of abstraction between the controller and the model/repository.</p>
+ * <p>
+ * This class provides methods for uploading, modifying, serializing calendars,
+ * etc.
+ * </p>
+ * <p>
+ * Purpose of this class is to provide a layer of abstraction between the
+ * controller and the model/repository.
+ * </p>
  */
 @Service
 public class CalendarService {
@@ -44,7 +50,8 @@ public class CalendarService {
      * @param ical the URL of the iCalendar file to upload.
      * @return the uploaded {@link Calendar} object.
      * @throws MalformedURLException if the provided URL is malformed.
-     * @throws IOException if an I/O error occurs during the upload process.
+     * @throws IOException           if an I/O error occurs during the upload
+     *                               process.
      *
      * @since 2024-12-19
      * @author Group 12
@@ -66,11 +73,15 @@ public class CalendarService {
     }
 
     /**
-     * Modify the calendar by filtering events, based on course and activity filters.
-     * <p>Retrieves the calendar from the database and saves the modified calendar back to the database.</p>
+     * Modify the calendar by filtering events, based on course and activity
+     * filters.
+     * <p>
+     * Retrieves the calendar from the database and saves the modified calendar back
+     * to the database.
+     * </p>
      *
-     * @param id the ID of the calendar to modify.
-     * @param courseFilter the list of course codes to filter by.
+     * @param id             the ID of the calendar to modify.
+     * @param courseFilter   the list of course codes to filter by.
      * @param activityFilter the list of activities to filter by.
      * @return the modified {@link Calendar} object.
      * @throws IOException if an I/O error occurs.
@@ -93,10 +104,13 @@ public class CalendarService {
 
     /**
      * Adds a new personal event to the calendar and saves it to the database.
-     * <p>Retrieves the calendar from the database and saves the modified calendar back to the database.</p>
+     * <p>
+     * Retrieves the calendar from the database and saves the modified calendar back
+     * to the database.
+     * </p>
      *
      * @param calendarId the ID of the calendar to add the event to.
-     * @param eventDTO the event data to add.
+     * @param eventDTO   the event data to add.
      * @return the modified {@link Calendar} object.
      *
      * @since 2024-12-19
@@ -124,8 +138,8 @@ public class CalendarService {
     /**
      * Modify an existing event in the calendar and save it to the database.
      *
-     * @param eventDTO the event data to modify.
-     * @param eventId the ID of the event to modify.
+     * @param eventDTO   the event data to modify.
+     * @param eventId    the ID of the event to modify.
      * @param calendarId the ID of the calendar to modify the event in.
      * @return the modified {@link Calendar} object.
      *
@@ -152,10 +166,11 @@ public class CalendarService {
     }
 
     /**
-     * Delete an existing event in the calendar and save the updated calendar to the database.
+     * Delete an existing event in the calendar and save the updated calendar to the
+     * database.
      *
      * @param calendarId the ID of the calendar to delete the event in.
-     * @param eventId the ID of the event to modify.
+     * @param eventId    the ID of the event to modify.
      * @return the modified {@link Calendar} object.
      *
      * @since 2024-12-19
@@ -194,7 +209,6 @@ public class CalendarService {
         }
     }
 
-
     /**
      * Retrieve the calendar from the database.
      *
@@ -221,7 +235,8 @@ public class CalendarService {
      * @since 2024-12-19
      * @author Group 12
      */
-    public Calendar setCourseAttendees(String calendarId, String courseCode, ArrayList<Attendee> attendees ) {
+    public Calendar setCourseAttendees(String calendarId, String courseCode, ArrayList<Attendee> attendees)
+            throws Exception {
         try {
             Calendar calendar = getCalendar(calendarId);
             calendar.SetCourseAttendees(courseCode, attendees);
