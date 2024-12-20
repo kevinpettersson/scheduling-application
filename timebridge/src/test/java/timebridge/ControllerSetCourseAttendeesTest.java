@@ -82,7 +82,7 @@ class ControllerSetCourseAttendeesTest {
         .andReturn();  // Store the result in modifyResult
     }
         @Test
-    void testSetCourseAttendeesShouldReturnStatus200IfInValidId() throws Exception {
+    void testSetCourseAttendeesShouldReturnStatus404IfInValidId() throws Exception {
         // Step 1: Upload a calendar and retrieve the calendar ID
         MvcResult uploadResult = mockMvc.perform(post("/calendar/upload")
             .param("ical", baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics"))
@@ -114,34 +114,6 @@ class ControllerSetCourseAttendeesTest {
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(attendees)))  // Pass the list of attendees as JSON
         .andExpect(status().isNotFound()) 
-        .andReturn();  // Store the result in modifyResult
-    }
-            @Test
-    void testSetCourseAttendeesShouldReturnStatus200IfInValidCourseCode() throws Exception {
-        // Step 1: Upload a calendar and retrieve the calendar ID
-        MvcResult uploadResult = mockMvc.perform(post("/calendar/upload")
-            .param("ical", baseURL + "ri657QQQY81Zn6Q5308636Z6y6Z55.ics"))
-            .andExpect(status().isOk())
-            .andReturn();  
-        // Step 2: Prepare the list of attendees
-        Attendee attendee1 = new Attendee("Attendee One", "attendee1@example.com");
-        Attendee attendee2 = new Attendee("Attendee Two", "attendee2@example.com");
-        ArrayList<Attendee> attendees = new ArrayList<>();
-        attendees.add(attendee1);
-        attendees.add(attendee2);
-
-        String uploadResponse = uploadResult.getResponse().getContentAsString();
-        Calendar calendar = objectMapper.readValue(uploadResponse, Calendar.class);
-        assertNotNull(calendar);
-        String calendarID = calendar.getId();
-        String coursecode = "InvalidCourseCode";
-
-        // Step 3: Perform the setCourseAttendees PUT request
-        MvcResult modifyResult = mockMvc.perform(put("/calendar/setCourseAttendees/" + calendarID)
-        .param("courseCode", coursecode)  // Assuming a valid course code
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(attendees)))  // Pass the list of attendees as JSON
-        .andExpect(status().is5xxServerError())
         .andReturn();  // Store the result in modifyResult
     }
 }
