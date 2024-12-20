@@ -160,16 +160,9 @@ public class Calendar {
                 .orElse(null);
     }
 
-    /**
-     * <p> Finds the events with the specified course code and assigns the attendees to it. </p>
-     *
-     * @param courseCode the course code of the event to assign attendees to.
-     * @param attendees the list of attendees to assign to the events.
-     *
-     * @since 2024-12-19
-     * @author Group 12
-     */
-    public void SetCourseAttendees(String courseCode, ArrayList<Attendee> attendees) {
+    
+    public void SetCourseAttendees(String courseCode, ArrayList<Attendee> attendees) throws IOException {
+        boolean CourseCodeDoesNotExist = false;
         for (Event event : events) {
             // If event does not have a course, continue
             if (!event.getDecorators().containsKey(EventDecoratorType.COURSE)) {
