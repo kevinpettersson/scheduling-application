@@ -4,21 +4,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import timebridge.model.event.component.Attendee;
-import timebridge.model.event.schema.EventSchema;
-import timebridge.repository.CalendarRepository;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import timebridge.DTO.EventDTO;
 import timebridge.model.Calendar;
 import timebridge.model.event.Event;
 import timebridge.model.event.EventFactory;
+import timebridge.model.event.component.Attendee;
+import timebridge.model.event.schema.EventSchema;
+import timebridge.repository.CalendarRepository;
 
 /**
  * Service class for managing calendar operations.
