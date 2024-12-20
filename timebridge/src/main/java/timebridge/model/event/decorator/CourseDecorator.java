@@ -32,23 +32,41 @@ public class CourseDecorator extends EventDecorator {
         StringBuilder summary = new StringBuilder();
         List<EventSchema.SummaryAttribute> schema = decoratedEvent.getSchema().getSummarySchema();
 
+        boolean courseNameAppended = false;
+        boolean courseCodeAppended = false;
+        boolean baseSummaryAppended = false;
+
         for (EventSchema.SummaryAttribute attribute : schema) {
             switch (attribute) {
                 case COURSE_NAME:
-                    summary.append(course.getName());
+                    if (!courseNameAppended) {
+                        appendAttribute(summary, course.getName());
+                        courseNameAppended = true;
+                    }
                     break;
                 case COURSE_CODE:
-                    summary.append(course.getCode());
+                    if (!courseCodeAppended) {
+                        appendAttribute(summary, course.getCode());
+                        courseCodeAppended = true;
+                    }
                     break;
                 default:
-                    summary.append(decoratedEvent.getSummary());
+                    if (!baseSummaryAppended) {
+                        appendAttribute(summary, decoratedEvent.getSummary());
+                        baseSummaryAppended = true;
+                    }
                     break;
             }
         }
+        String result = summary.toString().replaceAll("-\\s*-\\s*", "- ");
+        return result;
+    }
 
-        summary.append(" - ");
-
-        return summary.toString();
+    private void appendAttribute(StringBuilder summary, String value) {
+        if (!summary.isEmpty()) {
+            summary.append(" - ");
+        }
+        summary.append(value);
     }
 
     /**
@@ -63,6 +81,9 @@ public class CourseDecorator extends EventDecorator {
     public String getDescription() {
         StringBuilder desc = new StringBuilder();
         List<EventSchema.DescriptionAttribute> schema = decoratedEvent.getSchema().getDescriptionSchema();
+        boolean courseNameAppended = false;
+        boolean courseCodeAppended = false;
+        boolean baseSummaryAppended = false;
 
         if(schema.isEmpty()) {
             return decoratedEvent.getDescription();
@@ -71,17 +92,26 @@ public class CourseDecorator extends EventDecorator {
         for (EventSchema.DescriptionAttribute attribute : schema) {
             switch (attribute) {
                 case COURSE_NAME:
-                    desc.append(course.getName());
+                    if (!courseNameAppended) {
+                        appendAttribute(desc, course.getName());
+                        courseNameAppended = true;
+                    }
                     break;
                 case COURSE_CODE:
-                    desc.append(course.getCode());
+                    if(!courseCodeAppended) {
+                        appendAttribute(desc, course.getCode());
+                        courseCodeAppended = true;
+                    }
                     break;
                 default:
-                    desc.append(decoratedEvent.getDescription());
+                    if(!baseSummaryAppended) {
+                        appendAttribute(desc, decoratedEvent.getDescription());
+                        baseSummaryAppended = true;
+                    }
                     break;
             }
 
-            desc.append(" - ");
+            //desc.append(" - ");
         }
 
         return desc.toString();

@@ -31,6 +31,9 @@ public class ActivityDecorator extends EventDecorator {
         StringBuilder summary = new StringBuilder();
         List<EventSchema.SummaryAttribute> schema = decoratedEvent.getSchema().getSummarySchema();
 
+        boolean activityAppended = false;
+        boolean baseSummaryAppended = false;
+
         if (schema.isEmpty()) {
             return decoratedEvent.getSummary();
         }
@@ -38,15 +41,30 @@ public class ActivityDecorator extends EventDecorator {
         for (EventSchema.SummaryAttribute attribute : schema) {
             switch (attribute) {
                 case ACTIVITY:
-                    summary.append(activity);
+                    if (!activityAppended) {
+                        appendAttribute(summary, activity);
+                        activityAppended = true;
+                    }
                     break;
                 default:
-                    summary.append(decoratedEvent.getSummary());
+                    if (!baseSummaryAppended) {
+                        appendAttribute(summary, decoratedEvent.getSummary());
+                        baseSummaryAppended = true;
+                    }
                     break;
             }
         }
+        String result = summary.toString().replaceAll("-\\s*-\\s*", "- ");
+        return result;
+    }
 
-        return summary.toString();
+    private void appendAttribute(StringBuilder input, String value) {
+        if (!input.isEmpty()) {
+            input.append(" - ");
+            input.append(value);
+        } else {
+            input.append(value);
+        }
     }
 
     /**
@@ -61,6 +79,8 @@ public class ActivityDecorator extends EventDecorator {
     public String getDescription() {
         StringBuilder desc = new StringBuilder();
         List<EventSchema.DescriptionAttribute> schema = decoratedEvent.getSchema().getDescriptionSchema();
+        boolean activityAppended = false;
+        boolean baseDescriptionAppended = false;
 
         if (schema.isEmpty()) {
             return decoratedEvent.getDescription();
@@ -69,10 +89,16 @@ public class ActivityDecorator extends EventDecorator {
         for (EventSchema.DescriptionAttribute attribute : schema) {
             switch (attribute) {
                 case ACTIVITY:
-                    desc.append(activity);
+                    if(!activityAppended) {
+                        appendAttribute(desc, activity);
+                        activityAppended = true;
+                    }
                     break;
                 default:
-                    desc.append(decoratedEvent.getDescription());
+                    if(!baseDescriptionAppended) {
+                        appendAttribute(desc, decoratedEvent.getDescription());
+                        baseDescriptionAppended = true;
+                    }
                     break;
             }
 
