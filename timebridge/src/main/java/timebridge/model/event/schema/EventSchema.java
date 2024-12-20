@@ -3,6 +3,10 @@ package timebridge.model.event.schema;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents the schema of an event.
+ * This class provides methods to get and set the schema of an event by applying different attributes to the summary, description and location.
+ */
 public class EventSchema {
     private List<SummaryAttribute> summarySchema;
     private List<DescriptionAttribute> descriptionSchema;

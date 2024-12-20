@@ -1,5 +1,11 @@
 package timebridge.model.event.component;
 
+/**
+ * This class represents an attendee of an event, with name and mail.
+ *
+ * @since 2024-12-19
+ * @author Group 12
+ */
 public class Attendee {
     private String name;
     private String mail;

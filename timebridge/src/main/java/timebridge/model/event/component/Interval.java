@@ -3,6 +3,12 @@ package timebridge.model.event.component;
 
 import java.time.ZonedDateTime;
 
+/**
+ * This class represents an interval of time, with a start and end time.
+ *
+ * @since 2024-12-19
+ * @author Group 12
+ */
 public class Interval {
     private ZonedDateTime start;
     private ZonedDateTime end; 

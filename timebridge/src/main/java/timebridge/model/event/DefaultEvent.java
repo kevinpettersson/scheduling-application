@@ -11,6 +11,15 @@ import timebridge.model.event.component.Interval;
 import timebridge.model.event.decorator.EventDecorator;
 import timebridge.model.event.schema.EventSchema;
 
+/**
+ * Represents an event with various attributes.
+ * It implements the {@link Event} interface and provides getter and setter methods for these attributes.
+ * This class is used to store and manage the information related to an event.
+ *
+ * @since 2024-12-19
+ * @author Group 12
+ *
+ */
 public class DefaultEvent implements Event {
 
     @Id
