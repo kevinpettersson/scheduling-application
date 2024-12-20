@@ -7,7 +7,6 @@
 	import { goto } from '$app/navigation';
 	import { Upload } from 'lucide-svelte';
 	import { fetchCalendar } from '$lib/api.svelte';
-	import { calendar } from '$lib/store.svelte';
 
 	const form = superForm(defaults(zod(_importSchema)), {
 		SPA: true,
@@ -23,8 +22,8 @@
 	const { form: formData, enhance } = form;
 </script>
 
-<div class="bg-bridge flex flex-col items-center justify-center">
-	<h1 class="mb-6 text-5xl font-bold bowlby-one-regular">TimeBridge</h1>
+<div class="bg-bridge flex flex-col items-center justify-center color-">
+	<h1 class="bowlby-one-regular mb-6 text-5xl font-bold">TimeBridge</h1>
 	<form method="GET" use:enhance>
 		<Form.Field {form} name="url">
 			<Form.Control>

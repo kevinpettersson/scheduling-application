@@ -13,23 +13,38 @@ export type Course = {
     code: string;
 };
 
-export type Event = {
-    course: Course;
-    activity: string;
-    interval: Interval;
-    locations: Location[];
-    visibility: boolean;
+export type Attendee = {
+    name: string;
+    mail: string;
 };
 
-export type Format = {
-    summary: string[];
-    description: string[];
-    location: string[];
+export type Event = {
+    id: string;
+    summary: string;
+    activity: string;
+    location: string;
+    interval: Interval;
+    attendees: Attendee[];
+    visibility: boolean;
+    decorators: any;
+};
+
+export type EventDTO = {
+    summary: string;
+    description: string;
+    location: string;
+    interval: Interval;
+    attendees: Attendee[];
+}
+
+type EventSchema = {
+    summarySchema: String[];
+    descriptionSchema: String[];
+    locationSchema: String[];
 };
 
 export type Calendar = {
     id: string;
     name: string;
-    format: Format;
     events: Event[];
 };

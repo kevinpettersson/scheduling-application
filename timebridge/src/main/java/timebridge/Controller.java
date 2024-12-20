@@ -1,15 +1,11 @@
 package timebridge;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.ParseException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,186 +14,178 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import timebridge.services.CalendarParser;
-import timebridge.services.CalendarSerializer;
-import timebridge.model.Calendar;
-import timebridge.model.Event;
-import timebridge.repository.CalendarRepository;
+import org.springframework.web.server.ResponseStatusException;
 
+import timebridge.DTO.EventDTO;
+import timebridge.model.Calendar;
+import timebridge.model.event.component.Attendee;
+import timebridge.model.event.schema.EventSchema;
+import timebridge.services.CalendarService;
+
+/**
+ * Controller class for handling HTTP requests. Provides endpoints for uploading, downloading, modifying and deleting.
+ *
+ * @since 2024-12-19
+ * @author Group 12
+ */
 @RestController
-@CrossOrigin(origins = "http://localhost:5173") // Your frontend's origin
+@CrossOrigin(origins = "http://localhost:5173")
 public class Controller {
 
     @Autowired
-    private CalendarRepository repository;
+    private CalendarService service;
 
-    @GetMapping("/upload")
-    public ResponseEntity<Calendar> uploadCalendar(@RequestParam String ical)
-            throws MalformedURLException, IOException {
+    @GetMapping("/hello")
+    public String hello() {
+        return "Hello, World!";
+    }
+
+    @PostMapping("/calendar/upload")
+    public ResponseEntity<Calendar> uploadCalendar(@RequestParam String ical) {
         try {
-            // Create a URL object and open a connection to the iCalendar URL
-            URL url = new URL(ical);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-            // Check if the request was successful
-            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-            }
-
-            // Read the iCalendar file data from the URL
-            InputStream inputStream = connection.getInputStream();
-            String icsData = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-            CalendarParser parser = new CalendarParser();
-            Calendar calendar = parser.parse(icsData);
-
-            // Save the calendar to the database
-            repository.save(calendar);
-
-            return ResponseEntity.ok(calendar);
+            return ResponseEntity.ok(service.uploadCalendar(ical));
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Invalid iCalendar URL: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
+                    "Unable to fetch the iCalendar: " + e.getMessage(), e);
+        } catch (ParseException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                    "Failed to parse iCalendar data: " + e.getMessage(), e);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Unexpected error occured: " + e.getMessage(), e);
         }
     }
 
-    @PostMapping("/download")
-    public ResponseEntity<byte[]> downloadCalendar(@RequestBody Calendar calendar) throws IOException {
+    @GetMapping("/calendar/download/{id}")
+    public ResponseEntity<byte[]> downloadCalendar(@PathVariable String id) {
         try {
-            // Serialize the calendar to iCalendar format
-            CalendarSerializer serializer = new CalendarSerializer();
-            String icsData = serializer.serialize(calendar);
+            // Retrieve the calendar to use its name
+            Calendar calendar = service.getCalendar(id);
 
-            // Convert content to bytes
-            byte[] contentBytes = icsData.getBytes(StandardCharsets.UTF_8);
+            // Serialize the calendar to iCalendar format
+            byte[] bytes = service.SerializeCalendar(id);
 
             // Set HTTP headers
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + calendar.getName() + ".ics");
             headers.add(HttpHeaders.CONTENT_TYPE, "text/calendar; charset=UTF-8");
 
-            return new ResponseEntity<>(contentBytes, headers, HttpStatus.OK);
+            return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Calendar not found with ID: " + id, e);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Unexpected error occurred: " + e.getMessage(), e);
         }
     }
 
-    @PostMapping("/modify")
+    @PutMapping("/calendar/modify/{id}")
     public ResponseEntity<Calendar> modifyCalendar(
             @RequestParam ArrayList<String> courseFilter,
             @RequestParam ArrayList<String> activityFilter,
-            @RequestBody Calendar calendar) throws Exception {
+            @PathVariable String id) {
         try {
-            // Filter events based on course and activity filters
-            calendar.filterEvents(courseFilter, activityFilter);
-
-            // Save the modified calendar to the database
-            // If the calendar does exist in the database, it will be updated
-            repository.save(calendar);
-
-            return ResponseEntity.ok(calendar);
+            return ResponseEntity.ok(service.modifyCalendar(id, courseFilter, activityFilter));
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Calendar not found with ID: " + id, e);
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Invalid filter parameters: " + e.getMessage(), e);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Unexpected error occurred: " + e.getMessage(), e);
         }
     }
-    @PostMapping("/addEvent")
+
+    @PostMapping("/event/add")
     public ResponseEntity<Calendar> addEvent(
-        @RequestParam String calendarId,
-        @RequestBody Event event) throws Exception {
-            try {
-                // Retrieve the calendar from the database
-                Calendar calendar = repository.findById(calendarId).orElse(null);
-
-                // Check if the calendar exists
-                if (calendar == null) {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-                }
-                calendar.addEvent(event);
-                repository.save(calendar);
-                return ResponseEntity.ok(calendar);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-            }
-    }
-
-    @DeleteMapping("/deleteEvent")
-    public ResponseEntity<Calendar> deleteEvent(
-        @RequestParam String calendarId,
-        @RequestParam String eventId) throws Exception {
+            @RequestParam String calendarId,
+            @RequestBody EventDTO eventDTO) {
         try {
-            // Retrieve the calendar from the database
-            Calendar calendar = repository.findById(calendarId).orElse(null);
-
-            // Check if the calendar exists
-            if (calendar == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-            calendar.deleteEvent(eventId);
-            repository.save(calendar);
-            return ResponseEntity.ok(calendar);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    @PostMapping("/saveEvent")
-    public ResponseEntity<Calendar> saveEvent(
-        @RequestParam String calendarId,
-        @RequestBody Event newEventDetails) throws Exception {
-        try {
-            // Retrieve the calendar from the database
-            Calendar calendar = repository.findById(calendarId).orElse(null);
-
-            // Check if the calendar exists
-            if (calendar == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-
-            calendar.saveEvent(newEventDetails);
-            repository.save(calendar);
-            return ResponseEntity.ok(calendar);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    @GetMapping("/public/{id}")
-    public ResponseEntity<byte[]> getPublicCalendar(@PathVariable String id) {
-        try {
-            // Retrieve the calendar from the database
-            Calendar calendar = repository.findById(id).orElse(null);
-
-            // Check if the calendar exists
-            if (calendar == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-
-            // Serialize the calendar to iCalendar format
-            CalendarSerializer serializer = new CalendarSerializer();
-            String icsData = serializer.serialize(calendar);
-
-            // Convert content to bytes
-            byte[] contentBytes = icsData.getBytes(StandardCharsets.UTF_8);
-
-            // Set HTTP headers
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + calendar.getName() + ".ics");
-            headers.add(HttpHeaders.CONTENT_TYPE, "text/calendar; charset=UTF-8");
-
-            return new ResponseEntity<>(contentBytes, headers, HttpStatus.OK);
+            return ResponseEntity.ok(service.addEvent(calendarId, eventDTO));
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Calendar not found with ID: " + calendarId, e);
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Invalid event data: " + e.getMessage(), e);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Unexpected error occurred: " + e.getMessage(), e);
+        }
+    }
+
+    @PutMapping("/event/modify")
+    public ResponseEntity<Calendar> modifyEvent(
+            @RequestParam String calendarId,
+            @RequestParam String eventId,
+            @RequestBody EventDTO eventDTO) {
+        try {
+            return ResponseEntity.ok(service.modifyEvent(eventDTO, eventId, calendarId));
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Event or Calendar not found with provided IDs.", e);
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Invalid event data: " + e.getMessage(), e);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Unexpected error occurred: " + e.getMessage(), e);
+        }
+    }
+
+    @DeleteMapping("/event/delete")
+    public ResponseEntity<Calendar> deleteEvent(
+            @RequestParam String calendarId,
+            @RequestParam String eventId) {
+        try {
+            return ResponseEntity.ok(service.deleteEvent(calendarId, eventId));
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Event or Calendar not found with provided IDs.", e);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Unexpected error occurred: " + e.getMessage(), e);
+        }
+    }
+
+    @PutMapping("calendar/setCourseAttendees/{id}")
+    public ResponseEntity<Calendar> setCourseAttendees(
+            @PathVariable String id,
+            @RequestParam String courseCode,
+            @RequestBody ArrayList<Attendee> attendees) {
+        try {
+            return ResponseEntity.ok(service.setCourseAttendees(id, courseCode, attendees));
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Calendar not found with ID: " + id, e);}
+        catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Unexpected error occurred: " + e.getMessage(), e);
+        }
+    }
+
+    @PutMapping("calendar/applySchema/{id}")
+    public ResponseEntity<Calendar> setEventSchemas(
+            @PathVariable String id,
+            @RequestBody EventSchema schema) {
+        try {
+            return ResponseEntity.ok(service.setEventSchemas(id, schema));
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Calendar not found with ID: " + id, e);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Unexpected error occurred: " + e.getMessage(), e);
         }
     }
 }

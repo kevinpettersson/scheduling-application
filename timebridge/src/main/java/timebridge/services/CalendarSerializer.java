@@ -4,16 +4,17 @@ import java.io.IOException;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.UUID;
 
-import timebridge.model.Attendee;
+import org.springframework.stereotype.Service;
 import timebridge.model.Calendar;
-import timebridge.model.Event;
-import timebridge.model.Format;
-import timebridge.model.Location;
+import timebridge.model.event.Event;
+import timebridge.model.event.component.Attendee;
 
-
+/**
+ * Serializes a {@link Calendar} object to the iCalendar format.
+ * Uses a {@link StringBuilder} to append necessary fields and serialized events.
+ */
+@Service
 public class CalendarSerializer {
 
     private static final String ORG = "Chalmers";
@@ -32,6 +33,9 @@ public class CalendarSerializer {
     private static final String SUMMARY = "SUMMARY:";
     private static final String LOCATION = "LOCATION:";
     private static final String DESCRIPTION = "DESCRIPTION:";
+    private static final String ATTENDEE = "ATTENDEE;CN=";
+    private static final String DATE_PATTERN = "yyyyMMdd'T'HHmmss'Z'";
+
 
     private final StringBuilder sb;
 
@@ -39,17 +43,25 @@ public class CalendarSerializer {
         sb = new StringBuilder();
     }
 
+    /**
+     * <p> Serializes a {@link Calendar} object to a iCalendar format. </p>
+     *
+     * @param calendar The calendar to serialize.
+     * @return String - The serialized calendar in iCalendar format.
+     * @throws IOException if an I/O error occurs.
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
     public String serialize(Calendar calendar) throws IOException {
-        // Add starting fields
         sb.append(BEGIN_CALENDAR);
         sb.append(VERSION);
         sb.append(PRODID);
 
-        // Add each event to the calendar
         for (Event event : calendar.getEvents()) {
             // Only serialize visible events
             if (event.getVisibility()) {
-                serializeEvent(event, calendar.getFormat());
+                serializeEvent(event);
             }
         }
 
@@ -58,80 +70,55 @@ public class CalendarSerializer {
         return sb.toString();
     }
 
-    private void serializeEvent(Event event, Format format) {
+    /**
+     * <p> Serializes an {@link Event} object to a iCalendar format. </p>
+     *
+     * @param event The event to serialize.
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
+    private void serializeEvent(Event event) {
         sb.append(BEGIN_EVENT);
         sb.append(DTSTART).append(serializeTimestamp(event.getInterval().getStart())).append("\n");
         sb.append(DTEND).append(serializeTimestamp(event.getInterval().getEnd())).append("\n");
-        sb.append(UID).append(getUniqueIdetifier()).append("\n");
+        sb.append(UID).append(event.getId()).append("\n");
         sb.append(DTSTAMP).append(serializeTimestamp(ZonedDateTime.now(ZoneOffset.UTC))).append("\n");
         sb.append(LAST_MODIFIED).append(serializeTimestamp(ZonedDateTime.now(ZoneOffset.UTC))).append("\n");
-
-        formatSummary(event, format);
-        formatLocation(event, format);
-        formatDescription(event, format);
+        sb.append(SUMMARY).append(event.getSummary()).append("\n");
+        sb.append(LOCATION).append(event.getLocation()).append("\n");
+        sb.append(DESCRIPTION).append(event.getDescription()).append("\n");
         formatAttendee(event);
-
         sb.append(END_EVENT);
     }
 
-    private void formatSummary(Event event, Format format) {
-        sb.append(SUMMARY);
-        for (String field : format.getSummary()) {
-            appendField(event, field, format.getSummary());
-        }
-        sb.append("\n");
-    }
-
-    private void formatLocation(Event event, Format format) {
-        sb.append(LOCATION);
-        for (Location loc : event.getLocations()) {
-            if (format.getLocation().contains("building")) {
-                sb.append("Byggnad: ").append(loc.getBuilding()).append(", ");
-            }
-            if (format.getLocation().contains("room")) {
-                sb.append("Rum: ").append(loc.getRoom());
-            }
-        }
-        sb.append("\n");
-    }
-
-    private void formatDescription(Event event, Format format) {
-        sb.append(DESCRIPTION);
-        for (String field : format.getDescription()) {
-            appendField(event, field, format.getDescription());
-        }
-        sb.append("\n");
-    }
-    
+    /**
+     * <p> Formats the attendees of an {@link Event} object to iCalendar format. </p>
+     *
+     * @param event The event to format the attendees of.
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
     private void formatAttendee(Event event) {
         for (Attendee attendee : event.getAttendees()) {
-            sb.append("ATTENDEE;CN=").append(attendee.getName()).append(":mailto:").append(attendee.getMail()).append("\n");
+            sb.append(ATTENDEE).append(attendee.getName()).append(":mailto:").append(attendee.getMail())
+                    .append("\n");
         }
     }
 
-    private void appendField(Event event, String field, ArrayList<String> formatInstance) {
-        if (field.equals("code")) {
-            sb.append(event.getCourse().getCode());
-        } else if (field.equals("activity")) {
-            sb.append(event.getActivity());
-        } else if (field.equals("name")) {
-            sb.append(event.getCourse().getName());
-        }
-
-        // Add separator if not last field
-        if (formatInstance.indexOf(field) != formatInstance.size() - 1) {
-            sb.append(" - ");
-        }
-    }
-
-    private String getUniqueIdetifier() {
-        return UUID.randomUUID().toString() + "@timebridge.se";
-    }
-
+    /**
+     * <p> Serializes a {@link ZonedDateTime} object to a iCalendar format. </p>
+     *
+     * @param dateTime The ZonedDateTime object to serialize.
+     * @return String - The serialized timestamp in correct format.
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
     private String serializeTimestamp(ZonedDateTime dateTime) {
         ZonedDateTime utcDateTime = dateTime.withZoneSameInstant(ZoneOffset.UTC);
-        DateTimeFormatter icalFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'");
-        return utcDateTime.format(icalFormatter);
+        DateTimeFormatter iCalFormatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
+        return utcDateTime.format(iCalFormatter);
     }
-
 }

@@ -5,11 +5,6 @@ class CalendarStore {
         {
             id: '',
             name: '',
-            format: {
-                summary: [],
-                description: [],
-                location: []
-            },
             events: []
         }
     );
@@ -22,40 +17,31 @@ class CalendarStore {
         return this.data.name;
     }
 
-    get format() {
-        return this.data.format;
-    }
-
     get events() {
         return this.data.events;
     }
 
     // Get all unique course codes
     courseCodes() {
-        const codes = this.data.events.map(event => event.course.code);
+        const codes = this.data.events.map(event => event.decorators.COURSE.code);
         return [...new Set(codes)];
     }
 
     // Get all unique course names
     courseNames() {
-        const names = this.data.events.map(event => event.course.name);
+        const names = this.data.events.map(event => event.decorators.COURSE.name);
         return [...new Set(names)];
     }
 
     // Get all unique activities
     courseActivities() {
-        const activities = this.data.events.map(event => event.activity);
+        const activities = this.data.events.map(event => event.decorators.ACTIVITY);
         return [...new Set(activities)];
     }
 
     // Get visible events
     visibleEvents() {
         return this.data.events.filter(event => event.visibility);
-    }
-
-    // Set format
-    setFormat(format: Calendar['format']) {
-        this.data.format = format;
     }
 }
 

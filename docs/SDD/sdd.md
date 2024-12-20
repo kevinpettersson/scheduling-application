@@ -8,9 +8,8 @@
 4. [References](#references)
 5. [Overview](#overview)
 6. [Design](#design)
-7. [Implementation](#implementation)
+7. [Sequence Diagrams](#sequence-diagrams)
 8. [Testing](#testing)
-9. [Appendix](#appendix)
 
 ## Introduction
 
@@ -41,7 +40,7 @@ This software design document outlines the design and implementation of TimeBrid
 
 TimeBridge is built using a MVC architecture and is divided into three main components: the backend server, the frontend client, and the database.
 
-![overview](img/overview.png)
+![overview](img/overview-final.png)
 
 ### Backend Server
 
@@ -53,8 +52,8 @@ The backend server is built using Spring Boot, with the following dependencies:
 ### Frontend Client 
 
 The frontend client is built using Svelte, with the following dependencies:
-    - ShadCN: for building Svelte components.
-    - Tailwind CSS: for styling the components.
+- ShadCN: for building Svelte components.
+- Tailwind CSS: for styling the components.
 
 ### Database 
 
@@ -75,9 +74,15 @@ The Spring Boot backend revoles around the following components:
 - **Parser & Serializer**: Converts calendar data between Calendar objects and iCalendar format.
 - **Repository**: Interacts with the MongoDB database to store and retrieve calendar data.
 
-For more detail, a representation of the backend design is shown below:
+For more detail, a representation of the model is shown below:
 
-![design](UML/out/timebridge/timebridge.svg)
+![model](img/model-final.png)
+
+and the important aspects of the event handling of the model are:
+
+![event](img/event-final.png)
+
+As you can see, we use a decorator pattern to add features like course attributes, activity attributes and locale attributes to the event. This also allows us to easily add new features in the future.
 
 # Sequence Diagrams
 
@@ -104,4 +109,6 @@ The user clicks the "Export" button. A url is shown, and a download button is di
 # Testing
 
 We use JUnit for unit testing, and Postman for manual testing. You can find the test cases in the `test` directory of the backend application.
+
+
 

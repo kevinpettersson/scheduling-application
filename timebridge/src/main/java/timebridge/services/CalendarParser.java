@@ -1,6 +1,11 @@
 package timebridge.services;
 
+import org.springframework.stereotype.Service;
 import timebridge.model.*;
+import timebridge.model.event.component.Course;
+import timebridge.model.event.component.Interval;
+import timebridge.model.event.component.Locale;
+import timebridge.model.event.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,28 +19,50 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * <p> Parses iCal data and creates a {@link Calendar} object. </p>
+ *
+ * @since 2024-12-19
+ * @author Group 12
+ */
+@Service
 public class CalendarParser {
 
     public CalendarParser() {
     }
 
+
+    /**
+     * <p> Parses iCal data and creates a {@link Calendar} object. </p>
+     *
+     * @param iCal iCal data to parse
+     * @return a {@link Calendar} object with the parsed events
+     * @throws IOException if an I/O error occurs
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
     public Calendar parse(String iCal) throws IOException {
-        // Normalize the iCal data, so that values are on the same line as the key
         String normalizedIcs = normalizeIcs(iCal);
 
-        // Create a BufferedReader from the normalized iCal data
         BufferedReader reader = new BufferedReader(
                 new StringReader(normalizedIcs));
 
-        // Parse events from the BufferedReader
         ArrayList<Event> events = parseEvents(reader);
 
-        // Create and return a new Calendar object with the parsed events
         return new Calendar("My Calendar", events);
     }
 
-    // Method to normalize iCal data so that the SUMMARY, LOCATION,
-    // and other values are on the same line as the key
+    /**
+     * <p> Normalizes iCal data so that the keys(SUMMARY, LOCATION, etc.) are on the same line as the values. </p>
+     *
+     * @param ics iCal data to normalize.
+     * @return a string, normalized iCal data.
+     * @throws IOException if an I/O error occurs.
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
     private String normalizeIcs(String ics) throws IOException {
         BufferedReader reader = new BufferedReader(new StringReader(ics));
         StringWriter writer = new StringWriter();
@@ -43,19 +70,27 @@ public class CalendarParser {
         for (String line; (line = reader.readLine()) != null;) {
             writer.write(line.startsWith(" ") ? line.trim() : "\n" + line.trim());
         }
-
         return writer.toString().trim();
     }
 
-    // Method to parse events from the input BufferedReader
+    /**
+     * <p>Reads the input line by line, looking for the start of an event (indicated by
+     * the line "BEGIN:VEVENT"). Once an event is detected, it delegates the actual parsing to the
+     * {@link #parseEvent(BufferedReader)} method.</p>
+     *
+     * @param reader BufferedReader to parse events from
+     * @return ArrayList<Event> contains all the parsed events from input data.
+     * @throws IOException if an I/O error occurs.
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
     private ArrayList<Event> parseEvents(BufferedReader reader)
             throws IOException {
         ArrayList<Event> events = new ArrayList<>();
         String line;
 
-        // Read each line from the input
         while ((line = reader.readLine()) != null) {
-            // Check if the line indicates the start of an event, and parse it
             if (line.startsWith("BEGIN:VEVENT")) {
                 events.addAll(parseEvent(reader));
             }
@@ -63,15 +98,25 @@ public class CalendarParser {
         return events;
     }
 
-    // Method to parse a single event from the input BufferedReader
+    /**
+     * <p> Parses a single event from the input BufferedReader.
+     * Based on the key of the line, it delegates the parsing of the value to the appropriate method.</p>
+     * See: {@link #parseDateTime(String)}, {@link #parseCourses(String)}, {@link #parseActivity(String)}.
+     *
+     * @param reader BufferedReader to parse events from.
+     * @return ArrayList<Event> contains the parsed event from input data.
+     * @throws IOException if an I/O error occurs.
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
     private ArrayList<Event> parseEvent(BufferedReader reader) throws IOException {
         ArrayList<Course> courses = new ArrayList<>();
-        String activity = null;
+        String activity = new String();
         Interval interval = new Interval();
-        ArrayList<Location> locations = new ArrayList<Location>();
+        ArrayList<Locale> locations = new ArrayList<Locale>();
         String line;
 
-        // Read each line until the end of the event
         while (!(line = reader.readLine().trim()).equals("END:VEVENT")) {
             // Skip if line does not have prefix
             if (!line.contains(":")) {
@@ -82,26 +127,20 @@ public class CalendarParser {
             String prefix = line.substring(0, line.indexOf(':'));
             line = line.substring(prefix.length() + 1);
 
-            // Parse and set the event details based on the prefix
             switch (prefix) {
-                // Parse and set the start datetime of the event
                 case "DTSTART":
                     interval.setStart(parseDateTime(line));
                     break;
-                // Parse and set the end datetime of the event
                 case "DTEND":
                     interval.setEnd(parseDateTime(line));
                     break;
-                // Parse and set the summary (course & activity) of the event
                 case "SUMMARY":
                     courses = parseCourses(line);
                     activity = parseActivity(line);
                     break;
-                // Parse and add the location(s) of the event
                 case "LOCATION":
-                    locations = parseLocations(line);
+                    locations = parseLocales(line);
                     break;
-                // Handle any other prefixes if necessary
                 default:
                     break;
             }
@@ -109,25 +148,39 @@ public class CalendarParser {
 
         ArrayList<Event> events = new ArrayList<>();
 
-        // TEMP create a list of attendees, this needs to be implemented properly
-        // by checking if the ical file contains attendees for each event.
-        ArrayList<Attendee> attendees = new ArrayList<>();
-
         for (Course course : courses) {
-            events.add(new Event(course, activity, interval, locations, attendees));
+            events.add(EventFactory.createTimeEditEvent(interval, course, activity, locations));
         }
 
         return events;
     }
 
-    // Method to parse a datetime string and return codea ZonedDateTime object
+    /**
+     * <p> Parses a datetime string and returns a {@link ZonedDateTime} object representing the parsed datetime. </p>
+     *
+     * @param line String to parse as a datetime.
+     * @return {@link ZonedDateTime} object representing the parsed datetime.
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
     private ZonedDateTime parseDateTime(String line) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
                 "yyyyMMdd'T'HHmmss'Z'");
         return ZonedDateTime.parse(line, formatter.withZone(ZoneOffset.UTC));
     }
 
-    // Method to parse the course from the summary
+    /**
+     * <p> Parses the course information from the provided line into an {@link Course} object. </p>
+     * <p> Extracts course codes and names removes unwanted characters,
+     * and returns a list of {@link Course} objects. </p>
+     *
+     * @param line String to parse as courses.
+     * @return {@link ArrayList<Course>} containing the parsed courses.
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
     private ArrayList<Course> parseCourses(String line) {
         ArrayList<Course> courses = new ArrayList<>();
         String tempLine = line;
@@ -168,14 +221,31 @@ public class CalendarParser {
         return courses;
     }
 
-    // Method to parse the activity from the summary
+    /**
+     * <p> Parses the activity from the summary, where the activity comes after the last comma. </p>
+     *
+     * @param line String to parse as activity.
+     * @return String containing the parsed activity.
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
     private String parseActivity(String line) {
         return line.replaceAll(".*,(\\s*[^,]+)$", "$1").trim();
     }
 
+    /**
+     * <p> Parses the location(s) from the provided line into an {@link Locale} object. </p>
+     *
+     * @param line String to parse as locations.
+     * @return {@link ArrayList<Locale>} containing the parsed locations.
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
     // Method to parse the location(s) of an event
-    private ArrayList<Location> parseLocations(String line) {
-        ArrayList<Location> locations = new ArrayList<>();
+    private ArrayList<Locale> parseLocales(String line) {
+        ArrayList<Locale> locales = new ArrayList<>();
 
         line = line.replace("\\n", "\n");
         line = line.trim();
@@ -196,9 +266,9 @@ public class CalendarParser {
             String building = location.substring(location.indexOf("Byggnad:"), secondDotIndex).replace("Byggnad:", "")
                     .trim();
 
-            locations.add(new Location(building, room));
+            locales.add(new Locale(building, room));
         }
 
-        return locations;
+        return locales;
     }
 }

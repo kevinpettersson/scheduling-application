@@ -7,6 +7,8 @@
 	import { downloadCalendar } from '$lib/api.svelte';
 	import { calendar } from '$lib/store.svelte';
 	import Separator from '../ui/separator/separator.svelte';
+
+	const API_BASE_URL = import.meta.env.VITE_PUBLIC_API_BASE_URL || 'http://localhost:8080';
 </script>
 
 <Drawer.Root>
@@ -25,12 +27,12 @@
 				<div class="flex items-center space-x-2">
 					<div class="grid flex-1 gap-2">
 						<Label for="link" class="sr-only">Link</Label>
-						<Input id="link" value="http://localhost:8080/public/{calendar.id}" readonly />
+						<Input id="link" value="{API_BASE_URL}/calendar/download/{calendar.id}" readonly />
 					</div>
-					<Button variant="outline" size="icon" class="px-3">
+					<!-- <Button variant="outline" size="icon" class="px-3">
 						<span class="sr-only"> Copy </span>
 						<Copy class="h-4 w-4" />
-					</Button>
+					</Button> -->
 				</div>
 				<Separator />
 			</div>
