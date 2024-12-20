@@ -40,15 +40,15 @@ These requirements works as a guideline when developing the product, as well as 
 Based on these requirements, we created a GUI mockup in Figma. Our goal is to create a user interface that is clean, visually appealing and easy for the user to navigate. 
 This is what our Figma prototype looked like for our product:
 
-![alt text](image.png)
-![alt text](image-5.png)
+![alt text](images/image.png)
+![alt text](images/image-5.png)
 
 Since our initial Figma prototype, we have made adjustments based on user testing feedback and the constraints of the UI systems we are working with. This is how our current version of the UI looks like:
 
-![alt text](image-9.png)
-![alt text](image-10.png)
-![alt text](image-11.png)
-![alt text](image-12.png)
+![alt text](images/image-9.png)
+![alt text](images/image-10.png)
+![alt text](images/image-11.png)
+![alt text](images/image-12.png)
 
 
 ### Epics and User Stories
@@ -61,7 +61,7 @@ Our Epics, _with its corresponding user stories_, could be found in our reposito
 
 
 Epic 1 - Minimal Viable Procuct:
-![alt text](image-13.png)
+![alt text](images/image-13.png)
 
 From the first epic, these are the user stories that has been created:
 
@@ -105,7 +105,7 @@ Acceptance criteria:
 
 
 Epic 2 - Additional Features:
-![alt text](image-14.png)
+![alt text](images/image-14.png)
 
 From the second epic, these are the user stories that has been created:
 
@@ -139,7 +139,7 @@ Acceptance Criteria:
 
 
 Epic 3 - Testing and error handling:
-![alt text](image-15.png)
+![alt text](images/image-15.png)
 
 From our last epic, these are the user stories that has been created:
 
@@ -191,6 +191,6 @@ This is our DoD, definition of *done*:
 ## Domain Model
 This is our domain model over TimeBridge:
 
-![alt text](image-16.png)
+![alt text](images/image-16.png)
 
 
