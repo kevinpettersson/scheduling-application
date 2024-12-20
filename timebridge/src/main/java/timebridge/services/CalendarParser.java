@@ -43,6 +43,11 @@ public class CalendarParser {
      * @author Group 12
      */
     public Calendar parse(String iCal) throws IOException {
+        // Check if the input is an actual iCal file
+        if (!iCal.startsWith("BEGIN:VCALENDAR")) {
+            throw new IllegalArgumentException("Input is not a valid iCal file");
+        }
+
         String normalizedIcs = normalizeIcs(iCal);
 
         BufferedReader reader = new BufferedReader(
