@@ -13,6 +13,9 @@ import static timebridge.model.event.schema.EventSchema.LocationAttribute.BUILDI
 import static timebridge.model.event.schema.EventSchema.LocationAttribute.ROOM;
 
 
+/**
+ * This class represents a decorator for an event that adds a locale to the event.
+ */
 public class LocaleDecorator extends EventDecorator {
     private ArrayList<Locale> locales;
 
@@ -21,6 +24,15 @@ public class LocaleDecorator extends EventDecorator {
         this.locales = locales;
     }
 
+    /**
+     * Returns the location of the event with the locale added to the location.
+     * Separates for each unique building and separates buildings and rooms if the schema contains both.
+     *
+     * @return the location of the event with the locale added.
+     *
+     * @since 2024-12-19
+     * @version 1.0
+     */
     @Override
     public String getLocation() {
         StringBuilder location = new StringBuilder();
@@ -37,17 +49,14 @@ public class LocaleDecorator extends EventDecorator {
         }
 
         for (Locale locale : locales) {
-            // Schema contains the building attribute and the location does not already contain the building
             if (schema.contains(BUILDING) && !location.toString().contains(locale.getBuilding())) {
                 location.append(locale.getBuilding());
 
-                // Add separator if rooms are to be included after building
                 if (schema.contains(ROOM)) {
                     location.append(" ➤ ");
                 }
             }
 
-            // Schema contains the room attribute and the location does not already contain the room
             if (schema.contains(ROOM) && !location.toString().contains(locale.getRoom())) {
                 location.append(locale.getRoom());
             }
@@ -62,10 +71,17 @@ public class LocaleDecorator extends EventDecorator {
                 }
             }
         }
-
         return location.toString();
     }
 
+    /**
+     * Returns a map of decorators with an added entry to the HashMap with the decorator type and the value of the locale field.
+     *
+     * @return a map of event decorators.
+     *
+     * @since 2024-12-19
+     * @author Group 12
+     */
     @Override
     public HashMap<EventDecoratorType, Object> getDecorators() {
         HashMap<EventDecoratorType, Object> map = super.getDecorators();

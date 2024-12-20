@@ -1,5 +1,11 @@
 package timebridge.model.event.component;
 
+/**
+ * This class represents a locale with building and room.
+ *
+ * @since 2024-12-19
+ * @author Group 12
+ */
 public class Locale {
     private String building;
     private String room;

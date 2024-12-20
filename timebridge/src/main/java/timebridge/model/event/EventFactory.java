@@ -10,6 +10,10 @@ import timebridge.model.event.decorator.ActivityDecorator;
 import timebridge.model.event.decorator.CourseDecorator;
 import timebridge.model.event.decorator.LocaleDecorator;
 
+/**
+ * Factory class for creating events.
+ * This class provides methods to create empty, personal and time edit events.
+ */
 public abstract class EventFactory {
 
     public Event createEmptyEvent(Interval interval) {
