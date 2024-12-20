@@ -102,12 +102,16 @@ public class ActivityDecorator extends EventDecorator {
                     break;
             }
 
-            // Add separator, but only once
+           /*  // Add separator, but only once
             if (schema.indexOf(attribute) < schema.size() - 1) {
                 desc.append(" - ");
             }
+                */
         }
-        return desc.toString();
+
+        String temp = desc.toString();
+        String ret = temp.replaceAll("-\\s*-\\s*", "- ");
+        return ret;
     }
 
     /**
