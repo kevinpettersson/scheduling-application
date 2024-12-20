@@ -117,7 +117,7 @@ public class Calendar {
     }
 
     public void SetCourseAttendees(String courseCode, ArrayList<Attendee> attendees) throws IOException {
-        boolean CourseCodeDoesNotExist = true;
+        boolean CourseCodeDoesNotExist = false;
         for (Event event : events) {
             // If event does not have a course, continue
             if (!event.getDecorators().containsKey(EventDecoratorType.COURSE)) {
