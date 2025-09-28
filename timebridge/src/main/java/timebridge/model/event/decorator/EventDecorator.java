@@ -1,7 +1,6 @@
 package timebridge.model.event.decorator;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import timebridge.model.event.Event;
 import timebridge.model.event.EventDecoratorType;

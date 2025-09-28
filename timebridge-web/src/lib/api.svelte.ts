@@ -2,7 +2,7 @@ import { calendar } from './store.svelte';
 import type { EventDTO, EventSchema, Event, Attendee } from './types/calendar';
 
 // Fetch the base API URL from environment variables
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+const API_BASE_URL = 'http://localhost:8080';
 
 // Prevent re-triggering during update
 let requesting = false
@@ -17,7 +17,6 @@ export async function fetchCalendar(url: string) {
             `${API_BASE_URL}/calendar/upload?ical=${encodeURIComponent(url)}`,
             {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
             }
         );
         calendar.data = await response.json();

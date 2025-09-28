@@ -1,27 +1,51 @@
-# DIT213-GROUP-15
+# TimeBridge
 
-## TimeBridge
+
 
 ## Information
 More information about our project including the **Requirements Analysis Document (RAD)** and **System Design Document (SDD)**, can be found in the `docs` folder.
 
-## Installation
-Before running the application, **ensure the following are installed on your system**:
-1. Java Development Kit (JDK)
-3. Apache Maven eg. https://maven.apache.org/install.html
-2. Node.js eg. https://nodejs.org/en
-
 ## Running the application
+### Step 1 – Install Docker and Docker Compose
+Make sure Docker **and Docker Compose** are installed on your machine.
 
-### Windows
+- On **(Windows/Mac**), Docker Compose is often included by default.
 
-1. Open new terminal and `cd timebridge` then `mvn clean install && mvn spring-boot:run` to start the backend server.
-2. Open another terminal and `cd timebridge-web` then `npm install && npm run dev` to start the frontend client.
+- On **Linux**, Docker Compose might not be installed by default
 
-### Linux and MacOS
+You can download Docker Desktop here: [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
 
-Open a terminal and `./run.sh` to start the application. This will start the backend server and the frontend client.
+To verify installation, run:
+```bash
+docker --version
+docker compose version
+```
 
-### Accessing the application
+---
 
-To access the application, go to (http://localhost:5173)
+### Step 2 - Clone the repository
+Clone the repository into a folder of your choice:
+```bash
+git clone https://github.com/kevinpettersson/scheduling-application.git
+```
+
+---
+
+### Step 3 - Build and start the Docker container
+Navigate to the project directory:
+```bash
+cd /path/to/devops-microservices-project
+```
+Then run Docker Compose:
+```bash
+docker compose up --build
+```
+The first build may take a few minutes as Docker install all dependencies.
+
+---
+
+### Step 4 - Access the Web Application
+Once the containers are up and running, open your browser and go to:
+```arduino
+http://localhost:3000/
+```

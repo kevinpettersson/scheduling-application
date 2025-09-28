@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -59,9 +60,12 @@ public class CalendarService {
     public Calendar uploadCalendar(String ical) throws MalformedURLException, IOException {
         try {
             // Open connection and read the iCalendar file data from the URL
-            HttpURLConnection connection = (HttpURLConnection) (new URL(ical)).openConnection();
+            System.out.println("Fetching iCal URL: " + ical);
+            HttpURLConnection connection = (HttpURLConnection) URI.create(ical).toURL().openConnection();
+            connection.setRequestProperty("User-Agent", "Mozilla/5.0"); // some servers reject Java default UA
             InputStream inputStream = connection.getInputStream();
             String icsData = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+            System.out.println("Fetched iCal data length: " + icsData.length());
 
             Calendar calendar = parser.parse(icsData);
             repository.save(calendar);

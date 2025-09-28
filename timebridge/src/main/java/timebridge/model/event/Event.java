@@ -1,12 +1,10 @@
 package timebridge.model.event;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import timebridge.model.event.component.Attendee;
 import timebridge.model.event.component.Interval;
-import timebridge.model.event.decorator.EventDecorator;
 import timebridge.model.event.schema.EventSchema;
 
 /**

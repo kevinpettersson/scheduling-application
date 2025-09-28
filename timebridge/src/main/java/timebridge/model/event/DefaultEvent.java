@@ -2,13 +2,11 @@ package timebridge.model.event;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import timebridge.model.event.component.Attendee;
 import timebridge.model.event.component.Interval;
-import timebridge.model.event.decorator.EventDecorator;
 import timebridge.model.event.schema.EventSchema;
 
 /**

@@ -188,39 +188,19 @@ public class CalendarParser {
      */
     private ArrayList<Course> parseCourses(String line) {
         ArrayList<Course> courses = new ArrayList<>();
-        String tempLine = line;
 
-        // Remove activity from line
-        tempLine = tempLine.replaceAll(",[^,]*$", "");
+        // Remove backslashes
+        line = line.replaceAll("\\\\", "");
 
-        // Remove all backslashes
-        tempLine = tempLine.replaceAll("\\\\", "");
-
-        // Find course code
-        String pattern = "Kurskod:\\s(\\S+)\\.\\sKursnamn:\\s(.*?)(?=Kurskod:|$)";
-
-        // Create a Pattern object
+        // Regex to match each "Kurs kod: ... . Kurs namn: ..."
+        String pattern = "Kurs kod:\\s*([^\\.]+)\\.\\s*Kurs namn:\\s*([^,]+)";
         Pattern regex = Pattern.compile(pattern);
+        Matcher matcher = regex.matcher(line);
 
-        // Create a Matcher object
-        Matcher matcher = regex.matcher(tempLine);
-
-        // Create Course objects from the matches
         while (matcher.find()) {
-            Course temp = new Course(matcher.group(1), matcher.group(2));
-            courses.add(temp);
-        }
-
-        // Remove unwanted chars and substrings from course names
-        for (Course course : courses) {
-            // Remove trailing commas from course names
-            String str = course.getName().trim();
-            if (str.charAt(str.length() - 1) == ',') {
-                course.setName(str.substring(0, str.length() - 1));
-            }
-
-            // Remove "Rubrik:" from course names
-            str.replace("Rubrik:", "");
+            String code = matcher.group(1).trim();
+            String name = matcher.group(2).trim();
+            courses.add(new Course(code, name));
         }
 
         return courses;
@@ -236,7 +216,7 @@ public class CalendarParser {
      * @author Group 12
      */
     private String parseActivity(String line) {
-        return line.replaceAll(".*,(\\s*[^,]+)$", "$1").trim();
+        return line.replaceAll(".*Activity:\\s*([^,\\\\]+).*", "$1").trim();
     }
 
     /**
@@ -261,17 +241,15 @@ public class CalendarParser {
                 continue;
             }
 
-            int firstDotIndex = location.indexOf(".");
-            int secondDotIndex = location.indexOf(".", firstDotIndex + 1);
-            if (secondDotIndex == -1) {
-                secondDotIndex = location.length();
+            int lokalIndex = location.indexOf("Lokalnamn:");
+            if (lokalIndex == -1){
+                continue; // skip if not found
             }
 
-            String room = location.substring(0, firstDotIndex);
-            String building = location.substring(location.indexOf("Byggnad:"), secondDotIndex).replace("Byggnad:", "")
-                    .trim();
-
-            locales.add(new Locale(building, room));
+            int endIndex = location.indexOf(".", lokalIndex);
+            if (endIndex == -1) endIndex = location.length();
+            String room = location.substring(lokalIndex + "Lokalnamn:".length(), endIndex).trim();
+            locales.add(new Locale("", room));
         }
 
         return locales;
