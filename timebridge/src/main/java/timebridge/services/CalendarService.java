@@ -60,13 +60,11 @@ public class CalendarService {
     public Calendar uploadCalendar(String ical) throws MalformedURLException, IOException {
         try {
             // Open connection and read the iCalendar file data from the URL
-            System.out.println("Fetching iCal URL: " + ical);
             HttpURLConnection connection = (HttpURLConnection) URI.create(ical).toURL().openConnection();
             connection.setRequestProperty("User-Agent", "Mozilla/5.0"); // some servers reject Java default UA
             InputStream inputStream = connection.getInputStream();
             String icsData = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-            System.out.println("Fetched iCal data length: " + icsData.length());
-
+            
             Calendar calendar = parser.parse(icsData);
             repository.save(calendar);
             return calendar;
