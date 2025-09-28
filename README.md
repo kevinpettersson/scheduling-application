@@ -34,7 +34,7 @@ git clone https://github.com/kevinpettersson/scheduling-application.git
 ### Step 3 - Build and start the Docker container
 Navigate to the project directory:
 ```bash
-cd /path/to/devops-microservices-project
+cd /path/to/scheduling-application
 ```
 Then run Docker Compose:
 ```bash
